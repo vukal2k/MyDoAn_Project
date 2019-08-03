@@ -1,0 +1,121 @@
+﻿@model IEnumerable<DTO.Organisation>
+
+@{
+    ViewBag.Title = "ListOrganisation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Organisation List</h2>
+    <hr />
+    <a class="aHover">All |</a>
+    <a class="aHover"><b>0 - 9 |</b></a>
+    <a class="aHover"><b>A B C D E |</b></a>
+    <a class="aHover"><b>F G H I J |</b></a>
+    <a class="aHover"><b>K L M N |</b></a>
+    <a class="aHover"><b>O P Q R |</b></a>
+    <a class="aHover"><b>S T U V |</b></a>
+    <a class="aHover"><b>W X Y Z </b></a>
+    <div class="pull-right">
+        <button class="btn btn-default">Create</button>
+        <label style="margin-left:10px"><input type="checkbox" value="">Include In-active</label>
+    </div>
+    <div id="noiTableDungChan">
+        <table class="UseDataTables table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrganisationName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AddressLine1)
+                    </th>
+                    <th>
+                        Contact
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PostCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                </tr>
+            </thead>
+            @*<tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="">item.OrganisationName</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AddressLine1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostCode)
+                            </td>
+                            <td>
+                                @string.Format("{0} {1}", item.Contact.FirstName, item.Contact.SurName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                        </tr>
+                    }
+                </tbody>*@
+
+            <tbody>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

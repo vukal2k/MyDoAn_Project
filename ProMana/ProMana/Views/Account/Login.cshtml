@@ -1,0 +1,136 @@
+﻿@model IdentitySample.Models.LoginViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "Log in";
+}
+
+<html>
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            transition: 3s;
+        }
+
+        .login-container {
+            margin-top: 10%;
+            border: 1px solid #CCD1D1;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            max-width: 50%;
+        }
+
+        .ads {
+            background-color: #A569BD;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+            .ads h1 {
+                margin-top: 20%;
+            }
+
+        #fl {
+            font-weight: 600;
+        }
+
+        #sl {
+            font-weight: 100 !important;
+        }
+
+        .profile-img {
+            text-align: center;
+        }
+
+            .profile-img img {
+                border-radius: 50%;
+                /* animation: mymove 2s infinite; */
+            }
+
+        @@keyframes mymove {
+            from {
+                border: 1px solid #F2F3F4;
+            }
+
+            to {
+                border: 8px solid #F2F3F4;
+            }
+        }
+
+        .login-form {
+            padding: 15px;
+        }
+
+            .login-form h3 {
+                text-align: center;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+        .form-control {
+            font-size: 14px;
+        }
+
+        .forget-password a {
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<!------ Include the above in your HEAD tag ---------->
+<body>
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-md-6 ads" style="height:500px">
+                <h1><span id="fl">[HN_FR_.NET_18_10] BUF_ Mock Project _ Service Directory</span></h1>
+            </div>
+            <div class="col-md-6 login-form" style="height:500px">
+                <div style="padding:10px;">
+                    <div class="profile-img">
+                        <img src="~/pipImage.png" alt="profile_img" height="140px" width="140px;">
+                    </div>
+                    <h3>Login</h3>
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        if (TempData["Error"] != null)
+                        {
+                            <span style="color:#a94442">@TempData["Error"].ToString()</span>
+                        }
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Username, new { @class = "control-label text-info" })
+                            <div class="">
+                                @Html.TextBoxFor(m => m.Username, new { @class = "form-control input-sm chat-input", placeholder = "Username" })
+                                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "control-label text-info" })
+                            <div class="">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control input-sm chat-input", placeholder = "Password" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group" style="justify-content:center;display:flex">
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="Login">
+                        </div>
+                        <a style="text-align:center;display:block" href="@Url.Action("ForgotPassword", "Account")">Forgot Password ?</a>
+                        <a style="text-align:center;display:block" href="@Url.Action("Register", "Account")">Add New User ?</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</body>
+</html>

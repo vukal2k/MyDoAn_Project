@@ -1,0 +1,772 @@
+﻿@model DTO.Premise
+
+@{
+    ViewBag.Title = "CreateOrganisation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+
+<h2>Premises Details</h2>
+<style>
+    .scrollCheckbox {
+        height: 100px;
+        background-color: #ede9e9;
+        padding: 2%;
+        overflow-y: scroll;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "formPremises" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="OpenDay" id="OpenDay" value="" />
+    <div class="pull-right">
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a href="" class="btn btn-default">Cancel</a>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#details1">Details 1</a></li>
+        <li><a data-toggle="tab" href="#details2">Details 2</a></li>
+        <li><a data-toggle="tab" href="#details3">Details 3</a></li>
+        <li id="menuDetails4" style="display:none"><a data-toggle="tab" href="#details4">Details 4</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active container" id="details1">
+            <h4>Details1</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="LocationName">Location Name</label><span style="color:red">*</span>
+                        <input type="text" name="LocationName" id="LocationName" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.LocationName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="KnownAs">Known As</label>
+                        <input type="text" name="KnownAs" id="KnownAs" class="form-control" />
+                    </div>
+
+
+                    <div class="form-inline">
+                        <label for="LocationOrganisation">Location OrganisationName</label><br />
+                        <input type="text" name="LocationOrganisationName" readonly id="LocationOrganisationName" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="LocationOrganisation" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="LocationStatus">Location Status</label><span style="color:red">*</span>
+                        <select id="LocationStatus" name="LocationStatus" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.LocationStatus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationStatusDate">Location Status Date</label><span style="color:red">*</span>
+                        <input type="text" name="LocationStatusDate" autocomplete="off" value="" class="form-control" id="LocationStatusDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address1">Address Line1</label><span style="color:red">*</span>
+                        <input type="text" name="Address1" id="Address1" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address2">Address Line2</label>
+                        <input type="text" name="Address2" id="Address2" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address3">Address Line3</label>
+                        <input type="text" name="Address3" id="AddressLine3" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="PostCode">PostCode</label><span style="color:red">*</span><br />
+                        <input type="text" name="PostCode" id="PostCode" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="PostCode" style="margin-top:5px">Lookup</a>
+                        @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="City">City/Town</label>
+                        <input type="text" name="City" id="Town" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="County">County</label>
+                        <input type="text" name="County" id="County" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Country">Country</label>
+                        <select id="Country" name="Country" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                    </div>
+
+                    <a class="aHover" data-toggle="modal" data-target="#locationOpeningTimesModal">Location Opening Times</a>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <div class="form-group" style="margin-top:-15px">
+                        <label for="PrimaryLocation">Primary Location <input type="checkbox" id="PrimaryLocation" name="PrimaryLocation" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationManaged" class="">Location Managed<input type="checkbox" id="LocationManaged" onchange="" name="LocationManaged" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="STNetworkConnectivity" class="">ST Network Connectivity<input type="checkbox" id="STNetworkConnectivity" onchange="" name="STNetworkConnectivity" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationType">Location Type</label><span style="color:red">*</span>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocationType" value="Venue" onchange="showDetail4('menuDetails4')" /> Venue</label><br />
+                            <label><input type="checkbox" name="LocationType" value="Hotel" onchange="showDetail4('menuDetails4')" /> Hotel</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LocationType, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationDescription">Location Description</label>
+                        <textarea style="height:110px" name="LocationDescription" id="LocationDescription" class="form-control"></textarea>
+                        @Html.ValidationMessageFor(model => model.LocationDescription, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PhoneNumber">Phone Number</label>
+                        <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GeneralFaxNumber">General Fax Number</label>
+                        <input type="text" name="GeneralFaxNumber" id="GeneralFaxNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.GeneralFaxNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MinicommNumber">Minicomm Number</label>
+                        <input type="text" name="MinicommNumber" id="MinicommNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.MinicommNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="IsNewShop">Is New Shop?<input type="checkbox" onchange="enableWhenCheck(this,'ShopFlagDate')" id="IsNewShop" name="IsNewShop" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ShopFlagDate">Shop Flag Date</label>
+                        <input type="text" disabled name="ShopFlagDate" autocomplete="off" value="" class="form-control" id="ShopFlagDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SpecialistShop">Specialist Shop</label>
+                        <input type="text" name="SpecialistShop" autocomplete="off" value="" class="form-control" id="SpecialistShop" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="details2" class="tab-pane fade container">
+            <h4>Details2</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="Acreditations" class="col-md-6">Acreditations</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="MediaContact" onchange="showWhenCheck(this,'MediaContactLookUp')" class="">Media Contact<input type="checkbox" id="MediaContact" onchange="" name="MediaContact" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="MediaContactName">Media Contact Name</label><br />
+                        <input type="text" readonly name="MediaContactName" id="MediaContactName" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="MediaContactLookUp" style="display:none; margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="LocalDemographicIssue" class="col-md-6">Local Demographic Issue</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="LocalDemographicNotes">Local Demographic Notes</label>
+                        <textarea style="height:110px" name="LocalDemographicNotes" id="LocalDemographicNotes" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="JCPOffices" class="col-md-6">JCP Offices</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="CateringFacilities" oncancel="showWhenCheck(this,'CateringContactLookup')" class="">Catering Facilities<input type="checkbox" id="CateringFacilities" onchange="" name="CateringFacilities" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="CateringContact">Catering Contact</label><br />
+                        <input type="text" name="CateringContact" id="CateringContact" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="CateringContactLookup" style="display:none;margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="CateringType">Catering Type</label><span style="color:red">*</span>
+                        <select id="CateringType" name="CateringType" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.CateringType, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Network">IS/Network</label><span style="color:red">*</span>
+                        <select id="Network" name="Network" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Network, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientITFacilities" class="">Client IT Facilities<input type="checkbox" id="ClientITFacilities" onchange="enableWhenCheck(this,'ClientITFacilitiesDetails')" name="ClientITFacilities" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientITFacilitiesDetails">Client IT Facilities Details</label>
+                        <textarea disabled style="height:110px" name="ClientITFacilitiesDetails" id="ClientITFacilitiesDetails" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RoomAvailability" class="">Room Availability<input type="checkbox" id="RoomAvailability" onchange="" name="RoomAvailability" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VolunteerOpportunity" class="">Volunteer Opportunity<input type="checkbox" id="VolunteerOpportunity" onchange="" name="VolunteerOpportunity" value="true" /></label>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="details3" class="tab-pane fade container">
+            <h4>Details3</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="OutreachLocation" class="col-md-6">Outreach Location</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="TravelDetails">Travel Details</label>
+                        <input type="text" name="TravelDetails" id="TravelDetails" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelDetails, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Bus">Travel Nearest Bus</label>
+                        <input type="text" name="TravelNearest_Bus" id="TravelNearest_Bus" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Bus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Rail">Travel Nearest Rail</label>
+                        <input type="text" name="TravelNearest_Rail" id="TravelNearest_Rail" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Rail, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Airport">Travel Nearest Airport</label>
+                        <input type="text" name="TravelNearest_Airport" id="TravelNearest_Airport" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Airport, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="HostVisits" onchange="showWhenCheck(this,'HostingContact')" class="">Host Visits<input type="checkbox" id="HostVisits" onchange="" name="HostVisits" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="HostingContact">Hosting Contact</label><br />
+                        <input type="text" name="HostingContact" id="HostingContact" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="HostingContactLookup" style="display:none; margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="LocalHotels" class="col-md-6">Outreach Location</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="VisitorParkingOnsite" class="">Visitor Parking Onsite<input type="checkbox" id="VisitorParkingOnsite" onchange="" name="VisitorParkingOnsite" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VisitorParkingSpaces">Visitor Parking Spaces</label>
+                        <input type="number" name="VisitorParkingSpaces" id="VisitorParkingSpaces" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.VisitorParkingSpaces, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VisitorParkingAlternative">Visitor Parking Alternative</label>
+                        <textarea style="height:110px" name="VisitorParkingAlternative" id="VisitorParkingAlternative" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="details4" class="tab-pane fade container">
+            <h4>Details 4</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="RoomOnlyRate">Room Only Rate</label>
+                        <input type="number" name="RoomOnlyRate" id="RoomOnlyRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.RoomOnlyRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BAndBRate">B&B Rate</label>
+                        <input type="number" name="BAndBRate" id="BAndBRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.BAndBRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DBBRate">DBB Rate</label>
+                        <input type="number" name="DBBRate" id="DBBRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.DBBRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DDRate">DD Rate</label>
+                        <input type="number" name="DDRate" id="DDRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.DDRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TwentyFourhrRate">24hr Rate</label>
+                        <input type="number" name="TwentyFourhrRate" id="TwentyFourhrRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TwentyFourhrRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TeaAndCoffee">Tea And Coffee</label>
+                        <input type="number" name="TeaAndCoffee" id="TeaAndCoffee" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TeaAndCoffee, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Lunch" class="">Lunch<input type="checkbox" id="Lunch" onchange="" name="Lunch" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NumberOfMeetingRoom">No Of Meeting Room</label>
+                        <input type="number" name="NumberOfMeetingRoom" id="NumberOfMeetingRoom" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.NumberOfMeetingRoom, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MeetingRoomRatePerDay">Meeting Room Rate Per Day</label>
+                        <input type="number" name="MeetingRoomRatePerDay" id="MeetingRoomRatePerDay" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.MeetingRoomRatePerDay, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Codings">Codings</label>
+                        <select id="Codings" name="Codings" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Codings, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="NegotiatedRoomOnlyRate">Negotiated Room Only Rate</label>
+                        <input type="number" name="NegotiatedRoomOnlyRate" id="NegotiatedRoomOnlyRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.NegotiatedRoomOnlyRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BAndBNegotiatedRate">B&B Negotiated Rate</label>
+                        <input type="number" name="BAndBNegotiatedRate" id="BAndBNegotiatedRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.BAndBNegotiatedRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LastNegotiatedDate">Last Negotiated Date</label>
+                        <input type="text" name="LastNegotiatedDate" id="LastNegotiatedDate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.LastNegotiatedDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Re_negotiateOn">Re-negotiate On</label>
+                        <input type="text" name="Re_negotiateOn" id="Re_negotiateOn" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Re_negotiateOn, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PreferredStatus">Preferred Status</label>
+                        <select id="PreferredStatus" name="PreferredStatus" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.PreferredStatus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Comments">Comments</label>
+                        <textarea style="height:110px" name="Comments" id="Comments" class="form-control"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+}
+
+
+<div id="locationOpeningTimesModal" data-backdrop="true" class="modal fade" role="dialog" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="LoadLocationOpenDays();">&times;</button>
+                <h4 class="modal-title">Location Opening Times</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default" onclick="LoadLocationOpenDays();">Back</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <td></td>
+                        <td>
+                            Weekend Day
+                        </td>
+                        <td>
+                            Start Time
+                        </td>
+                        <td>
+                            End Time
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="mondayCheck" checked />
+                        </td>
+                        <td>
+                            Monday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="mondayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="mondayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="tuesdayCheck" checked />
+                        </td>
+                        <td>
+                            Tuesday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="tuesdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="tuesdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="wednesdayCheck" checked />
+                        </td>
+                        <td>
+                            Wednesday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="wednesdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="wednesdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="thursdayCheck" checked />
+                        </td>
+                        <td>
+                            Thursday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="thursdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="thursdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="fridayCheck" />
+                        </td>
+                        <td>
+                            Friday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="fridayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="fridayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="saturdayCheck" />
+                        </td>
+                        <td>
+                            Saturday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="saturdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="saturdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="sundayCheck" />
+                        </td>
+                        <td>
+                            Sunday
+                        </td>
+                        <td>
+                            <input type="text" value="09:00:00" name="openTimeSpan" id="sundayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" value="17:00:00" name="openTimeSpan" id="sundayEndTime" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.js"></script>
+    <script>
+        function LocationOpenDay(_day, _startTime, _endTime) {
+            this.day = _day;
+            this.startTime = _startTime;
+            this.endTime = _endTime;
+
+            return this;
+        }
+
+        function LoadLocationOpenDays() {
+            $('#locationOpeningTimesModal').modal('hide')
+            var openDays=[]
+            var day;
+            if ($('#mondayCheck').prop('checked')) {
+                day = new LocationOpenDay('Monday', $('#mondayStartTime').val(), $('#mondayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#tuesdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Tuesday', $('#tuesdayStartTime').val(), $('#tuesdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#wednesdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Wednesday', $('#wednesdayStartTime').val(), $('#wednesdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#thursdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Thursday', $('#thursdayStartTime').val(), $('#thursdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#fridayCheck').prop('checked')) {
+                day = new LocationOpenDay('Friday', $('#fridayStartTime').val(), $('#fridayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#saturdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Saturday', $('#saturdayStartTime').val(), $('#saturdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#sundayCheck').prop('checked')) {
+                day = new LocationOpenDay('Sunday', $('#sundayStartTime').val(), $('#sundayEndTime').val())
+                openDays.push(day);
+            }
+
+            $("#OpenDay").val(JSON.stringify(openDays))
+        }
+</script>
+    <script>
+        function showWhenCheck(checkbox, showId) {
+            if (checkbox.checked) {
+                $("#" + showId).show();
+            }
+            else {
+                $("#" + showId).hide();
+            }
+        };
+
+        function showDetail4(showId) {
+            if ($("input[value='Venue']").prop('checked') || $("input[value='Hotel']").prop('checked')) {
+                $("#" + showId).show();
+            }
+            else {
+                $("#" + showId).hide();
+            }
+        };
+
+        function enableWhenCheck(checkbox, showId) {
+            if (checkbox.checked) {
+                $("#" + showId).prop('disabled', false);
+            }
+            else {
+                $("#" + showId).prop('disabled', true);
+            }
+        };
+        //validate
+        $(document).ready(function () {
+            $("#formPremises").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "VolunteerContact": {
+                        required: true
+                    },
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $('#LastNegotiatedDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#Re_negotiateOn').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#LocationStatusDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#ShopFlagDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            var openTimeSpan = $("input[name='openTimeSpan']");
+            openTimeSpan.each(function () {
+                $(this).datetimepicker({
+                    datepicker: false,
+                    format:'H:i:s',
+                    sideBySide: true,
+                    step: 15
+                });
+            })
+        })
+    </script>
+}

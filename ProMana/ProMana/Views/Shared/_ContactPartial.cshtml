@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DTO.Contact>
+
+<table class="UseDataTables table table-bordered table-hover" id="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                Contact Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobilePhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input value="@item.ContactId" type="radio" name="chk_contact" />
+                </td>
+                <td id="@string.Format("ContactName{0}",item.ContactId)">
+                    @string.Format("{0} {1}", item.FirstName, item.SurName)
+                </td>
+                <td>
+                    @item.MobilePhone
+                </td>
+                <td>
+                    @item.EmailAddress
+                </td>
+                <td>
+                    @item.ContactType
+                </td>
+                <td>
+                    @item.IsActive
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

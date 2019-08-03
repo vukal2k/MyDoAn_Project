@@ -1,0 +1,115 @@
+﻿@model DTO.Facility
+<form id="formUpdateFacilities" action='@Url.Action(" "," ")' method="post"></form>
+
+<div id="updateFacilitiesModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#updateFacilitiesModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Facilities Details</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-default" onclick="$('#updateFacilitiesModal').modal('hide')">Cancel</button>
+                </div>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FacilityType">Facility Type</label><span style="color:red">*</span>
+                        <select form="formUpdateFacilities" id="FacilityType" onchange="SelectFacilityType(this)" name="FacilityType" class="form-control">
+                            <option value="Room">
+                                Room
+                            </option>
+                            <option value="lala">
+                                2
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="FacilityDescription">Facility Description</label><span style="color:red">*</span>
+                        <textarea form="formUpdateFacilities" style="height:110px" name="FacilityDescription" id="FacilityDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="RoomCapacity">Room Capacity</label>
+                        <input form="formUpdateFacilities" type="number" disabled name="RoomCapacity" id="RoomCapacity" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="RoomSize">Room Size</label>
+                        <input form="formUpdateFacilities" type="number" disabled name="RoomSize" id="RoomSize" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roomConnectivity">Room Connectivity<input type="checkbox" disabled onchange="enableWhenCheck(this,'ConnectivityType')" id="RoomConnectivity" name="RoomConnectivity" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ConnectivityType">Connectivity Type</label><span style="color:red">*</span>
+                        <select id="ConnectivityType" disabled name="ConnectivityType" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="WirelessAccessInformation">Wireless Access Information</label>
+                        <input form="formUpdateFacilities" type="text" disabled name="WirelessAccessInformation" id="WirelessAccessInformation" class="form-control" />
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="LeadContact">Lead Contact</label><br />
+                        <input type="text" name="LeadContactName" readonly id="LeadContactName" class="form-control" style="width:80% !important" />
+                        <input form="formUpdateFacilities" type="hidden" name="LeadContact" value="" />
+                        <a class="aHover pull-right" id="LeadContactLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="RoomHost">Room Host</label><br />
+                        <input type="text" name="RoomHostName" readonly id="RoomHostName" class="form-control" style="width:80% !important" />
+                        <input form="formUpdateFacilities" type="hidden" name="RoomHost" value="" />
+                        <a class="aHover pull-right" id="RoomHostLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="EquipmentAvailable">Equipment Available<input type="checkbox" disabled id="EquipmentAvailable" name="EquipmentAvailable" value="true" /></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="EquipmentNotes">Equipment Notes</label>
+                        <textarea form="formUpdateFacilities" disabled style="height:110px" name="EquipmentNotes" id="FacilityDescription" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#formUpdateFacilities").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "FacilityType": {
+                        required: true
+                    },
+                    "FacilityDescription": {
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+        })
+    </script>
+}

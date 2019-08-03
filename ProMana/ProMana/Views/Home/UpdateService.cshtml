@@ -1,0 +1,722 @@
+﻿@model DTO.Service
+
+@{
+    ViewBag.Title = "Create Service ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Service Details</h2>
+<style>
+    .scrollCheckbox {
+        height: 100px;
+        background-color: #ede9e9;
+        padding: 2%;
+        overflow-y: scroll;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "formService" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="pull-right">
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a href="" class="btn btn-default">Cancel</a>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#details1">Details 1</a></li>
+        <li><a data-toggle="tab" href="#details2">Details 2</a></li>
+        <li><a data-toggle="tab" href="#details3">Details 3</a></li>
+        <li id="menuOrganisation"><a data-toggle="tab" href="#organisation">Organisation</a></li>
+        <li id="menuPremises"><a data-toggle="tab" href="#premises">Premises</a></li>
+        <li id="menuFunded"><a data-toggle="tab" href="#funded">Funding</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active container" id="details1">
+            <h4>Details1</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ServiceName">Service Name</label><span style="color:red">*</span>
+                        <input type="text" name="ServiceName" id="ServiceName" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.ServiceName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ShortDescription">Service Short Description</label><span style="color:red">*</span>
+                        <textarea name="ShortDescription" id="ShortDescription" class="form-control"></textarea>
+                        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SubTypeId">Sub Type</label>
+                        <select name="SubTypeId" id="SubTypeId" class="form-control">
+                            <option value="0">Select  Item</option>
+                            <option value="1">Contract</option>
+                            <option value="2">Funding</option>
+                        </select>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="ContactId">Lead Contact</label><br />
+                        <input type="text" name="ContactName" readonly id="ContactName" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="ContactId" style="margin-top:5px">Lookup</a>
+                        <input type="hidden" name="ContactId" value="1" />
+                        @Html.ValidationMessageFor(model => model.ContactId, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="ClientDescription">Service Short Description</label>
+                        <textarea name="ClientDescription" id="ClientDescription" class="form-control"></textarea>
+                        @Html.ValidationMessageFor(model => model.ClientDescription, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="ServiceAttendance">ServiceAttendance</label>
+                        <select name="ServiceAttendance" id="ServiceAttendance" class="form-control">
+                            <option value="">Select Item</option>
+                            <option value="ServiceAttendance1">ServiceAttendance1</option>
+                            <option value="ServiceAttendance2">ServiceAttendance2</option>
+                            <option value="ServiceAttendance3">ServiceAttendance3</option>
+                            <option value="ServiceAttendance4">ServiceAttendance4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="StartExpected">StartExpected</label>
+                        <div class="input-group date">
+                            <input type="text" name="StartExpected" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="StartDate">StartDate</label>
+                        <div class="input-group date">
+                            <input type="text" name="StartDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">EndDate</label>
+                        <div class="input-group date">
+                            <input type="text" name="EndDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ServiceExtendable">Service Extendable</label>
+                        <div style="float:right;margin-right:415px;">
+                            <input type="checkbox" id="checkboxServiceExtendable" name="" />
+                        </div>
+                    </div>
+                    <div class="form-group classServiceExtendable">
+                        <div class="">
+                            <input type="number" name="ServiceExtendableYear" value="0" disabled /><span>Year</span>
+                            <input type="number" name="ServiceExtendableMonth" value="0" disabled /><span>Month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <div class="form-group" style="margin-top:14px">
+                        <label for="ServiceActive">Service Active</label>
+                        <div style="float:right;margin-right:410px">
+                            <input type="checkbox" id="ServiceActive" name="ServiceActive" checked />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="FullDescription">Service Full Description</label>
+                        <textarea name="FullDescription" id="FullDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="DeptCode">Dept code</label><span style="color:red">*</span>
+                        <input type="text" name="DeptCode" id="DeptCode" class="form-control" required />
+                        @Html.ValidationMessageFor(model => model.DeptCode, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ServiceTpye">Service Type</label><span style="color:red">*</span>
+                        <select name="ServiceTpye" class="form-control">
+                            <option value="">Select Item</option>
+                            <option value="ServiceTpye1">ServiceTpye1</option>
+                            <option value="ServiceTpye2">ServiceTpye2</option>
+                            <option value="ServiceTpye3">ServiceTpye3</option>
+                            <option value="ServiceTpye4">ServiceTpye4</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DescriptionDelivery">Service Description Delivery</label>
+                        <textarea name="DescriptionDelivery" id="DescriptionDelivery" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ContractCode">Service Contact Code</label>
+                        <input type="text" name="ContractCode" id="ContractCode" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractValue">Service Contact Value</label>
+                        <input type="text" name="ContractValue" id="ContractValue" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StagedPayment">Service Staged Payment</label>
+                        <div class="form-control">
+                            <input type="checkbox" id="StagedPayment" name="StagedPayment" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RefernalProcessMethod">Refernal Process\Method</label>
+                        <select name="RefernalProcessMethod" class="form-control">
+                            <option value="RefernalProcessMethod1">RefernalProcessMethod1</option>
+                            <option value="RefernalProcessMethod2">RefernalProcessMethod2</option>
+                            <option value="RefernalProcessMethod3">RefernalProcessMethod3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TimeLimited">Service TimeLimited</label>
+                        <div style="float:right;margin-right:410px">
+                            <input type="checkbox" id="checkboxTimeLimited" name="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group classTimeLimited">
+                        <div class="">
+                            <input type="number" name="TimeLimitedYear" value="0" disabled /><span>Year</span>
+                            <input type="number" name="TimeLimitedMonth" value="0" disabled /><span>Month</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="details2" class="tab-pane fade container">
+            <h4>Details2</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="ServiceBenefitsCriterion" class="col-md-6">Service Benefits Criterion</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ServiceBenefitsCriterion" value="ServiceBenefitsCriterion1" /> ServiceBenefitsCriterion1</label><br />
+                            <label><input type="checkbox" name="ServiceBenefitsCriterion" value="ServiceBenefitsCriterion2" /> ServiceBenefitsCriterion2</label><br />
+                            <label><input type="checkbox" name="ServiceBenefitsCriterion" value="ServiceBenefitsCriterion3" /> ServiceBenefitsCriterion3</label><br />
+                            <label><input type="checkbox" name="ServiceBenefitsCriterion" value="ServiceBenefitsCriterion4" /> ServiceBenefitsCriterion4</label><br />
+                            <label><input type="checkbox" name="ServiceBenefitsCriterion" value="ServiceBenefitsCriterion5" /> ServiceBenefitsCriterion5</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="ServiceBameraCriterion" class="col-md-6">Service Bamera Criterion</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ServiceBameraCriterion" value="ServiceBameraCriterion1" /> ServiceBameraCriterion1</label><br />
+                            <label><input type="checkbox" name="ServiceBameraCriterion" value="ServiceBameraCriterion2" /> ServiceBameraCriterion2</label><br />
+                            <label><input type="checkbox" name="ServiceBameraCriterion" value="ServiceBameraCriterion3" /> ServiceBameraCriterion3</label><br />
+                            <label><input type="checkbox" name="ServiceBameraCriterion" value="ServiceBameraCriterion4" /> ServiceBameraCriterion4</label><br />
+                            <label><input type="checkbox" name="ServiceBameraCriterion" value="ServiceBameraCriterion5" /> ServiceBameraCriterion5</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="ServiceEthnicityCriterion" class="col-md-6">Service Ethnicity Criterion</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ServiceEthnicityCriterion1" value="ServiceEthnicityCriterion1" /> ServiceEthnicityCriterion1</label><br />
+                            <label><input type="checkbox" name="ServiceEthnicityCriterion2" value="ServiceEthnicityCriterion2" /> ServiceEthnicityCriterion2</label><br />
+                            <label><input type="checkbox" name="ServiceEthnicityCriterion3" value="ServiceEthnicityCriterion3" /> ServiceEthnicityCriterion3</label><br />
+                            <label><input type="checkbox" name="ServiceEthnicityCriterion4" value="ServiceEthnicityCriterion4" /> ServiceEthnicityCriterion4</label><br />
+                            <label><input type="checkbox" name="ServiceEthnicityCriterion5" value="ServiceEthnicityCriterion5" /> ServiceEthnicityCriterion5</label><br />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="ServiceDisabilityCriterion" class="col-md-6">Service Disability Criterion</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ServiceDisabilityCriterion" value="ServiceDisabilityCriterion1" /> ServiceDisabilityCriterion1</label><br />
+                            <label><input type="checkbox" name="ServiceDisabilityCriterion" value="ServiceDisabilityCriterion2" /> ServiceDisabilityCriterion2</label><br />
+                            <label><input type="checkbox" name="ServiceDisabilityCriterion" value="ServiceDisabilityCriterion3" /> ServiceDisabilityCriterion3</label><br />
+                            <label><input type="checkbox" name="ServiceDisabilityCriterion" value="ServiceDisabilityCriterion4" /> ServiceDisabilityCriterion4</label><br />
+                            <label><input type="checkbox" name="ServiceDisabilityCriterion" value="ServiceDisabilityCriterion5" /> ServiceDisabilityCriterion5</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="ServicePersonalCreumstancesCritertion" class="col-md-6">Service Personal Creumstances Critertion</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ServicePersonalCreumstancesCritertion" value="ServicePersonalCreumstancesCritertion1" /> Service1</label><br />
+                            <label><input type="checkbox" name="ServicePersonalCreumstancesCritertion" value="ServicePersonalCreumstancesCritertion2" /> Service2</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="OtherServiceParticipationCriterion" class="col-md-6">Other Service Participation Criterion </label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="OtherServiceParticipationCriterion" value="OtherServiceParticipationCriterion1" /> OtherService1</label><br />
+                            <label><input type="checkbox" name="OtherServiceParticipationCriterion" value="OtherServiceParticipationCriterion2" /> OtherService2</label><br />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+        <div id="details3" class="tab-pane fade container">
+            <h4>Details3</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="ClientSupportProcess" class="col-md-6">Client Support Process</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ClientSupportProcess" value="ClientSupportProcess1" /> ClientSupportProcess1</label><br />
+                            <label><input type="checkbox" name="ClientSupportProcess" value="ClientSupportProcess1" /> ClientSupportProcess1</label><br />
+                            <label><input type="checkbox" name="ClientSupportProcess" value="ClientSupportProcess1" /> ClientSupportProcess1</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="Intervention" class="col-md-6">Intervention</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="Intervention" value="Intervention1" /> Intervention1</label><br />
+                            <label><input type="checkbox" name="Intervention" value="Intervention2" /> Intervention2</label><br />
+                            <label><input type="checkbox" name="Intervention" value="Intervention3" /> Intervention3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="ClientJourney" class="col-md-6">Client Journey</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ClientJourney" value="ClientJourney1" /> ClientJourney1</label><br />
+                            <label><input type="checkbox" name="ClientJourney" value="ClientJourney2" /> ClientJourney2</label><br />
+                            <label><input type="checkbox" name="ClientJourney" value="ClientJourney3" /> ClientJourney3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="OtherServices" class="col-md-6">Other Services</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="OtherServices" value="OtherServices1" /> OtherServices1</label><br />
+                            <label><input type="checkbox" name="OtherServices" value="OtherServices2" /> OtherServices2</label><br />
+                            <label><input type="checkbox" name="OtherServices" value="OtherServices3" /> OtherServices3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="SupportCentres" class="col-md-6">Support Centres</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="SupportCentres" value="SupportCentres1" /> SupportCentres1</label><br />
+                            <label><input type="checkbox" name="SupportCentres" value="SupportCentres2" /> SupportCentres2</label><br />
+                            <label><input type="checkbox" name="SupportCentres" value="SupportCentres3" /> SupportCentres3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-md-6">
+
+                    <div class="form-inline">
+                        <label for="ClientOutcome" class="col-md-6">Client Outcome</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ClientOutcome" value="ClientOutcome1" /> ClientOutcome1</label><br />
+                            <label><input type="checkbox" name="ClientOutcome" value="ClientOutcome2" /> ClientOutcome2</label><br />
+                            <label><input type="checkbox" name="ClientOutcome" value="ClientOutcome3" /> ClientOutcome3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="TargetClient" class="col-md-6">Target Client</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="TargetClient" value="TargetClient1" /> TargetClient1</label><br />
+                            <label><input type="checkbox" name="TargetClient" value="TargetClient2" /> TargetClient2</label><br />
+                            <label><input type="checkbox" name="TargetClient" value="TargetClient3" /> TargetClient3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="Accreditations" class="col-md-6">Accreditations</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="Accreditations" value="Accreditations1" /> Accreditations1</label><br />
+                            <label><input type="checkbox" name="Accreditations" value="Accreditations2" /> Accreditations2</label><br />
+                            <label><input type="checkbox" name="Accreditations" value="Accreditations3" /> Accreditations3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="ReferralSources" class="col-md-6">Referral Sources</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="ReferralSources" value="ReferralSources1" /> ReferralSources1</label><br />
+                            <label><input type="checkbox" name="ReferralSources" value="ReferralSources2" /> ReferralSources2</label><br />
+                            <label><input type="checkbox" name="ReferralSources" value="ReferralSources3" /> ReferralSources3</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="ProgrammeId" class="col-md-6">Programme</label>
+                        <div>
+                            <select name="ProgrammeId" class=form-control>
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+
+        <div id="organisation" class="tab-pane fade container">
+            <h4>Organisation</h4>
+            <hr />
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Organisation Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Roles
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <a class="aHover" data-toggle="modal" data-target="#organisationRoleModal">edid role</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="premises" class="tab-pane fade container">
+            <h4>Premises</h4>
+            <hr />
+            <table class="UseDataTables table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Premises Name
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                        <th>
+                            Phone Number
+                        </th>
+                        <th>
+                            Project Code
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a class="aHover">1</a>
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <a class="aHover">Remove</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <input type="button" data-toggle="modal" data-target="#setPremisesToServiceModal" class="btn btn-success" value="Associate new Premise" />
+            </div>
+        </div>
+        <div class="tab-pane fade container" id="funded">
+            <h4>Funding</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Source">Funding Source</label>
+                        <select name="Source" class="form-control">
+                            <option value="Source1">Source1</option>
+                            <option value="Source2">Source2</option>
+                            <option value="Source3">Source3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="ContactId">Funding Contact Detail</label><br />
+                        <input type="text" name="ContactId" readonly id="ContactId" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="ContactId" style="margin-top:5px">Lookup</a>
+                        <input type="hidden" name="ContactId" value="1" />
+                        @Html.ValidationMessageFor(model => model.ContactId, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="Amount">Funding Amount</label><span style="color:red">*</span>
+                        <input type="number" step="0.01" value="0" required />
+                        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="StartDate">Funding Start</label>
+                        <div class="input-group date">
+                            <input type="text" name="StartDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">Funding End</label>
+                        <div class="input-group date">
+                            <input type="text" name="EndDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FundingNeed">Funding Need</label>
+                        <input type="text" name="FundingNeed" id="FundingNeed" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundingContinuationNeeded">Funding Continuation Needed</label>
+                        <input type="checkbox" style="float:right;margin-right:330px" id="checkboxFundingContinuationNeeded" name="FundingContinuationNeeded" />
+                    </div>
+                    <div class="form-group">
+                        <label for="FundingContinuationAmount">Funding Continuation Amount</label>
+                        <input type="number" value="0" name="FundingContinuationAmount" id="classFundingContinuationAmount" class="form-control" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="FundingContinuationDetail">Funding Continuation Detail</label>
+                        <input type="text" name="FundingContinuationDetail" id="classFundingContinuationDetail" class="form-control" disabled />
+                    </div>
+
+                </div>
+            </div>
+
+
+            <h4>Fundraising For Service Project</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FundraisingForText">Fundraising For Text</label>
+                        <textarea class="form-control" id="FundraisingForText" name="FundraisingForText"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundraisingWhy">Fundraising  Why</label>
+                        <textarea class="form-control" id="FundraisingWhy" name="FundraisingWhy"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FundraisingNeed">Fundraising Need</label>
+                        <input type="text" class="form-control" id="FundraisingNeed" name="FundraisingNeed" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundraisingRequiredBy">Fundraising Required By</label>
+                        <div class="input-group date">
+                            <input type="text" name="FundraisingRequiredBy" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundraisingComplete">Fundraising Complete</label>
+                        <input type="checkbox" id="checkboxFundraisingComplete" name="FundraisingComplete" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundraisingCompletedDate">Fundraising Completed Date</label>
+                        <div class="input-group date">
+                            <input type="text" name="FundraisingCompletedDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <h4>Fundraising Door</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FundraisingDonorAnonymos">Fundraising Donor Anonymos</label>
+                        <div>
+                            <input type="checkbox" id="FundraisingDonorAnonymos" name="FundraisingDonorAnonymos" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="FundraisingDonorAmount">Fundraising Donor Amount</label>
+                        <input type="number" value="0" name="FundraisingDonorAmount" id="FundraisingDonorAmount" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FundraisingDonationDate">Fundraising Donation Date</label>
+                        <div class="input-group date">
+                            <input type="text" name="FundraisingDonationDate" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FundraisingDonationIncremental">Fundraising Donation Incremental</label>
+                        <div>
+                            <input type="checkbox" id="FundraisingDonationIncremental" name="FundraisingDonationIncremental" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+}
+
+@*@foreach cho thg organisation role*@
+@Html.Partial("~/Views/Shared/_OrganisationRole.cshtml", null)
+
+@Html.Partial("~/Views/Shared/_PremisesNotInService.cshtml")
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.form-group .input-group.date').datepicker({
+                todayHighlight: true
+            });
+        })
+
+
+        function showDetails3(checkbox) {
+            if (checkbox.checked) {
+                $("#menuDetails").show();
+            }
+            else {
+                $("#menuDetails").hide();
+            }
+        };
+
+        $("#checkboxServiceExtendable").change(function (e) {
+            if ($('#checkboxServiceExtendable').is(":checked")) {
+                $("[name=ServiceExtendableYear]").attr("disabled", false)
+                $("[name=ServiceExtendableMonth]").attr("disabled", false)
+            }
+            else {
+                $("[name=ServiceExtendableYear]").attr("disabled", true).val(0)
+                $("[name=ServiceExtendableMonth]").attr("disabled", true).val(0)
+            }
+        })
+
+
+        $("#checkboxTimeLimited").change(function (e) {
+            if ($('#checkboxTimeLimited').is(":checked")) {
+                $("[name=TimeLimitedYear]").attr("disabled", false)
+                $("[name=TimeLimitedMonth]").attr("disabled", false)
+            }
+            else {
+                $("[name=TimeLimitedYear]").attr("disabled", true).val(0)
+                $("[name=TimeLimitedMonth]").attr("disabled", true).val(0)
+            }
+        })
+        $("#checkboxFundingContinuationNeeded").change(function (e) {
+            if ($('#checkboxFundingContinuationNeeded').is(":checked")) {
+                $("[name=FundingContinuationAmount]").attr("disabled", false)
+                $("[name=FundingContinuationDetail]").attr("disabled", false)
+            }
+            else {
+                $("[name=FundingContinuationAmount]").attr("disabled", true).val(0)
+                $("[name=FundingContinuationDetail]").attr("disabled", true).val("")
+            }
+        })
+
+        $("#checkboxFundraisingComplete").change(function (e) {
+            if ($('#checkboxFundraisingComplete').is(":checked")) {
+                $("[name=FundraisingCompleteDate]").attr("disabled", false)
+
+            }
+            else {
+                $("[name=FundraisingCompleteDate]").attr("disabled", true)
+
+            }
+        })
+
+
+
+
+
+        //validate
+        $("#formService").validate({
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                "ServiceName": {
+                    required: true
+                },
+                "ShortDescription": {
+                    required: true,
+                    minlength: 300
+                },
+                "DeptCode": {
+                    required: true
+                },
+                "ServiceTpye": {
+                    required: true
+                },
+                "TypeOfBussinessName": {
+                    required: true,
+                    minlength: 0
+                },
+                "PhoneNumber": {
+                    required: true,
+                    minlength: 7
+                }
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            },
+        });
+
+        $("#SubTypeId").change(function () {
+            if ($(this).val() == "1") {
+                $("#menuContract").show()
+                $("#menuFunded").hide()
+            }
+            if ($(this).val() == "2") {
+                $("#menuFunded").show()
+                $("#menuContract").hide()
+            }
+            if ($(this).val() == "0") {
+                $("#menuContract").hide()
+                $("#menuFunded").hide()
+            }
+        })
+    </script>
+}
