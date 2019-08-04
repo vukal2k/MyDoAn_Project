@@ -1,8 +1,8 @@
 ﻿@model DTO.Project
 
 @{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Your Project";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
 
@@ -15,7 +15,6 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Your Project</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

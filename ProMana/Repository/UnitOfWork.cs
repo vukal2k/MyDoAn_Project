@@ -25,6 +25,8 @@ namespace Repository
             Tassks = new Repository<Tassk>(_dbContext);
             TaskTypes = new Repository<TaskType>(_dbContext);
             UserInfos = new Repository<UserInfo>(_dbContext);
+            Solutions = new Repository<Solutionn>(_dbContext);
+            ResolveTypes = new Repository<ResolveType>(_dbContext);
         }
 
         #region Propeties
@@ -38,6 +40,8 @@ namespace Repository
         public Repository<Tassk> Tassks { get; set; }
         public Repository<TaskType> TaskTypes { get; set; }
         public Repository<UserInfo> UserInfos { get; set; }
+        public Repository<Solutionn> Solutions { get; set; }
+        public Repository<ResolveType> ResolveTypes { get; set; }
         #endregion
 
         #region Methods

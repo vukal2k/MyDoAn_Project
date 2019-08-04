@@ -171,6 +171,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
+    <Compile Include="Controllers\SolutionController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -204,6 +205,7 @@
     <Content Include="Content\ionicons.css" />
     <Content Include="Content\ionicons.min.css" />
     <Content Include="Content\jquery.datetimepicker.min.css" />
+    <Content Include="Content\kanban.css" />
     <Content Include="Content\skins\skin-black-light.css" />
     <Content Include="Content\skins\skin-black-light.min.css" />
     <Content Include="Content\skins\skin-black.css" />
@@ -1861,6 +1863,7 @@
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\jquery-lookupContact.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\kanban.js" />
     <Content Include="Views\Home\CreatePremises.cshtml" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
@@ -2034,7 +2037,7 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\_LayoutUser.cshtml" />
     <Content Include="Views\Home\CreateService.cshtml" />
     <Content Include="Views\Project\Create.cshtml" />
     <Content Include="Views\JobRoles\Create.cshtml" />
@@ -2042,7 +2045,9 @@
     <Content Include="Views\JobRoles\Details.cshtml" />
     <Content Include="Views\JobRoles\Edit.cshtml" />
     <Content Include="Views\JobRoles\Index.cshtml" />
-    <Content Include="Views\Project\Details.cshtml" />
+    <Content Include="Views\Project\KanbanBoard.cshtml" />
+    <Content Include="Views\Shared\_LayoutProject.cshtml" />
+    <Content Include="Views\Solution\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

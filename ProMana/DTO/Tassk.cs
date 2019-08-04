@@ -12,7 +12,7 @@ namespace DTO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tassk()
         {
-            Solutions = new HashSet<Solution>();
+            Solutions = new HashSet<Solutionn>();
         }
 
         public int Id { get; set; }
@@ -51,7 +51,7 @@ namespace DTO
         public virtual Module Module { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Solution> Solutions { get; set; }
+        public virtual ICollection<Solutionn> Solutions { get; set; }
 
         public virtual TaskType TaskType { get; set; }
 

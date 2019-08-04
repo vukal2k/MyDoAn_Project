@@ -20,13 +20,7 @@ namespace ProMana.Controllers
         {
             return View();
         }
-
-        // GET: Project/Details/5
-        public async Task<ActionResult> Details(int id)
-        {
-            var project = await projectBus.GetById(id);
-            return View();
-        }
+        
 
         // GET: Project/Create
         public async Task<ActionResult> Create()
@@ -57,6 +51,21 @@ namespace ProMana.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> KanbanBoard(int id)
+        {
+            var project = await projectBus.GetById(id);
+            return View(project);
+        }
+
+        //[HttpGet]
+        //public async Task<ActionResult> KanbanBoardFilter(int projectId, int moduleId)
+        //{
+        //    ViewBag.ModuleId = moduleId;
+        //    var project = await projectBus.GetById(projectId);
+        //    return View();
+        //}
 
         // GET: Project/Edit/5
         public ActionResult Edit(int id)

@@ -7,7 +7,7 @@ namespace DTO
     using System.Data.Entity.Spatial;
 
     [Table("Solution")]
-    public partial class Solution
+    public partial class Solutionn
     {
         public int Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace DTO
 
         [Column("Solution", TypeName = "ntext")]
         [Required]
-        public string Solution1 { get; set; }
+        public string Solution { get; set; }
 
         [Column(TypeName = "ntext")]
         public string Description { get; set; }

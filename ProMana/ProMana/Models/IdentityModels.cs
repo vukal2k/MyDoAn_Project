@@ -41,5 +41,9 @@ namespace IdentitySample.Models
         public System.Data.Entity.DbSet<DTO.JobRole> JobRoles { get; set; }
 
         public System.Data.Entity.DbSet<DTO.Project> Projects { get; set; }
+
+        public System.Data.Entity.DbSet<DTO.Solutionn> Solutions { get; set; }
+
+        public System.Data.Entity.DbSet<DTO.Tassk> Tassks { get; set; }
     }
 }
