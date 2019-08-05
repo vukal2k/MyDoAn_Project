@@ -25,13 +25,15 @@
                         <div class="form-group">
                             <label class="control-label col-md-2">Resolve Type</label>
                             <div class="col-md-10">
-                                <select class="form-control" name="ResolveType" id="solution.ResolveType">
-                                    <option>--Choose resolve type--</option>
-                                    @foreach (var item in (IEnumerable<DTO.ResolveType>)ViewBag.ResolveType)
-                                    {
-                                        <option value="@item.Id">@item.Title</option>
-                                    }
-                                </select>
+                                <div class="form-inline">
+                                    <select class="form-control" name="ResolveType" id="solution.ResolveType"  style="width:100%" type="text">
+                                        <option value="0">--Choose resolve type--</option>
+                                        @foreach (var item in (IEnumerable<DTO.ResolveType>)ViewBag.ResolveType)
+                                        {
+                                            <option value="@item.Id">@item.Title</option>
+                                        }
+                                    </select>
+                                </div>
                                 @Html.ValidationMessageFor(model => model.ResolveType, "", new { @class = "text-danger" })
                             </div>
                         </div>

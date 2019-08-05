@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using COMMON;
+using DTO;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,14 @@ namespace BUS
         }
 
         #region Public method
-        public async Task<bool> Create(Solutionn solution,string userName, List<string> errors)
+        public async Task<bool> Create(Solutionn solution,string userName,int statusId,List<string> errors)
         {
             try
             {
+                var task = await _unitOfWork.Tassks.GetById(solution.TaskId);
+                task.StatusId = statusId;
+                _unitOfWork.Tassks.Update(task);
+
                 solution.CreatedBy = userName;
                 solution.CreatedDateTime = DateTime.Now;
 

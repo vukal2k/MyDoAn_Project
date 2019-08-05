@@ -38,7 +38,7 @@ else
                             In Progress
                         </div>
                         <div class="panel-body">
-                            <div id="TODO" class="kanban-centered">
+                            <div id="InProgress" class="kanban-centered">
                                 @{
                                     var inProgressList = item.Tasks.Where(t => t.IsActive == true && t.StatusId == COMMON.TaskStatusKey.InProgress);
                                     foreach (var task in inProgressList)
@@ -46,7 +46,7 @@ else
                                         <article class="kanban-entry grab"  id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="#">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>
                                                         Deadline: @task.To 
@@ -73,7 +73,7 @@ else
                             Resolved
                         </div>
                         <div class="panel-body">
-                            <div id="DOING" class="kanban-centered">
+                            <div id="Resolved" class="kanban-centered">
                                 @{
                                     var resolvedList = item.Tasks.Where(t => t.IsActive == true && t.StatusId == COMMON.TaskStatusKey.Resolved);
                                     foreach (var task in resolvedList)
@@ -81,7 +81,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="#">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
@@ -102,7 +102,7 @@ else
                             Done
                         </div>
                         <div class="panel-body">
-                            <div id="DONE" class="kanban-centered">
+                            <div id="Closed" class="kanban-centered">
                                 @{
                                     var doneList = item.Tasks.Where(t => t.IsActive == true && t.StatusId == COMMON.TaskStatusKey.Closed);
                                     foreach (var task in doneList)
@@ -110,7 +110,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="#">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>

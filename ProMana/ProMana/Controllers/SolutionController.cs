@@ -1,4 +1,5 @@
 ﻿using BUS;
+using COMMON;
 using DTO;
 using Newtonsoft.Json;
 using System;
@@ -30,9 +31,24 @@ namespace ProMana.Controllers
         }
 
         // GET: Solution/Create
-        public async Task<ActionResult> Create(int id)
+        public async Task<ActionResult> Create(int taskId, int statusId)
         {
-            ViewBag.Task = await _taskBus.GetById(id,errors);
+            //int taskId = 0;
+            //int statusId = 0;
+
+            //int.TryParse(formCollection["taskId"], out taskId);
+            //int.TryParse(formCollection["statusId"], out statusId);
+
+            var task = await _taskBus.CheckSolutionTaskPermission(taskId,statusId,"pmtest", errors);
+            if (task == null)
+            {
+                return Content("0");
+            }else if (task.StatusId == TaskStatusKey.Closed)
+            {
+                return Content("1");
+            }
+
+            ViewBag.Task = task;
             ViewBag.ResolveType = await _resolveTypeBUS.GetAll();
             ViewBag.Errors = errors;
             return View();
@@ -40,14 +56,15 @@ namespace ProMana.Controllers
 
         // POST: Solution/Create
         [HttpPost]
-        public async Task<ActionResult> CreateSoution(string solutionJson)
+        public async Task<ActionResult> CreateSoution(FormCollection formCollection)
         {
             try
             {
-                Solutionn solution = JsonConvert.DeserializeObject<Solutionn>(solutionJson);
+                Solutionn solution = JsonConvert.DeserializeObject<Solutionn>(formCollection["solutionJson"]);
+                int statusId = int.Parse(formCollection["statusId"]);
                 bool result = false;
 
-                result = await _solutionBUS.Create(solution, "pmtest", errors);
+                result = await _solutionBUS.Create(solution, "pmtest", statusId,errors);
 
                 if (result)
                 {

@@ -45,5 +45,9 @@ namespace IdentitySample.Models
         public System.Data.Entity.DbSet<DTO.Solutionn> Solutions { get; set; }
 
         public System.Data.Entity.DbSet<DTO.Tassk> Tassks { get; set; }
+
+        public System.Data.Entity.DbSet<DTO.Module> Modules { get; set; }
+
+        public System.Data.Entity.DbSet<DTO.TaskType> TaskTypes { get; set; }
     }
 }
