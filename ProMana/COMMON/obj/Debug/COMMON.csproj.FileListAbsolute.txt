@@ -4,3 +4,8 @@ C:\Users\vuanl\Desktop\ProMana\COMMON\obj\Debug\COMMON.csproj.CoreCompileInputs.
 C:\Users\vuanl\Desktop\ProMana\COMMON\obj\Debug\COMMON.dll
 C:\Users\vuanl\Desktop\ProMana\COMMON\obj\Debug\COMMON.pdb
 C:\Users\vuanl\Desktop\ProMana\COMMON\obj\Debug\COMMON.csprojAssemblyReference.cache
+D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\COMMON.dll
+D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\COMMON.pdb
+D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.csproj.CoreCompileInputs.cache
+D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.dll
+D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.pdb

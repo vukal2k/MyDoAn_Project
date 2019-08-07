@@ -1,107 +1,188 @@
-﻿@model DTO.Tassk
+﻿@model DTO.Task
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
-<h2>Details</h2>
+<style>
+    #noiListTaskDungChan{
+        overflow:scroll;
+        height:500px;
+    }
 
-<div>
-    <h4>Tassk</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Module.Title)
-        </dt>
+    #noiDetailDungChan {
+        overflow: scroll;
+        height: 500px;
+    }
+    .card:hover {
+        transform: scale(1.1, 1.1);
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Module.Title)
-        </dd>
+    .cardActive {
+        border-style: groove;
+    }
+</style>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TaskType.Title)
-        </dt>
+<h2>Task List</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.TaskType.Title)
-        </dd>
+<div class="row">
+    <div class="col-md-3">
+        <div id="noiListTaskDungChan">
+            @foreach (var item in Model.Module.Project.Modules)
+            {
+                foreach (var task in item.Tasks)
+                {
+                    if (task.Id == Model.Id)
+                    {
+                        <div class="card cardActive" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                            <div class="card-body">
+                                <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
+                                <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType.Title</label></h6>
+                                <p class="card-text">Created By: @task.UserInfo1.UserName</p>
+                                <p class="card-text">Deadline: @task.To</p>
+                                <a href="#" class="card-link">Card link</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card cardActive" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                            <div class="card-body">
+                                <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
+                                <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType.Title</label></h6>
+                                <p class="card-text">Created By: @task.UserInfo1.UserName</p>
+                                <p class="card-text">Deadline: @task.To</p>
+                                <a href="#" class="card-link">Card link</a>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-9" id="noiDetailDungChan">
+        <h4>Tassk</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dd>
+                <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType.Title</label>
+            </dd>
+           
+            <dd>
+                <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
+                <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
+                <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
+            </dd>
+            <dt>
+                Module
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Module.Title)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreatedBy)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AssignedTo)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AssignedTo)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AssignedTo)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AssignedTo)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.From)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.From)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.From)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.From)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.To)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.To)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.To)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.To)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Level)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Level)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Level)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Level)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.StatusId)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.StatusId)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.StatusId)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.StatusId)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-
-    </dl>
+        </dl>
+        <hr />
+        <h3>Solutions</h3>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Resolve Type
+                </th>
+                <th>
+                    User
+                </th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model.Solutions)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.ResolveType1.Title
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Module.ProjectId})')
+            $("#sidebar2").addClass('active');
+            $("#sidebar2").children().attr("href",'@Url.Action("Details", "Task", new { id = Model.Id})')
+        });
+    </script>
+}

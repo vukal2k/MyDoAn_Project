@@ -18,8 +18,9 @@ namespace DTO
             Requests = new HashSet<Request>();
             Requests1 = new HashSet<Request>();
             RoleInProjects = new HashSet<RoleInProject>();
-            Tasks = new HashSet<Tassk>();
-            Tasks1 = new HashSet<Tassk>();
+            Solutions = new HashSet<Solution>();
+            Tasks = new HashSet<Task>();
+            Tasks1 = new HashSet<Task>();
         }
 
         [Key]
@@ -63,9 +64,12 @@ namespace DTO
         public virtual ICollection<RoleInProject> RoleInProjects { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tassk> Tasks { get; set; }
+        public virtual ICollection<Solution> Solutions { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tassk> Tasks1 { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Task> Tasks1 { get; set; }
     }
 }

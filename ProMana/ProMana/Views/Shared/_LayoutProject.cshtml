@@ -64,6 +64,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             padding-bottom: 3%;
             padding-left: 14%;
             color: white;
+            z-index: 100 !important;
+            position:relative;
         }
 
         .myNav {
@@ -75,7 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         #buttonAddProject {
             position: absolute;
-            margin-left: 75%;
+            margin-left: 70% !important;
             margin-top: -1%;
             box-shadow: 0 1px,5px, #000000;
         }
@@ -85,10 +87,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
 
         .mySideBar {
-            margin-top: 13% !important;
-            z-index: -1 !important;
+            margin-top: 10% !important;
+            z-index: 1 !important;
             height:700px !important;
             position:absolute;
+        }
+
+        .myALink {
+            z-index: 1000 !important;
         }
     </style>
 </head>
@@ -113,8 +119,6 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-purple-light sidebar-mini sidebar-collapse">
-    <div>
-
         <!-- Main Header -->
         <header class="main-header" style="position:relative !important; background-color:#605ca8; margin-bottom:0px !important">
 
@@ -176,7 +180,8 @@ desired effect
                     <li class="header">HEADER</li>
                     <!-- Optionally, you can add icons to the links -->
                     @*<li class="active"><a href="#"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>*@
-                    <li id="sidebar1"><a href="#"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>
+                    <li id="sidebar1" class="myALink"><a href="@Url.Action("KanbanBoard","Project")"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>
+                    <li id="sidebar2" class="myALink"><a href="#"><i class="fas fa-tasks"></i> <span>Tasks</span></a></li>
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>
@@ -214,7 +219,6 @@ desired effect
                 <h4><i class="fas fa-envelope"></i>: vuanlbv@gmail.com</h4>
             </div>
         </div>
-    </div>
     <!-- ./wrapper -->
     <!-- REQUIRED JS SCRIPTS -->
     <!-- jQuery 3 -->

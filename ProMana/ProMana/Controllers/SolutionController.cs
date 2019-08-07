@@ -60,7 +60,7 @@ namespace ProMana.Controllers
         {
             try
             {
-                Solutionn solution = JsonConvert.DeserializeObject<Solutionn>(formCollection["solutionJson"]);
+                Solution solution = JsonConvert.DeserializeObject<Solution>(formCollection["solutionJson"]);
                 int statusId = int.Parse(formCollection["statusId"]);
                 bool result = false;
 

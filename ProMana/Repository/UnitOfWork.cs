@@ -22,10 +22,10 @@ namespace Repository
             ProjectLogs = new Repository<ProjectLog>(_dbContext);
             Requests = new Repository<Request>(_dbContext);
             RoleInProjects = new Repository<RoleInProject>(_dbContext);
-            Tassks = new Repository<Tassk>(_dbContext);
+            Tasks = new Repository<DTO.Task>(_dbContext);
             TaskTypes = new Repository<TaskType>(_dbContext);
             UserInfos = new Repository<UserInfo>(_dbContext);
-            Solutions = new Repository<Solutionn>(_dbContext);
+            Solutions = new Repository<Solution>(_dbContext);
             ResolveTypes = new Repository<ResolveType>(_dbContext);
         }
 
@@ -37,10 +37,10 @@ namespace Repository
         public Repository<ProjectLog> ProjectLogs { get; set; }
         public Repository<Request> Requests { get; set; }
         public Repository<RoleInProject> RoleInProjects { get; set; }
-        public Repository<Tassk> Tassks { get; set; }
+        public Repository<DTO.Task> Tasks { get; set; }
         public Repository<TaskType> TaskTypes { get; set; }
         public Repository<UserInfo> UserInfos { get; set; }
-        public Repository<Solutionn> Solutions { get; set; }
+        public Repository<Solution> Solutions { get; set; }
         public Repository<ResolveType> ResolveTypes { get; set; }
         #endregion
 

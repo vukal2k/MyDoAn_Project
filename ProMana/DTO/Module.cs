@@ -12,7 +12,7 @@ namespace DTO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Module()
         {
-            Tasks = new HashSet<Tassk>();
+            Tasks = new HashSet<Task>();
         }
 
         public int Id { get; set; }
@@ -23,7 +23,6 @@ namespace DTO
 
         public int ProjectId { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string TeamLead { get; set; }
 
@@ -34,6 +33,6 @@ namespace DTO
         public virtual UserInfo UserInfo { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tassk> Tasks { get; set; }
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

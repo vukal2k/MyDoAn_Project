@@ -100,16 +100,17 @@ namespace DAL
             //LookupStatus.AddRange(listStatus);
             //SaveChanges();
         }
-
         public virtual DbSet<JobRole> JobRoles { get; set; }
         public virtual DbSet<LookupStatus> LookupStatus { get; set; }
         public virtual DbSet<Module> Modules { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectLog> ProjectLogs { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
+        public virtual DbSet<ResolveType> ResolveTypes { get; set; }
         public virtual DbSet<RoleInProject> RoleInProjects { get; set; }
+        public virtual DbSet<Solution> Solutions { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Tassk> Tasks { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<UserInfo> UserInfoes { get; set; }
 
@@ -122,8 +123,11 @@ namespace DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<LookupStatus>()
+                .Property(c => c.Id).HasDatabaseGeneratedOption(null);
+
+            modelBuilder.Entity<LookupStatus>()
                 .HasMany(e => e.Projects)
-                .WithRequired(e => e.LookupStatus)
+                .WithRequired(e => e.LookupStatu)
                 .HasForeignKey(e => e.StatusId)
                 .WillCascadeOnDelete(false);
 
@@ -135,7 +139,7 @@ namespace DAL
 
             modelBuilder.Entity<LookupStatus>()
                 .HasMany(e => e.Tasks)
-                .WithRequired(e => e.LookupStatu)
+                .WithRequired(e => e.LookupStatus)
                 .HasForeignKey(e => e.StatusId)
                 .WillCascadeOnDelete(false);
 
@@ -169,15 +173,24 @@ namespace DAL
                 .Property(e => e.ApprovalBy)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<ResolveType>()
+                .HasMany(e => e.Solutions)
+                .WithOptional(e => e.ResolveType1)
+                .HasForeignKey(e => e.ResolveType);
+
             modelBuilder.Entity<RoleInProject>()
                 .Property(e => e.UserName)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Tassk>()
+            modelBuilder.Entity<Solution>()
                 .Property(e => e.CreatedBy)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Tassk>()
+            modelBuilder.Entity<Task>()
+                .Property(e => e.CreatedBy)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Task>()
                 .Property(e => e.AssignedTo)
                 .IsUnicode(false);
 
@@ -208,9 +221,8 @@ namespace DAL
 
             modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.Modules)
-                .WithRequired(e => e.UserInfo)
-                .HasForeignKey(e => e.TeamLead)
-                .WillCascadeOnDelete(false);
+                .WithOptional(e => e.UserInfo)
+                .HasForeignKey(e => e.TeamLead);
 
             modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.Projects)
@@ -226,14 +238,14 @@ namespace DAL
 
             modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.Requests)
-                .WithRequired(e => e.UserInfo)
-                .HasForeignKey(e => e.CreatedBy)
-                .WillCascadeOnDelete(false);
+                .WithOptional(e => e.UserInfo)
+                .HasForeignKey(e => e.ApprovalBy);
 
             modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.Requests1)
-                .WithOptional(e => e.UserInfo1)
-                .HasForeignKey(e => e.ApprovalBy);
+                .WithRequired(e => e.UserInfo1)
+                .HasForeignKey(e => e.CreatedBy)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.RoleInProjects)
@@ -241,15 +253,21 @@ namespace DAL
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserInfo>()
-                .HasMany(e => e.Tasks)
+                .HasMany(e => e.Solutions)
                 .WithRequired(e => e.UserInfo)
                 .HasForeignKey(e => e.CreatedBy)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserInfo>()
+                .HasMany(e => e.Tasks)
+                .WithRequired(e => e.UserInfo)
+                .HasForeignKey(e => e.AssignedTo)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserInfo>()
                 .HasMany(e => e.Tasks1)
                 .WithRequired(e => e.UserInfo1)
-                .HasForeignKey(e => e.AssignedTo)
+                .HasForeignKey(e => e.CreatedBy)
                 .WillCascadeOnDelete(false);
         }
     }

@@ -19,13 +19,13 @@ namespace BUS
         }
 
         #region Public method
-        public async Task<bool> Create(Solutionn solution,string userName,int statusId,List<string> errors)
+        public async Task<bool> Create(Solution solution,string userName,int statusId,List<string> errors)
         {
             try
             {
-                var task = await _unitOfWork.Tassks.GetById(solution.TaskId);
+                var task = await _unitOfWork.Tasks.GetById(solution.TaskId);
                 task.StatusId = statusId;
-                _unitOfWork.Tassks.Update(task);
+                _unitOfWork.Tasks.Update(task);
 
                 solution.CreatedBy = userName;
                 solution.CreatedDateTime = DateTime.Now;

@@ -61,7 +61,7 @@
     <Compile Include="RoleInProject.cs" />
     <Compile Include="Solution.cs" />
     <Compile Include="sysdiagram.cs" />
-    <Compile Include="Tassk.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="TaskType.cs" />
     <Compile Include="UserInfo.cs" />
     <Compile Include="ViewModel\MemberParamsViewModel.cs" />

@@ -7,12 +7,12 @@ namespace DTO
     using System.Data.Entity.Spatial;
 
     [Table("Task")]
-    public partial class Tassk
+    public partial class Task
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tassk()
+        public Task()
         {
-            Solutions = new HashSet<Solutionn>();
+            Solutions = new HashSet<Solution>();
         }
 
         public int Id { get; set; }
@@ -46,12 +46,12 @@ namespace DTO
 
         public bool IsActive { get; set; }
 
-        public virtual LookupStatus LookupStatu { get; set; }
+        public virtual LookupStatus LookupStatus { get; set; }
 
         public virtual Module Module { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Solutionn> Solutions { get; set; }
+        public virtual ICollection<Solution> Solutions { get; set; }
 
         public virtual TaskType TaskType { get; set; }
 

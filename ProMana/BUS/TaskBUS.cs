@@ -18,11 +18,11 @@ namespace BUS
             _unitOfWork = new UnitOfWork();
         }
 
-        public async Task<Tassk> GetById(int taskId, List<string>errors)
+        public async Task<DTO.Task> GetById(int taskId, List<string>errors)
         {
             try
             {
-                var result = await _unitOfWork.Tassks.GetById(taskId);
+                var result = await _unitOfWork.Tasks.GetById(taskId);
                 return result;
             }
             catch (Exception ex)
@@ -32,11 +32,11 @@ namespace BUS
             }
         }
 
-        public async Task<Tassk> CheckSolutionTaskPermission(int taskId,int statusId,string userName,List<string> errors)
+        public async Task<DTO.Task> CheckSolutionTaskPermission(int taskId,int statusId,string userName,List<string> errors)
         {
             try
             {
-                var result = await _unitOfWork.Tassks.GetById(taskId);
+                var result = await _unitOfWork.Tasks.GetById(taskId);
 
                 switch (statusId)
                 {
@@ -51,7 +51,7 @@ namespace BUS
                         if (result.CreatedBy == userName)
                         {
                             result.StatusId = TaskStatusKey.Closed;
-                            _unitOfWork.Tassks.Update(result);
+                            _unitOfWork.Tasks.Update(result);
 
                             var success = await _unitOfWork.CommitAsync() > 0;
                             if (success)

@@ -9,6 +9,7 @@ namespace DTO
     [Table("RoleInProject")]
     public partial class RoleInProject
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         public int ProjectId { get; set; }

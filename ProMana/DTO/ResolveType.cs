@@ -12,10 +12,9 @@ namespace DTO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ResolveType()
         {
-            Solutions = new HashSet<Solutionn>();
+            Solutions = new HashSet<Solution>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]
@@ -23,6 +22,6 @@ namespace DTO
         public string Title { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Solutionn> Solutions { get; set; }
+        public virtual ICollection<Solution> Solutions { get; set; }
     }
 }

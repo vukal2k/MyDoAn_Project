@@ -23,8 +23,8 @@ D:\MyDoAn_Project\ProMana\DTO\bin\Debug\EntityFramework.dll
 D:\MyDoAn_Project\ProMana\DTO\bin\Debug\EntityFramework.SqlServer.dll
 D:\MyDoAn_Project\ProMana\DTO\bin\Debug\EntityFramework.xml
 D:\MyDoAn_Project\ProMana\DTO\bin\Debug\EntityFramework.SqlServer.xml
-D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.csprojAssemblyReference.cache
 D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.csproj.CoreCompileInputs.cache
 D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.csproj.CopyComplete
 D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.dll
 D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.pdb
+D:\MyDoAn_Project\ProMana\DTO\obj\Debug\DTO.csprojAssemblyReference.cache

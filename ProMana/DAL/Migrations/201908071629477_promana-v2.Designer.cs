@@ -7,13 +7,13 @@ namespace DAL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class promanav5 : IMigrationMetadata
+    public sealed partial class promanav2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(promanav5));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(promanav2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201908030852238_promana-v5"; }
+            get { return "201908071629477_promana-v2"; }
         }
         
         string IMigrationMetadata.Source

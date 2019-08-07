@@ -7,13 +7,13 @@ namespace DTO
     using System.Data.Entity.Spatial;
 
     [Table("Solution")]
-    public partial class Solutionn
+    public partial class Solution
     {
         public int Id { get; set; }
 
         public int TaskId { get; set; }
 
-        public int ResolveType { get; set; }
+        public int? ResolveType { get; set; }
 
         [Column(TypeName = "ntext")]
         [Required]
@@ -21,7 +21,7 @@ namespace DTO
 
         [Column("Solution", TypeName = "ntext")]
         [Required]
-        public string Solution { get; set; }
+        public string Solution1 { get; set; }
 
         [Column(TypeName = "ntext")]
         public string Description { get; set; }
@@ -34,6 +34,8 @@ namespace DTO
 
         public virtual ResolveType ResolveType1 { get; set; }
 
-        public virtual Tassk Task { get; set; }
+        public virtual Task Task { get; set; }
+
+        public virtual UserInfo UserInfo { get; set; }
     }
 }

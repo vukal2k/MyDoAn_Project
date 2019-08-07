@@ -52,33 +52,13 @@
   <ItemGroup>
     <Compile Include="DbProManaContext.cs" />
     <Compile Include="Initialaze.cs" />
-    <Compile Include="Migrations\201908030807327_promana-v1.cs" />
-    <Compile Include="Migrations\201908030807327_promana-v1.Designer.cs">
-      <DependentUpon>201908030807327_promana-v1.cs</DependentUpon>
+    <Compile Include="Migrations\201908071620553_promana-v1.cs" />
+    <Compile Include="Migrations\201908071620553_promana-v1.Designer.cs">
+      <DependentUpon>201908071620553_promana-v1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201908030816154_promana-v2.cs" />
-    <Compile Include="Migrations\201908030816154_promana-v2.Designer.cs">
-      <DependentUpon>201908030816154_promana-v2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908030826373_promana-v3.cs" />
-    <Compile Include="Migrations\201908030826373_promana-v3.Designer.cs">
-      <DependentUpon>201908030826373_promana-v3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908030838508_promana-v4.cs" />
-    <Compile Include="Migrations\201908030838508_promana-v4.Designer.cs">
-      <DependentUpon>201908030838508_promana-v4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908030852238_promana-v5.cs" />
-    <Compile Include="Migrations\201908030852238_promana-v5.Designer.cs">
-      <DependentUpon>201908030852238_promana-v5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908031051452_promana-v6.cs" />
-    <Compile Include="Migrations\201908031051452_promana-v6.Designer.cs">
-      <DependentUpon>201908031051452_promana-v6.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908031054383_promana-v7.cs" />
-    <Compile Include="Migrations\201908031054383_promana-v7.Designer.cs">
-      <DependentUpon>201908031054383_promana-v7.cs</DependentUpon>
+    <Compile Include="Migrations\201908071629477_promana-v2.cs" />
+    <Compile Include="Migrations\201908071629477_promana-v2.Designer.cs">
+      <DependentUpon>201908071629477_promana-v2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,26 +78,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201908030807327_promana-v1.resx">
-      <DependentUpon>201908030807327_promana-v1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201908071620553_promana-v1.resx">
+      <DependentUpon>201908071620553_promana-v1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908030816154_promana-v2.resx">
-      <DependentUpon>201908030816154_promana-v2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908030826373_promana-v3.resx">
-      <DependentUpon>201908030826373_promana-v3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908030838508_promana-v4.resx">
-      <DependentUpon>201908030838508_promana-v4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908030852238_promana-v5.resx">
-      <DependentUpon>201908030852238_promana-v5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908031051452_promana-v6.resx">
-      <DependentUpon>201908031051452_promana-v6.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908031054383_promana-v7.resx">
-      <DependentUpon>201908031054383_promana-v7.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201908071629477_promana-v2.resx">
+      <DependentUpon>201908071629477_promana-v2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
