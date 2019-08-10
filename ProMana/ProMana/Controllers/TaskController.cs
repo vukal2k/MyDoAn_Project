@@ -11,6 +11,7 @@ namespace ProMana.Controllers
     public class TaskController : Controller
     {
         private TaskBUS _taskBus = new TaskBUS();
+        private ProjectBUS _projectBus = new ProjectBUS();
         private List<string> errors = new List<string>();
         // GET: Task
         public ActionResult Index()
@@ -48,9 +49,10 @@ namespace ProMana.Controllers
         }
 
         // GET: Task/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var task = await _taskBus.GetById(id, errors);
+            return View(task);
         }
 
         // POST: Task/Edit/5

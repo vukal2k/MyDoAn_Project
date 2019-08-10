@@ -12,8 +12,9 @@ namespace ProMana.Controllers
 {
     public class ProjectController : Controller
     {
-        private ProjectBUS projectBus = new ProjectBUS();
-        private JobRoleBUS JobRoleBUS = new JobRoleBUS();
+        private ProjectBUS _projectBus = new ProjectBUS();
+        private JobRoleBUS _jobRoleBUS = new JobRoleBUS();
+        private TaskTypeBUS _taskTypeBUS = new TaskTypeBUS();
         List<string> errors = new List<string>();
         // GET: Project
         public ActionResult Index()
@@ -25,8 +26,8 @@ namespace ProMana.Controllers
         // GET: Project/Create
         public async Task<ActionResult> Create()
         {
-            ViewBag.GetUserDoNotInProject = await projectBus.GetUserDoNotInProject(0);
-            ViewBag.GetSoftRole = await JobRoleBUS.GetSoftRole();
+            ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+            ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             return View();
         }
 
@@ -39,7 +40,7 @@ namespace ProMana.Controllers
                 if (ModelState.IsValid)
                 {
                     var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
-                    await projectBus.Create(project, listMembers, "pmtest",errors);
+                    await _projectBus.Create(project, listMembers, "pmtest",errors);
                 }
 
                 ViewBag.Errors = errors;
@@ -55,7 +56,16 @@ namespace ProMana.Controllers
         [HttpGet]
         public async Task<ActionResult> KanbanBoard(int id)
         {
-            var project = await projectBus.GetById(id);
+            var project = await _projectBus.GetById(id);
+            return View(project);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> TaskList(int id, bool createTask = false)
+        {
+            var project = await _projectBus.GetById(id);
+            ViewBag.IsCreateTask = createTask;
+            ViewBag.TaskTypes = await _taskTypeBUS.GetAll();
             return View(project);
         }
 

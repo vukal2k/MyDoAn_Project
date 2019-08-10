@@ -1,0 +1,166 @@
+﻿@model DTO.Project
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+<link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
+<style>
+    #noiListTaskDungChan {
+        overflow-y: scroll;
+        overflow-x: no-display;
+        height: 500px;
+    }
+
+    #noiDetailDungChan {
+        overflow-y: scroll;
+        height: 500px;
+    }
+
+    .card:hover {
+        transform: scale(1, 1.1);
+        background-color: #dffff6;
+    }
+
+    .cardActive {
+        border-style: groove;
+        background-color: #dffff6;
+    }
+</style>
+
+<h2>Task List</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div id="noiListTaskDungChan">
+            @foreach (var item in Model.Modules)
+            {
+                foreach (var task in item.Tasks.Where(m => m.IsActive))
+                {
+                    <div class="card" onclick="chooseTask(this,@task.Id);" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
+                            <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType.Title</label></h6>
+                            <p class="card-text">Created By: @task.UserInfo1.UserName</p>
+                            <p class="card-text">Deadline: @task.To</p>
+                            <a href="#" class="card-link">Card link</a>
+                        </div>
+                    </div>
+                    <br />
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-9" id="noiDetailDungChan">
+
+        Task detail
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modalCreateTask" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("~/Views/Task/Create.cshtml", Model)
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#sidebar2").addClass('active');
+            $("#sidebar2").children().attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
+        });
+
+        function chooseTask(btn, taskId) {
+            $(".card").removeClass("cardActive");
+            $(btn).addClass("cardActive");
+
+            //post data
+            $.ajax({
+                url: "@Url.Action("Details","Task")/" + taskId,
+                cache: false,
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                data: {
+                    'taskId': taskId,
+                    'statusId': status
+                },
+                success: function (result) {
+                    if (result !== "0" && result !== "1") {
+                        $("#noiDetailDungChan").html(result);
+                    }
+                }
+            });
+        }
+
+        var isCreateTask = "@ViewBag.IsCreateTask";
+        if (isCreateTask =="True") {
+            $("#modalCreateTask").modal("show");
+        }
+    </script>
+
+    <script>
+        function validateCreated () {
+            $('#from').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+            $('#to').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+
+            $('#form').validate({
+                errorClass: 'errors',
+                rules: {
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    Code: {
+                        required: true,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    Name: {
+                        required: "Project name is required",
+                        maxlength: "Max length is 100"
+                    },
+                    Code: {
+                        required: "Project Code is required",
+                        maxlength: "Max length is 100"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#submit").click(function () {
+                $('#fromValue').val($('#from').val());
+                $('#toValue').val($('#to').val());
+                $("#members").val(JSON.stringify(listMemeberAndRole));
+                return $("#form").valid();
+            });
+        }
+    </script>
+}

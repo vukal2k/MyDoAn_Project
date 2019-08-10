@@ -179,9 +179,15 @@ desired effect
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">HEADER</li>
                     <!-- Optionally, you can add icons to the links -->
-                    @*<li class="active"><a href="#"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>*@
                     <li id="sidebar1" class="myALink"><a href="@Url.Action("KanbanBoard","Project")"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>
-                    <li id="sidebar2" class="myALink"><a href="#"><i class="fas fa-tasks"></i> <span>Tasks</span></a></li>
+
+                    <li class="treeview" id="sidebar2">
+                        <a><i class="fas fa-tasks"></i> <span>Task List</span></a>
+                        <ul class="treeview-menu">
+                            <li><a id="linkSidebar21" href="#"><i class="fas fa-tasks"></i> <span> Task List</span></a></li>
+                            <li><a id="linkSidebar22" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Task</span> </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>

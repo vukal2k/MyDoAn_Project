@@ -3,7 +3,17 @@
 }
 
 <h4>Task</h4>
-    <hr />
+<hr />
+@using (Ajax.BeginForm("SearchStudent", "Home", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "GET",
+    LoadingElementId = "imgloader",
+    OnFailure = "fnError",
+    OnBegin = "fnOnBegin",
+    UpdateTargetId = "divSearchStudent",
+}))
+{
     <dl class="dl-horizontal">
         <dd>
             <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType.Title</label>
@@ -79,35 +89,35 @@
         </dd>
 
     </dl>
-    <a class="aHover">Edit</a>
-    <hr />
-    <h3>Solutions</h3>
-    <table class="table table-hover table-bordered">
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                Resolve Type
-            </th>
-            <th>
-                User
-            </th>
-        </tr>
-        <tbody>
-            @foreach (var item in Model.Solutions)
-            {
-                <tr>
-                    <td>
-                        @item.Id
-                    </td>
-                    <td>
-                        @item.ResolveType1.Title
-                    </td>
-                    <td>
-                        @item.UserInfo.FullName
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+}
+<hr />
+<h3>Solutions</h3>
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Resolve Type
+        </th>
+        <th>
+            User
+        </th>
+    </tr>
+    <tbody>
+        @foreach (var item in Model.Solutions)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.ResolveType1.Title
+                </td>
+                <td>
+                    @item.UserInfo.FullName
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

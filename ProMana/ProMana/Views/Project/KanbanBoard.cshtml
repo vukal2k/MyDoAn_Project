@@ -140,8 +140,11 @@ else
         $(document).ready(function () {
             $("#sidebar1").addClass("active");
             $("#sidebar1").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#sidebar2").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#sidebar2").children().attr("href",'@Url.Action("Details", "Task", new { id = Model.Modules.FirstOrDefault().Tasks.FirstOrDefault().Id})')
+            $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
+
+            $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar22").attr("href",'@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
         });
     </script>
     <script>

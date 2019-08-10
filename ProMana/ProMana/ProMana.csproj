@@ -1974,7 +1974,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
@@ -1992,21 +1991,9 @@
     <Content Include="Views\Home\CreateOrganisation.cshtml" />
     <Content Include="Views\Home\ListOrganisation.cshtml" />
     <Content Include="Views\Home\UpdateOrganisation.cshtml" />
-    <Content Include="Views\Shared\_UpdateBuDDirectorate.cshtml" />
-    <Content Include="Views\Shared\_UpdateDepartment.cshtml" />
-    <Content Include="Views\Shared\_UpdateTeam.cshtml" />
     <Content Include="Views\Home\ListPremises.cshtml" />
     <Content Include="Views\Home\UpdatePremises.cshtml" />
-    <Content Include="Views\Shared\_UpdateFacilities.cshtml" />
-    <Content Include="Views\Shared\_UpdateVolunteering.cshtml" />
-    <Content Include="Views\Shared\_UpdateMinorWorks.cshtml" />
     <Content Include="Views\Home\UpdateService.cshtml" />
-    <Content Include="Views\Shared\_PremisesNotInService.cshtml" />
-    <Content Include="Views\Shared\_ServiceNotInPremise.cshtml" />
-    <Content Include="Views\Shared\_ListOrganisationByWord.cshtml" />
-    <Content Include="Views\Shared\_ListSupportingmaterial.cshtml" />
-    <Content Include="Views\Shared\_OrganisationRole.cshtml" />
-    <Content Include="Views\Shared\_ContactPartial.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\UsersAdmin\Index.cshtml" />
     <Content Include="Views\UsersAdmin\Edit.cshtml" />
@@ -2049,7 +2036,10 @@
     <Content Include="Views\Project\KanbanBoard.cshtml" />
     <Content Include="Views\Shared\_LayoutProject.cshtml" />
     <Content Include="Views\Solution\Create.cshtml" />
+    <Content Include="Views\Project\TaskList.cshtml" />
     <Content Include="Views\Task\Details.cshtml" />
+    <Content Include="Views\Task\Edit.cshtml" />
+    <Content Include="Views\Task\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -9,3 +9,7 @@ D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\COMMON.pdb
 D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.csproj.CoreCompileInputs.cache
 D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.dll
 D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.pdb
+D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.dll
+D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.pdb
+D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.dll.config
+D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.csproj.CopyComplete
