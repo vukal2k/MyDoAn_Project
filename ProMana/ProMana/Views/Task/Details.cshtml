@@ -67,7 +67,23 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StatusId)
+            @switch (Model.StatusId)
+            {
+                case COMMON.TaskStatusKey.Opened:
+            <label class="label label-default">@Model.LookupStatus.Name</label>
+                    break;
+                case COMMON.TaskStatusKey.InProgress:
+            <label class="label label-warning">@Model.LookupStatus.Name</label>
+                    break;
+                case COMMON.TaskStatusKey.Resolved:
+            <label class="label label-danger">@Model.LookupStatus.Name</label>
+                    break;
+                case COMMON.TaskStatusKey.Closed:
+            <label class="label label-success">@Model.LookupStatus.Name</label>
+                    break;
+                default:
+                    break;
+            }
         </dd>
 
         <dt>
@@ -79,7 +95,7 @@
         </dd>
 
     </dl>
-    <a class="aHover">Edit</a>
+    <a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>
     <hr />
     <h3>Solutions</h3>
     <table class="table table-hover table-bordered">

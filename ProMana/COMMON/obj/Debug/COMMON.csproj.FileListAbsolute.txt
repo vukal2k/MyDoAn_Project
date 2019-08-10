@@ -13,3 +13,4 @@ D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.dll
 D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.pdb
 D:\MyDoAn_Project\ProMana\COMMON\bin\Debug\DTO.dll.config
 D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.csproj.CopyComplete
+D:\MyDoAn_Project\ProMana\COMMON\obj\Debug\COMMON.csprojAssemblyReference.cache

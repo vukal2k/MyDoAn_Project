@@ -7,16 +7,14 @@
 
 
 
-@using (Ajax.BeginForm("SearchStudent", "Home", new AjaxOptions
+@using (Ajax.BeginForm("Create","Task", new { },new AjaxOptions
 {
     InsertionMode = InsertionMode.Replace,
-    HttpMethod = "GET",
-    LoadingElementId = "imgloader",
-    OnFailure = "fnError",
-    OnBegin = "fnOnBegin",
-    UpdateTargetId = "divSearchStudent",
-},htmlAttributes: new { @id = "formCreateTask"}))
+    HttpMethod = "POST",
+    UpdateTargetId = "createResult",
+},new { @id = "formCreateTask"}))
 {
+    <input type="hidden" value="abc" name="CreatedBy"/>
     <div class="form-horizontal">
         <div class="form-group">
             <label class="control-label col-md-2">
@@ -68,26 +66,26 @@
 
         <div class="form-group">
             <label class="control-label col-md-2">From</label>
-            <div class="col-md-10">
-                <input type="text" name="From" id="createFrom" class="form-control" />
+            <div class="control-label col-md-3">
+                <input type="text" name="From" onchange="ValidateDateTo('create')" class="form-control" style="margin-left:1.5% !important" id="createFrom"  autocomplete="off" />
             </div>
-        </div>
-        <div class="form-group">
+
             <label class="control-label col-md-2">To</label>
-            <div class="col-md-10">
-                <input type="text" name="To" id="createTo" class="form-control" />
+            <div class="control-label col-md-3">
+                <input type="text" class="form-control" name="To" id="createTo" autocomplete="off" />
             </div>
         </div>
+
         <div class="form-group">
-            <label class="control-label col-md-2">Priority</label>
+            <label class="control-label col-md-2">Level</label>
             <div class="col-md-10">
                 <select class="form-control" name="Level" id="createdLevel">
                     <option value="0">-- Choose level --</option>
-                    <option value="1">Trivial</option>
-                    <option value="2">Minor</option>
-                    <option value="3">Low</option>
-                    <option value="4">Medium</option>
-                    <option value="5">High</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </div>
         </div>
@@ -101,7 +99,7 @@
         <div class="form-group">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-9">
-                    <input type="button" value="Create" class="btn btn-success pull-right" />
+                    <input form="formCreateTask" type="submit" id="createSubmit" value="Create" class="btn btn-success pull-right" />
                 </div>
             </div>
         </div>

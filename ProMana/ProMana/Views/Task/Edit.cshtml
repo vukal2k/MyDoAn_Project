@@ -1,123 +1,139 @@
 ﻿@model DTO.Task
+@using COMMON
+
 @{
+    Layout = null;
+    var project = (DTO.Project)ViewBag.Project;
 }
 
-<h4>Task</h4>
+<h2>Edit task</h2>
 <hr />
-@using (Ajax.BeginForm("SearchStudent", "Home", new AjaxOptions
+
+@using (Ajax.BeginForm("Edit", "Task", new { }, new AjaxOptions
 {
     InsertionMode = InsertionMode.Replace,
-    HttpMethod = "GET",
-    LoadingElementId = "imgloader",
-    OnFailure = "fnError",
-    OnBegin = "fnOnBegin",
-    UpdateTargetId = "divSearchStudent",
-}))
+    HttpMethod = "POST",
+    UpdateTargetId = "noiDetailDungChan",
+}, new { @id = "editFormTask" }))
 {
-    <dl class="dl-horizontal">
-        <dd>
-            <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType.Title</label>
-        </dd>
+    <input type="hidden" value="@Model.Id" name="Id" />
+    <input type="hidden" value="@Model.CreatedBy" name="CreatedBy" />
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">
+                Title
+            </label>
+            <div class="col-md-10">
+                <input type="text" id="editTitle" value="@Model.Title" name="Title" class="form-control" />
+            </div>
+        </div>
 
-        <dd>
-            <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
-            <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
-            <a class="btn btn-success pull-right" style="margin-left:2%" href="#">Resolve</a>
-        </dd>
-        <dt>
-            Module
-        </dt>
+        <div class="form-group">
+            <label class="control-label col-md-2">Assigned To</label>
+            <div class="col-md-10">
+                <select name="AssignedTo" id="editAssignedTo" class="form-control">
+                    <option value="0">-- Choose member --</option>
+                    @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMember())
+                    {
+                        if (item.UserName.Equals(Model.AssignedTo))
+                        {
+                            <option selected value="@item.UserName">@item.FullName (@item.UserName)</option>
+                        }
+                        else
+                        {
+                            <option value="@item.UserName">@item.FullName (@item.UserName)</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Module.Title)
-        </dd>
+        <div class="form-group">
+            <label class="control-label col-md-2">Task Type</label>
+            <div class="col-md-10">
+                <select name="TaskTypeId" id="editTaskTypeId" class="form-control">
+                    <option value="0">-- Choose task type --</option>
+                    @foreach (var item in (IEnumerable<DTO.TaskType>)ViewBag.TaskTypes)
+                    {
+                        if (item.Id == Model.TaskTypeId)
+                        {
+                            <option selected value="@item.Id">@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
+        <div class="form-group">
+            <label class="control-label col-md-2">Module</label>
+            <div class="col-md-10">
+                <select name="ModuleId" id="editModuleId" class="form-control">
+                    <option value="0">-- Choose module --</option>
+                    @foreach (var item in project.Modules.Where(m => m.IsActive))
+                    {
+                        if (item.Id == Model.ModuleId)
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
+        <div class="form-group">
+            <label class="control-label col-md-2">From</label>
+            <div class="control-label col-md-3">
+                <input type="text" name="From" onchange="ValidateDateTo('edit')" value="@Model.From.ToString("mm/dd/yyyy hh:mm")" class="form-control" style="margin-left:1.5% !important" id="editFrom" autocomplete="off" />
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AssignedTo)
-        </dt>
+            <label class="control-label col-md-2">To</label>
+            <div class="control-label col-md-3">
+                <input type="text" class="form-control" name="To" id="editTo" value="@Model.To.ToString("mm/dd/yyyy hh:mm")" autocomplete="off" />
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.AssignedTo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.From)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.From)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.To)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.To)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Level)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Level)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StatusId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StatusId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
+        <div class="form-group">
+            <label class="control-label col-md-2">Level</label>
+            <div class="col-md-10">
+                <select class="form-control" name="Level" id="editLevel">
+                    <option value="0">-- Choose level --</option>
+                    @for (int i = 1; i < 5; i++)
+                    {
+                        if (Model.Level == i)
+                        {
+                            <option value="@i" selected>@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Description</label>
+            <div class="col-md-10">
+                <textarea name="Description" id="editDescription" class="form-control">@Model.Description</textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+                    <input form="editFormTask" type="submit" id="editSubmit" value="Save" class="btn btn-success pull-right" />
+                </div>
+                <div class="col-md-1"><input form="editFormTask" type="button" onclick="chooseTask(null,@Model.Id)" value="Cancel" class="btn btn-warning pull-right" />
+                </div>
+            </div>
+        </div>
+    </div>
 }
-<hr />
-<h3>Solutions</h3>
-<table class="table table-hover table-bordered">
-    <tr>
-        <th>
-            ID
-        </th>
-        <th>
-            Resolve Type
-        </th>
-        <th>
-            User
-        </th>
-    </tr>
-    <tbody>
-        @foreach (var item in Model.Solutions)
-        {
-            <tr>
-                <td>
-                    @item.Id
-                </td>
-                <td>
-                    @item.ResolveType1.Title
-                </td>
-                <td>
-                    @item.UserInfo.FullName
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
