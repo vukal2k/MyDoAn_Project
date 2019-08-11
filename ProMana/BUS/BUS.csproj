@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JobRoleBUS.cs" />
+    <Compile Include="ModuleBUS.cs" />
     <Compile Include="ProjectBUS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolutionBUS.cs" />

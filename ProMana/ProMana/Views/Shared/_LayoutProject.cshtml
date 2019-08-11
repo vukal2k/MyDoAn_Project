@@ -188,6 +188,14 @@ desired effect
                             <li><a id="linkSidebar22" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Task</span> </a></li>
                         </ul>
                     </li>
+
+                    <li class="treeview" id="sidebar3">
+                        <a><i class="fas fa-sitemap"></i> <span>Modules</span></a>
+                        <ul class="treeview-menu">
+                            <li><a id="linkSidebar31" href="#"><i class="fas fa-tasks"></i> <span>Module List</span></a></li>
+                            <li><a id="linkSidebar32" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Module</span> </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>
@@ -199,8 +207,8 @@ desired effect
             <!-- Content Header (Page header) -->
             <section class="content-header"></section>
 
-            <!-- Main content -->
-            <section class="content container-fluid">
+            <!-- Main content  class: container-fluid-->
+            <section class="content">
 
                 @RenderBody()
 
@@ -288,6 +296,7 @@ desired effect
                 },
                 "pagingType": "full_numbers",
                 "deferRender": true,
+                "bFilter": true
             });
         }
     </script>

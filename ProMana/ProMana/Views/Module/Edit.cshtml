@@ -1,0 +1,117 @@
+﻿@model DTO.Module
+@using COMMON
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+    ViewBag.Title = Model.Project.Name;
+}
+<h2>Edit module in project: @Model.Project.Name</h2>
+@using (Html.BeginForm("edit", "Module", FormMethod.Post, new { @id = "formModule" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TeamLead, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" name="TeamLead" id="TeamLead">
+                <option value="0">-- Choose Team Lead --</option>
+                @foreach (var item in (IEnumerable<DTO.UserInfo>)Model.Project.GetMember())
+                {
+                    if (item.UserName == Model.TeamLead)
+                    {
+                        <option selected value="@item.UserName">@item.FullName (@item.UserName)</option>
+                    }
+                    else
+                    {
+                        <option value="@item.UserName">@item.FullName (@item.UserName)</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" id="btnSubmit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    <a href="@Url.Action("Index","Module",new { id = Model.ProjectId})">Back to list</a>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            $("#sidebar3").addClass('active');
+            $("#sidebar1").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id})')
+            $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id})')
+            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id})')
+
+            $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id})')
+            $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id, createTask =true})')
+
+            $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id})')
+            $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Project.Id})')
+
+            $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id})')
+            $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Project.Id })')
+
+            validateTask();
+            if ('@ViewBag.InsertFailed' === "True")
+            {
+                $.notify("Failed!", "error");
+            }
+        })
+        function validateTask() {
+            $('#formModule').validate({
+                errorClass: 'errors',
+                rules: {
+                    Title: {
+                        required: true,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    Title: {
+                        required: "Title is required",
+                        maxlength: "Max length is 100"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#btnSubmit").click(function () {
+                var result = true;
+                if ($("#TeamLead").val() === "0") {
+                    $("#TeamLead").parent().addClass('has-error');
+                    result = false;
+                }
+
+                return $("#formModule").valid() && result;
+            })
+        }
+    </script>
+}

@@ -7,14 +7,15 @@
 
 
 
-@using (Ajax.BeginForm("Create","Task", new { },new AjaxOptions
+@using (Ajax.BeginForm("Create", "Task", new { }, new AjaxOptions
 {
     InsertionMode = InsertionMode.Replace,
     HttpMethod = "POST",
     UpdateTargetId = "createResult",
-},new { @id = "formCreateTask"}))
+}, new { @id = "createFormTask" }))
 {
-    <input type="hidden" value="abc" name="CreatedBy"/>
+    <input type="hidden" value="abc" name="CreatedBy" />
+    <input type="hidden" value="@Model.Id" name="projectId" />
     <div class="form-horizontal">
         <div class="form-group">
             <label class="control-label col-md-2">
@@ -67,7 +68,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">From</label>
             <div class="control-label col-md-3">
-                <input type="text" name="From" onchange="ValidateDateTo('create')" class="form-control" style="margin-left:1.5% !important" id="createFrom"  autocomplete="off" />
+                <input type="text" name="From" onchange="ValidateDateTo('create')" class="form-control" style="margin-left:1.5% !important" id="createFrom" autocomplete="off" />
             </div>
 
             <label class="control-label col-md-2">To</label>
@@ -79,7 +80,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Level</label>
             <div class="col-md-10">
-                <select class="form-control" name="Level" id="createdLevel">
+                <select class="form-control" name="Level" id="createLevel">
                     <option value="0">-- Choose level --</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -99,7 +100,7 @@
         <div class="form-group">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-9">
-                    <input form="formCreateTask" type="submit" id="createSubmit" value="Create" class="btn btn-success pull-right" />
+                    <input form="createFormTask" type="submit" id="createSubmit" value="Create" class="btn btn-success pull-right" />
                 </div>
             </div>
         </div>

@@ -33,25 +33,33 @@ namespace ProMana.Controllers
         // GET: Solution/Create
         public async Task<ActionResult> Create(int taskId, int statusId)
         {
-            //int taskId = 0;
-            //int statusId = 0;
-
-            //int.TryParse(formCollection["taskId"], out taskId);
-            //int.TryParse(formCollection["statusId"], out statusId);
-
-            var task = await _taskBus.CheckSolutionTaskPermission(taskId,statusId,"pmtest", errors);
-            if (task == null)
+            try
             {
-                return Content("0");
-            }else if (task.StatusId == TaskStatusKey.Closed)
-            {
-                return Content("1");
+                //int taskId = 0;
+                //int statusId = 0;
+
+                //int.TryParse(formCollection["taskId"], out taskId);
+                //int.TryParse(formCollection["statusId"], out statusId);
+
+                var task = await _taskBus.CheckSolutionTaskPermission(taskId, statusId, "pmtest", errors);
+                if (task == null)
+                {
+                    return Content("0");
+                }
+                else if (task.StatusId == TaskStatusKey.Closed || statusId == TaskStatusKey.InProgress)
+                {
+                    return Content("1");
+                }
+
+                ViewBag.Task = task;
+                ViewBag.ResolveType = await _resolveTypeBUS.GetAll();
+                ViewBag.Errors = errors;
+                return View();
             }
-
-            ViewBag.Task = task;
-            ViewBag.ResolveType = await _resolveTypeBUS.GetAll();
-            ViewBag.Errors = errors;
-            return View();
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         // POST: Solution/Create

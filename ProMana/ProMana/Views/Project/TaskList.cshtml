@@ -1,8 +1,8 @@
 ﻿@model DTO.Project
 
 @{
-    ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
+    ViewBag.Title = Model.Name;
 }
 <link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
 <style>
@@ -37,13 +37,12 @@
             {
                 foreach (var task in item.Tasks.Where(m => m.IsActive))
                 {
-                    <div class="card" onclick="chooseTask(this,@task.Id);" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                    <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
                         <div class="card-body">
                             <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
                             <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType.Title</label></h6>
                             <p class="card-text">Created By: @task.UserInfo1.UserName</p>
                             <p class="card-text">Deadline: @task.To</p>
-                            <a href="#" class="card-link">Card link</a>
                         </div>
                     </div>
                     <br />
@@ -52,7 +51,6 @@
         </div>
     </div>
     <div class="col-md-9" id="noiDetailDungChan">
-
         Task detail
     </div>
 </div>
@@ -74,17 +72,40 @@
 
     </div>
 </div>
+<div id="createResult">
+
+</div>
+<div id="solutionModalDungChan">
+
+</div>
 
 @section Scripts{
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
     <script>
         $(document).ready(function () {
-            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
             $("#sidebar2").addClass('active');
-            $("#sidebar2").children().attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
+            $("#sidebar1").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
+
+            $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+
+            $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
+
+            $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar32").attr("href",'@Url.Action("Create", "Module", new { id = Model.Id })')
 
             validateTask("create");
+
+            var choosedTask = @ViewBag.ChoosedTask;
+            if (choosedTask != "0") {
+                var btn = document.getElementById("card" + choosedTask);
+                chooseTask(btn, parseInt(choosedTask));
+                $("#noiListTaskDungChan").scrollTop($('#card' + choosedTask).position().top);
+            }
         });
 
         function chooseTask(btn, taskId) {
@@ -100,8 +121,6 @@
                 contentType: false,
                 type: 'GET',
                 data: {
-                    'taskId': taskId,
-                    'statusId': status
                 },
                 success: function (result) {
                     if (result !== "0" && result !== "1") {
@@ -111,7 +130,9 @@
             });
         }
 
+        var currentTaskId=null;
         function chooseEditTask(taskId) {
+            currentTaskId = taskId;
             //post data
             $.ajax({
                 url: "@Url.Action("Edit","Task")/" + taskId,
@@ -137,17 +158,17 @@
     </script>
 
     <script>
-        function validateTask (mode) {
-            $('#' + mode+'From').datetimepicker({
+        function validateTask(mode) {
+            $('#' + mode + 'From').datetimepicker({
                 timepicker: true,
                 format: 'm/d/Y h:m'
             });
-            $('#' + mode+'To').datetimepicker({
+            $('#' + mode + 'To').datetimepicker({
                 timepicker: true,
                 format: 'm/d/Y h:m'
             });
 
-            $('#' + mode+'FormTask').validate({
+            $('#' + mode + 'FormTask').validate({
                 errorClass: 'errors',
                 rules: {
                     Title: {
@@ -185,26 +206,27 @@
                 },
             });
 
-            $("#"+mode+"Submit").click(function () {
+            $("#" + mode + "Submit").click(function () {
                 var result = true;
-                if ($("#" + mode+"AssignedTo").val() === "0") {
+                if ($("#" + mode + "AssignedTo").val() === "0") {
                     $("#createAssignedTo").parent().addClass('has-error');
                     result = false;
                 }
-                if ($("#" + mode+"TaskTypeId").val() === "0") {
-                    $("#" + mode+"TaskTypeId").parent().addClass('has-error');
+                if ($("#" + mode + "TaskTypeId").val() === "0") {
+                    $("#" + mode + "TaskTypeId").parent().addClass('has-error');
                     result = false;
                 }
-                if ($("#" + mode+"ModuleId").val() === "0") {
-                    $("#" + mode+"ModuleId").parent().addClass('has-error');
+                if ($("#" + mode + "ModuleId").val() === "0") {
+                    $("#" + mode + "ModuleId").parent().addClass('has-error');
                     result = false;
                 }
-                if ($("#" + mode+"Level").val() === "0") {
-                    $("#" + mode+"Level").parent().addClass('has-error');
+                if ($("#" + mode + "Level").val() === "0") {
+                    $("#" + mode + "Level").parent().addClass('has-error');
                     result = false;
                 }
-                return $("#formCreateTask").valid() && result;
-            });
+
+                return $("#" + mode + "FormTask").valid() && result;
+            })
         }
 
         function ValidateDateTo(mode) {
@@ -214,8 +236,31 @@
                 minDate: new Date($('#' + mode+'From').val())
             });
         }
-        
+
+        function resetSumarry() {
+            if (currentTaskId != null) {
+                    //post data
+                    $.ajax({
+                        url: "@Url.Action("Details","Task")?id=" + currentTaskId + "&isSummary=true",
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        type: 'GET',
+                        data: {
+                        },
+                        success: function (result) {
+                            if (result !== "0" && result !== "1") {
+                                $("#card" + currentTaskId).html(result);
+                            }
+                        }
+                    });
+                }
+        }
+
+
+        function closeModalSolutionDetail(solutionId) {
+            $("#solutionModal" + solutionId).modal('hide')
+        }
     </script>
-    <div id="createResult">
-    </div>
+    <script src="~/Scripts/kanban.js"></script>
 }

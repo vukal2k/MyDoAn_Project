@@ -169,6 +169,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ModuleController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\SolutionController.cs" />
@@ -233,6 +234,7 @@
     <Content Include="Content\skins\skin-yellow.min.css" />
     <Content Include="Content\skins\_all-skins.css" />
     <Content Include="Content\skins\_all-skins.min.css" />
+    <Content Include="Content\tab_w3s.css" />
     <Content Include="DataTables\css\dataTables.bootstrap.css" />
     <Content Include="DataTables\css\dataTables.bootstrap.min.css" />
     <Content Include="DataTables\css\dataTables.bootstrap4.css" />
@@ -1865,6 +1867,8 @@
     <Content Include="Scripts\jquery-lookupContact.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\kanban.js" />
+    <Content Include="Scripts\scrollFocusItem_jquery.js" />
+    <Content Include="Scripts\tab_w3s.js" />
     <Content Include="Views\Home\CreatePremises.cshtml" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
@@ -2042,6 +2046,11 @@
     <Content Include="Views\Task\Create.cshtml" />
     <Content Include="Views\Shared\_ActionFailed.cshtml" />
     <Content Include="Views\Shared\_ActionSuccess.cshtml" />
+    <Content Include="Views\Task\DetailSummary.cshtml" />
+    <Content Include="Views\Solution\DetailModal.cshtml" />
+    <Content Include="Views\Module\Index.cshtml" />
+    <Content Include="Views\Module\Create.cshtml" />
+    <Content Include="Views\Module\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

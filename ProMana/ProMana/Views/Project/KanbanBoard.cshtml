@@ -14,7 +14,7 @@
         Project do not have any module.
     </div>
     <div>
-        <a href="#">Click here to add module</a>
+        <a href="@Url.Action("Create","Module",new { id = Model.Id})">Click here to add module</a>
     </div>
 }
 else
@@ -46,7 +46,7 @@ else
                                         <article class="kanban-entry grab"  id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>
                                                         Deadline: @task.To 
@@ -81,7 +81,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
@@ -110,7 +110,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("Detail","Task", new { id = task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
@@ -139,12 +139,19 @@ else
     <script>
         $(document).ready(function () {
             $("#sidebar1").addClass("active");
-            $("#sidebar1").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+
             $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
             $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
 
             $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar22").attr("href",'@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+            $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+
+            $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
+
+            $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#linkSidebar32").attr("href",'@Url.Action("Create", "Module", new { id = Model.Id })')
         });
     </script>
     <script>

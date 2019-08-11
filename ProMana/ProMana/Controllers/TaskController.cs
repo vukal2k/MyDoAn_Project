@@ -21,9 +21,13 @@ namespace ProMana.Controllers
         }
 
         // GET: Task/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id, bool isSummary=false)
         {
             var task = await _taskBus.GetById(id,errors);
+            if (isSummary)
+            {
+                return PartialView("~/Views/Task/DetailSummary.cshtml", task);
+            }
             return View(task);
         }
 
@@ -35,7 +39,7 @@ namespace ProMana.Controllers
 
         // POST: Task/Create
         [HttpPost]
-        public async Task<ActionResult> Create(DTO.Task task)
+        public async Task<ActionResult> Create(DTO.Task task , int projectId)
         {
             try
             {
@@ -45,7 +49,9 @@ namespace ProMana.Controllers
                     if (result)
                     {
                         //return RedirectToAction("TaskList", "Project", new { id = task.Module.ProjectId });
-                        return JavaScript("location.reload(true)");
+                        var redirectTo = "window.location.href = '" + Url.Action("TaskList", "Project", new { id = projectId, chooseTaskId = task.Id }) + "';";
+                        //return JavaScript("location.reload(true)");
+                        return JavaScript(redirectTo);
                     }
                 }
 

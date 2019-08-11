@@ -61,11 +61,12 @@ namespace ProMana.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> TaskList(int id, bool createTask = false)
+        public async Task<ActionResult> TaskList(int id, bool createTask = false,int chooseTaskId = 0)
         {
             var project = await _projectBus.GetById(id);
             ViewBag.IsCreateTask = createTask;
             ViewBag.TaskTypes = await _taskTypeBUS.GetAll();
+            ViewBag.ChoosedTask = chooseTaskId;
             return View(project);
         }
 

@@ -81,6 +81,40 @@ function draggableInit() {
     });
 }
 
+function startSolutionByButton(taskId, toStatus) {
+    switch (toStatus) {
+        case "InProgress":
+            statusId = 2;
+            break;
+        case "Resolved":
+            statusId = 3
+            break;
+        case "ReOpened":
+            statusId = 4;
+            break;
+        case "Closed":
+            statusId = 10;
+            break;
+        default:
+            break;
+    }
+
+    //post data
+    $.ajax({
+        url: "../../Solution/Create?taskId=" + taskId + "&statusId=" + statusId,
+        type: 'GET',
+        data: {
+        },
+        success: function (result) {
+            if (result !== "0" && result !== "1") {
+                $("#solutionModalDungChan").html(result);
+                settingValidateSolution();
+                submitSolution();
+            }
+                
+        }
+    });
+}
 
 function settingValidateSolution() {
     $("#solutionModal").modal("show");
@@ -134,11 +168,12 @@ function submitSolution() {
             $(resolveType).parent().removeClass('has-error');
         }
 
+        var taskId = document.getElementById("solution.TaskId").value;
         var dataParam = {
-            "TaskId": document.getElementById("solution.TaskId").value,
+            "TaskId": taskId,
             "ResolveType": document.getElementById("solution.ResolveType").value,
             "Reason": document.getElementById("solution.Reason").value,
-            "Solution": document.getElementById("solution.Solution").value,
+            "SolutionDescription": document.getElementById("solution.Solution").value,
             "Description": document.getElementById("solution.Description").value
         }
         var returnValue = false;
@@ -167,12 +202,18 @@ function submitSolution() {
                     if (result == "1") {
                         returnValue = true;
                     }
+
+                    if (returnValue === true && currentElement != null) {
+                        $("#solutionModal").modal("hide");
+                        appendTo.append(currentElement);
+                    } else if (returnValue === true && currentElement == null) {
+                        var btn = document.getElementById("card" + taskId);
+                        chooseTask(btn, parseInt(taskId));
+                        $("#solutionModal").modal("hide");
+                    }
                 }
             });
             
-        }
-        if (returnValue === true) {
-            appendTo.append(currentElement);
         }
         event.preventDefault();
     });

@@ -41,6 +41,18 @@ namespace BUS
                 switch (statusId)
                 {
                     case TaskStatusKey.InProgress:
+                        if (result.StatusId != TaskStatusKey.Closed)
+                        {
+                            result.StatusId = TaskStatusKey.Closed;
+                            _unitOfWork.Tasks.Update(result);
+
+                            var success = await _unitOfWork.CommitAsync() > 0;
+                            if (success)
+                            {
+                                return result;
+                            }
+                        }
+                        return null;
                     case TaskStatusKey.Resolved:
                         if(result.StatusId != TaskStatusKey.Closed)
                         {
@@ -48,13 +60,14 @@ namespace BUS
                         }
                         return null;
                     case TaskStatusKey.Closed:
+                    case TaskStatusKey.ReOpened:
                         if (result.CreatedBy == userName)
                         {
-                            result.StatusId = TaskStatusKey.Closed;
+                            result.StatusId = statusId;
                             _unitOfWork.Tasks.Update(result);
 
-                            var success = await _unitOfWork.CommitAsync() > 0;
-                            if (success)
+                            var success2 = await _unitOfWork.CommitAsync() > 0;
+                            if (success2)
                             {
                                 return result;
                             }

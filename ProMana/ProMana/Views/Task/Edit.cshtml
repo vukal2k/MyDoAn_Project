@@ -14,6 +14,7 @@
     InsertionMode = InsertionMode.Replace,
     HttpMethod = "POST",
     UpdateTargetId = "noiDetailDungChan",
+    OnSuccess="resetSumarry"
 }, new { @id = "editFormTask" }))
 {
     <input type="hidden" value="@Model.Id" name="Id" />
@@ -137,3 +138,4 @@
         </div>
     </div>
 }
+

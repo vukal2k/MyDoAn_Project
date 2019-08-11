@@ -21,7 +21,7 @@ namespace DTO
 
         [Column("Solution", TypeName = "ntext")]
         [Required]
-        public string Solution1 { get; set; }
+        public string SolutionDescription { get; set; }
 
         [Column(TypeName = "ntext")]
         public string Description { get; set; }
