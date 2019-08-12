@@ -1,0 +1,45 @@
+﻿@model IEnumerable<DTO.JobRole>
+
+@{
+    ViewBag.Title = "List Job Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Job Role List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="container">
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        <a href="@Url.Action("Delete","JobRole",new { area="Admin",id=item.Id})" onclick="return confirm('Are u sure? Delete @item.Title?')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

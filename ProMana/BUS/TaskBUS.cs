@@ -43,7 +43,7 @@ namespace BUS
                     case TaskStatusKey.InProgress:
                         if (result.StatusId != TaskStatusKey.Closed)
                         {
-                            result.StatusId = TaskStatusKey.Closed;
+                            result.StatusId = TaskStatusKey.InProgress;
                             _unitOfWork.Tasks.Update(result);
 
                             var success = await _unitOfWork.CommitAsync() > 0;

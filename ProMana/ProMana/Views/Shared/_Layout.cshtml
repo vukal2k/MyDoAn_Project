@@ -42,6 +42,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .aHover:hover {
                 cursor: pointer;
             }
+        .errors {
+            color: red;
+        }
     </style>
 </head>
 <!--
@@ -243,28 +246,28 @@ desired effect
         function SetDataTable() {
             table.destroy();
             table = $(".UseDataTables").DataTable({
-                "bLengthChange": false,
-                "pageLength": 15,
-                "searching": false,
-                "language": {
-                    "sProcessing": "Processing...",
-                    "sLengthMenu": "Count of Records _MENU_",
-                    "sZeroRecords": "Do not have any record",
-                    "sInfo": "From record _START_ to record _END_ in total _TOTAL_ record",
-                    "sInfoEmpty": "Do not have any record",
-                    "sInfoFiltered": "(filted from _MAX_ records)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Search: ",
-                    "sUrl": "",
-                    "oPaginate": {
-                        "sFirst": "<i class='fa fa-angle-double-left fa-lg'></i>",
-                        "sPrevious": "<i class='fa fa-angle-left fa-lg'></i>",
-                        "sNext": "<i class='fa fa-angle-right fa-lg'></i>",
-                        "sLast": "<i class='fa fa-angle-double-right fa-lg'></i>"
-                    }
-                },
-                "pagingType": "full_numbers",
-                "deferRender": true,
+                //"bLengthChange": false,
+                //"pageLength": 15,
+                //"searching": false,
+                //"language": {
+                //    "sProcessing": "Processing...",
+                //    "sLengthMenu": "Count of Records _MENU_",
+                //    "sZeroRecords": "Do not have any record",
+                //    "sInfo": "From record _START_ to record _END_ in total _TOTAL_ record",
+                //    "sInfoEmpty": "Do not have any record",
+                //    "sInfoFiltered": "(filted from _MAX_ records)",
+                //    "sInfoPostFix": "",
+                //    "sSearch": "Search: ",
+                //    "sUrl": "",
+                //    "oPaginate": {
+                //        "sFirst": "<i class='fa fa-angle-double-left fa-lg'></i>",
+                //        "sPrevious": "<i class='fa fa-angle-left fa-lg'></i>",
+                //        "sNext": "<i class='fa fa-angle-right fa-lg'></i>",
+                //        "sLast": "<i class='fa fa-angle-double-right fa-lg'></i>"
+                //    }
+                //},
+                //"pagingType": "full_numbers",
+                //"deferRender": true,
             });
         }
     </script>
@@ -277,6 +280,16 @@ desired effect
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. -->
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
+    <script>
+            if ('@ViewBag.isSuccess'=== "True") {
+                $.notify("Success!", "success");
+            }
+            if ('@ViewBag.InsertFailed' === "True")
+            {
+                $.notify("Failed!", "error");
+            }
+    </script>
+
 </body>
 </html>

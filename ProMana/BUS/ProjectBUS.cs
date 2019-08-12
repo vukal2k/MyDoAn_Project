@@ -21,6 +21,57 @@ namespace BUS
             _unitOfWork = new UnitOfWork();
         }
 
+        #region Admin
+        public async Task<bool> Insert(Project project, List<string> errors)
+        {
+            try
+            {
+                project.IsActive = true;
+                _unitOfWork.Projects.Insert(project);
+
+                return await _unitOfWork.CommitAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> Update(Project project, List<string> errors)
+        {
+            try
+            {
+                project.IsActive = true;
+                _unitOfWork.Projects.Update(project);
+
+                return await _unitOfWork.CommitAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> Delete(int projectId, List<string> errors)
+        {
+            try
+            {
+                var project = await _unitOfWork.Projects.GetById(projectId);
+                project.IsActive = false;
+                _unitOfWork.Projects.Update(project);
+
+                return await _unitOfWork.CommitAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return false;
+            }
+        }
+        #endregion
+
         #region Public method
         public async Task<bool> Create(Project project,IEnumerable<MemberParamsViewModel>members,string userCreate, List<string>errors)
         {

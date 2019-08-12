@@ -20,14 +20,14 @@
 else
 {
     <ul class="nav nav-tabs">
-        @foreach (var item in Model.Modules)
+        @foreach (var item in Model.Modules.Where(m => m.IsActive))
         {
             <li><a data-toggle="tab" href="@string.Format("#{0}",item.Id)">@item.Title</a></li>
         }
     </ul>
 
     <div class="tab-content">
-        @foreach (var item in Model.Modules)
+        @foreach (var item in Model.Modules.Where(m => m.IsActive))
         {
             <div id="@item.Id" class="tab-pane fade">
                 <br />

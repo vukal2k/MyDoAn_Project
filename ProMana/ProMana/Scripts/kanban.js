@@ -111,6 +111,14 @@ function startSolutionByButton(taskId, toStatus) {
                 settingValidateSolution();
                 submitSolution();
             }
+            else if (result == "1") {
+                var btn = document.getElementById("card" + taskId);
+                chooseTask(btn, parseInt(taskId));
+                $.notify("Success!", "success");
+            }
+            else {
+                $.notify("Failed!", "error");
+            }
                 
         }
     });
@@ -123,9 +131,6 @@ function settingValidateSolution() {
     $('#formSolution').validate({
         errorClass: 'errors',
         rules: {
-            ResolveType: {
-                required: true
-            },
             Reason: {
                 required: true,
                 maxlength: 300
@@ -136,9 +141,6 @@ function settingValidateSolution() {
             }
         },
         messages: {
-            ResolveType: {
-                required: "Resolve Type is required"
-            },
             Reason: {
                 required: "Reason is required",
                 maxlength: "Reason max length is 300"
@@ -158,16 +160,7 @@ function settingValidateSolution() {
 }
 
 function submitSolution() {
-    $('#submitSolution').bind('click', function (event) {
-        var isValid = true;
-        var resolveType = document.getElementById("solution.ResolveType");
-        if (resolveType.value === "0") {
-            $(resolveType).parent().addClass('has-error');
-            isValid = false;
-        } else {
-            $(resolveType).parent().removeClass('has-error');
-        }
-
+    $('#submitSolution').click(function () {
         var taskId = document.getElementById("solution.TaskId").value;
         var dataParam = {
             "TaskId": taskId,
@@ -177,18 +170,16 @@ function submitSolution() {
             "Description": document.getElementById("solution.Description").value
         }
         var returnValue = false;
-        var valid = $("#formSolution").valid();
+        var resolveType = document.getElementById("solution.ResolveType");
+        if (resolveType.value === "0") {
+            $(resolveType).parent().addClass('has-error');
+            returnValue = false;
+        } else {
+            $(resolveType).parent().removeClass('has-error');
+            returnValue = true;
+        }
+        var valid = $("#formSolution").valid() && returnValue;
         if (valid === true) {
-
-            var resolveType = document.getElementById("solution.ResolveType");
-            if (resolveType.value === "0") {
-                $(resolveType).parent().addClass('has-error');
-                return;
-            } else {
-                $(resolveType).parent().removeClass('has-error');
-            }
-
-            alert(JSON.stringify(dataParam));
             $.ajax({
                 url: $("#formSolution").attr('action'),
                 data: {
@@ -215,6 +206,6 @@ function submitSolution() {
             });
             
         }
-        event.preventDefault();
+        return false;
     });
 }

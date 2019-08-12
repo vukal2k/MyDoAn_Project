@@ -21,6 +21,8 @@ namespace DTO
         [StringLength(50)]
         public string Title { get; set; }
 
+        public bool IsActive { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Solution> Solutions { get; set; }
     }
