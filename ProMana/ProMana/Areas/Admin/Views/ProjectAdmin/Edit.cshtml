@@ -1,0 +1,188 @@
+﻿@model DTO.Project
+
+@{
+    ViewBag.Title = Model.Code+" | Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Edit Project</h2>
+<link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+
+@using (Html.BeginForm("Edit", "Project", FormMethod.Post, new { @id = "form", area = "Admin" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @{
+        var errors = (List<string>)ViewBag.Errors;
+        if (errors != null && errors.Any())
+        {
+            <ul class="list-group">
+                @foreach (var item in errors)
+                {
+                    <li class="list-group-item text-danger">@item</li>
+                }
+            </ul>
+        }
+    }
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input name="Name" id="Name" type="text" value="@Model.Name" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Owner</label>
+        <div class="col-md-10">
+            <select class="form-control" name="CreatedBy" id="CreatedBy">
+                <option value="0">-- Choose Owner --</option>
+                @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
+                {
+                    if (item.UserName.Equals(Model.CreatedBy))
+                    {
+                        <option value="@item.UserName" selected>@item.UserName</option>
+                    }
+                    else
+                    {
+                        <option value="@item.UserName">@item.UserName</option>
+                    }
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
+        <input type="text" onchange="ValidateDateTo()" autocomplete="off" value="@Model.From.ToString("MM/dd/yyyy")" class="control-label col-md-3" id="from" style="margin-left:1.3% !important" />
+        <input type="hidden" name="From" id="fromValue" />
+
+        @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label col-md-2" })
+        @{
+            string toValue = "";
+            if (Model.To != null)
+            {
+                var dateTo = (DateTime)Model.To;
+                toValue = dateTo.ToString("MM/dd/yyyy");
+            }
+        }
+        <input type="text" autocomplete="off" value="@toValue" class="control-label col-md-3" id="to" />
+        <input type="hidden" name="To" id="toValue" />
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @{
+                string descriptionValue = "";
+                if (Model.Description != null)
+                {
+                    var des = Model.Description;
+                    descriptionValue = des.ToString();
+                }
+            }
+            <textarea name="Description" id="Description"  class="form-control">@descriptionValue</textarea>
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="StatusId" value="@Model.StatusId" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="submit" type="submit" value="Create" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#from').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+            $('#to').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+
+            $('#form').validate({
+                errorClass: 'errors',
+                rules: {
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    Code: {
+                        required: true,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    Name: {
+                        required: "Project name is required",
+                        maxlength: "Max length is 100"
+                    },
+                    Code: {
+                        required: "Project Code is required",
+                        maxlength: "Max length is 100"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#submit").click(function () {
+                $('#fromValue').val($('#from').val());
+                $('#toValue').val($('#to').val());
+
+                var result = true;
+                if ($('#CreatedBy').val() === "0") {
+                    result = false;
+                    $("#CreatedBy").parent().addClass('has-error');
+                }
+                else {
+                    result = true;
+                    $("#CreatedBy").parent().removeClass('has-error');
+                }
+                return $("#form").valid() && result;
+            });
+
+            $("#sidebar4").addClass("active");
+        });
+
+        function ValidateDateTo() {
+            $('#to').datetimepicker({
+                format: 'm/d/Y',
+                timepicker: false,
+                minDate: new Date($('#from').val())
+            });
+        }
+    </script>
+}

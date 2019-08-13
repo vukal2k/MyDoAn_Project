@@ -1,7 +1,7 @@
 ﻿@model DTO.JobRole
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create | Job Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -72,6 +72,8 @@
             $("#btnSubmit").click(function () {
                 return $("#formJobRole").valid();
             })
+
+            $("#sidebar1").addClass("active");
         });
     </script>
 }

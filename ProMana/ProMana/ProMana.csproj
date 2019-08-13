@@ -168,6 +168,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\JobRoleController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProjectAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ResolveTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaskTypeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1872,6 +1874,7 @@
     <Content Include="Scripts\kanban.js" />
     <Content Include="Scripts\scrollFocusItem_jquery.js" />
     <Content Include="Scripts\tab_w3s.js" />
+    <Content Include="Scripts\updateMemberToProject.js" />
     <Content Include="Views\Home\CreatePremises.cshtml" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
@@ -1939,6 +1942,12 @@
     <Content Include="Areas\Admin\Views\TaskType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\TaskType\Create.cshtml" />
     <Content Include="Areas\Admin\Views\TaskType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ResolveType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ResolveType\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ResolveType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ProjectAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProjectAdmin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ProjectAdmin\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
@@ -2061,6 +2070,7 @@
     <Content Include="Views\Module\Index.cshtml" />
     <Content Include="Views\Module\Create.cshtml" />
     <Content Include="Views\Module\Edit.cshtml" />
+    <Content Include="Views\Project\Infomation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

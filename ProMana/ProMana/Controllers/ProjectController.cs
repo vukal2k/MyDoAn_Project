@@ -37,19 +37,30 @@ namespace ProMana.Controllers
         {
             try
             {
+                bool result = false;
                 if (ModelState.IsValid)
                 {
                     var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
-                    await _projectBus.Create(project, listMembers, "pmtest",errors);
+                    result=await _projectBus.Create(project, listMembers, "pmtest",errors);
                 }
 
-                ViewBag.Errors = errors;
-
-                return RedirectToAction("Index");
+                if (result)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+                    ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+                    ViewBag.Errors = errors;
+                    return View(project);
+                }
             }
             catch
             {
-                return View();
+                ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+                return View(project);
             }
         }
 
@@ -70,55 +81,49 @@ namespace ProMana.Controllers
             return View(project);
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> KanbanBoardFilter(int projectId, int moduleId)
-        //{
-        //    ViewBag.ModuleId = moduleId;
-        //    var project = await projectBus.GetById(projectId);
-        //    return View();
-        //}
-
-        // GET: Project/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<ActionResult> Infomation(int id)
         {
-            return View();
+            var project = await _projectBus.GetById(id);
+            ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+            ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+            ViewBag.GetAllRole = await _jobRoleBUS.GetAll();
+            var members = project.RoleInProjects.Select(r => new MemberDetailViewModel
+            {
+                RoleId = r.RoleId,
+                FullName = r.UserInfo.FullName,
+                RoleTitle = r.JobRole.Title,
+                Username = r.UserName
+            });
+            var memberJson = JsonConvert.SerializeObject(members.ToList());
+            ViewBag.GetMemberInProject = memberJson;
+            return View(project);
         }
 
-        // POST: Project/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Infomation(Project project, string members)
         {
             try
             {
-                // TODO: Add update logic here
+                Project result = null;
+                if (ModelState.IsValid)
+                {
+                    var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
+                    result = await _projectBus.Update(project, listMembers, errors);
+                }
 
-                return RedirectToAction("Index");
+                ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+                ViewBag.GetAllRole = await _jobRoleBUS.GetAll();
+                ViewBag.Errors = errors;
+                ViewBag.isSuccess = !errors.Any();
+                return RedirectToAction("Infomation", "Project", new { Id = project.Id });
             }
             catch
             {
-                return View();
-            }
-        }
-
-        // GET: Project/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Project/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
+                ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+                return RedirectToAction("Infomation","Project",new { Id =project.Id});
             }
         }
     }

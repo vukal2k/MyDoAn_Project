@@ -1,7 +1,7 @@
 ﻿@model DTO.JobRole
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = Model.Title+" | Job Role";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -72,8 +72,11 @@
                 },
             });
 
-            return $("#" + mode + "FormTask").valid();
-        })
-               });
+            $("#btnSubmit").click(function () {
+                return $("#formJobRole").valid();
+            })
+
+            $("#sidebar1").addClass("active");
+        });
     </script>
 }

@@ -1,7 +1,7 @@
 ﻿@model DTO.TaskType
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create | Task Type";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -71,6 +71,8 @@
             $("#btnSubmit").click(function () {
                 return $("#formJobRole").valid();
             })
+
+            $("#sidebar2").addClass("active");
         });
     </script>
 }

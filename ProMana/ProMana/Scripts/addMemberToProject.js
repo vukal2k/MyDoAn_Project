@@ -32,18 +32,40 @@ function AddProject()
         listMemeberAndRole.push(roleInProject);
         listUserSelected.push(userName);
 
-        $("#listMember").append("<div id='row" + userName + "'></div>");
-        $("#row" + userName).append("<label class='control-label'>" +
-                                        $('#user option:selected').text() + " - "
-            + $('#role  option:selected').text() + "</label>");
-        $("#row" + userName).append('<button class="btn btn-danger pull-right" onclick="RemoveMember(\'' + userName + '\')"><i class="fas fa-user-times"></i></button>');
-        $("#row" + userName).append("<hr/>");
+        if (roleId != 1) {
+            $("#listMember" + roleId).append("<div id='row" + userName + "'></div>");
+            $("#row" + userName).append("<label class='control-label'>" +
+                $('#user option:selected').text() + " - "
+                + $('#role  option:selected').text() + "</label>");
+            $("#row" + userName).append('<button class="btn btn-danger pull-right" onclick="RemoveMember(\'' + userName + '\')"><i class="fas fa-user-times"></i></button>');
+        }
         ResetSelect();
         $('#memberModal').modal('hide');
     }
     else {
         return false;
     }
+}
+
+function SelectMember(membersJson) {
+    var members = JSON.parse(membersJson);
+    for (var i = 0; i < members.length; i++) {
+        var roleInProject = new RoleInProjectViewModel(members[i].Username, members[i].RoleId);
+        listMemeberAndRole.push(roleInProject);
+        listUserSelected.push(members[i].Username);
+
+        if (members[i].RoleId!=1) {
+            $("#listMember" + members[i].RoleId).append("<div id='row" + members[i].Username + "'></div>");
+            $("#row" + members[i].Username).append("<label class='control-label'>" +
+                members[i].FullName + "(" + members[i].Username + ") - "
+                + members[i].RoleTitle + "</label>");
+            if (members[i].RoleId!=2) {
+                $("#row" + members[i].Username).append('<button class="btn btn-danger pull-right" onclick="RemoveMember(\'' + members[i].Username + '\')"><i class="fas fa-user-times"></i></button>');
+            }
+            $("#row" + members[i].Username).append("<hr/>");
+        }
+    }
+    ResetSelect();
 }
 
 function ResetSelect() {

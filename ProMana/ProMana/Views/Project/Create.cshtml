@@ -14,9 +14,22 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @{
+    var errors = (List<string>
+        )ViewBag.Errors;
+        if (errors != null && errors.Any())
+        {
+        <ul class="list-group">
+            @foreach (var item in errors)
+            {
+            <li class="list-group-item-danger">@item</li>
+            }
+        </ul>
+        }
+        }
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -57,13 +70,13 @@
                 <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
             </div>
         </div>
-        <input type="hidden" name="members" id="members"/>
+        <input type="hidden" name="members" id="members" />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input id="submit" type="submit" value="Create" class="btn btn-success" />
             </div>
         </div>
-    </div>
+</div>
 }
 
 <br />
@@ -87,13 +100,15 @@
                         <div class="form-inline">
                             <select style="width:100%" type="text" id="user" class="form-control">
                                 @{
-                                    <option value="0"> -- Choose User --</option>
-                                    var user = (IEnumerable<DTO.UserInfo>)ViewBag.GetUserDoNotInProject;
+                                <option value="0"> -- Choose User --</option>
+                                var user = (IEnumerable
+                                <DTO.UserInfo>
+                                    )ViewBag.GetUserDoNotInProject;
                                     foreach (var item in user)
                                     {
-                                        <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                    <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
                                     }
-                                }
+                                    }
                             </select>
                         </div>
                     </div>
@@ -105,12 +120,14 @@
                             <select style="width:100%" type="text" id="role" class="form-control">
                                 <option value="0"> -- Choose Role --</option>
                                 @{
-                                    var roles = (IEnumerable<DTO.JobRole>)ViewBag.GetSoftRole;
+                                var roles = (IEnumerable
+                                <DTO.JobRole>
+                                    )ViewBag.GetSoftRole;
                                     foreach (var item in roles)
                                     {
-                                        <option value="@item.Id"> @item.Title</option>
+                                    <option value="@item.Id"> @item.Title</option>
                                     }
-                                }
+                                    }
                             </select>
                         </div>
                     </div>
@@ -131,67 +148,67 @@
 </div>
 
 @section Scripts{
-    <script src="~/Scripts/bootstrap-select.min.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
-    <script src="~/Scripts/addMemberToProject.js"></script>
+<script src="~/Scripts/bootstrap-select.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+<script src="~/Scripts/addMemberToProject.js"></script>
 
-    <script>
+<script>
 
-        $(document).ready(function () {
-            $('#from').datetimepicker({
-                timepicker: false,
-                format: 'm/d/Y'
-            });
-            $('#to').datetimepicker({
-                timepicker: false,
-                format: 'm/d/Y'
-            });
-
-            $('#form').validate({
-                errorClass: 'errors',
-                rules: {
-                    Name: {
-                        required: true,
-                        maxlength: 100
-                    },
-                    Code: {
-                        required: true,
-                        maxlength: 100
-                    }
-                },
-                messages: {
-                    Name: {
-                        required: "Project name is required",
-                        maxlength: "Max length is 100"
-                    },
-                    Code: {
-                        required: "Project Code is required",
-                        maxlength: "Max length is 100"
-                    }
-                },
-                highlight: function (element) {
-                    $(element).parent().addClass('has-error');
-                },
-                unhighlight: function (element) {
-                    $(element).parent().removeClass('has-error');
-                },
-            });
-
-            $("#submit").click(function () {
-                $('#fromValue').val($('#from').val());
-                $('#toValue').val($('#to').val());
-                $("#members").val(JSON.stringify(listMemeberAndRole));
-                return $("#form").valid();
-            });
+    $(document).ready(function () {
+        $('#from').datetimepicker({
+            timepicker: false,
+            format: 'm/d/Y'
+        });
+        $('#to').datetimepicker({
+            timepicker: false,
+            format: 'm/d/Y'
         });
 
-        function ValidateDateTo() {
-            $('#to').datetimepicker({
-                format: 'm/d/Y',
-                timepicker: false,
-                minDate: new Date($('#from').val())
-            });
-        }
-    </script>
+        $('#form').validate({
+            errorClass: 'errors',
+            rules: {
+                Name: {
+                    required: true,
+                    maxlength: 100
+                },
+                Code: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+            messages: {
+                Name: {
+                    required: "Project name is required",
+                    maxlength: "Max length is 100"
+                },
+                Code: {
+                    required: "Project Code is required",
+                    maxlength: "Max length is 100"
+                }
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            },
+        });
+
+        $("#submit").click(function () {
+            $('#fromValue').val($('#from').val());
+            $('#toValue').val($('#to').val());
+            $("#members").val(JSON.stringify(listMemeberAndRole));
+            return $("#form").valid();
+        });
+    });
+
+    function ValidateDateTo() {
+        $('#to').datetimepicker({
+            format: 'm/d/Y',
+            timepicker: false,
+            minDate: new Date($('#from').val())
+        });
+    }
+</script>
 }

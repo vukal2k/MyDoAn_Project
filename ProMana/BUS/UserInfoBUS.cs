@@ -1,4 +1,5 @@
-﻿using Repository;
+﻿using DTO;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace BUS
         public UserInfoBUS()
         {
             _unitOfWork = new UnitOfWork();
+        }
+
+        public async Task<IEnumerable<UserInfo>> GetAll()
+        {
+            return await _unitOfWork.UserInfos.Get(j => j.IsActive == true);
         }
     }
 }

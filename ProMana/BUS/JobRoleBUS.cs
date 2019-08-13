@@ -50,6 +50,7 @@ namespace BUS
             try
             {
                 jobRole.IsActive = true;
+                jobRole.CanDelete = !(jobRole.Id == COMMON.HardFixJobRole.PM || jobRole.Id == COMMON.HardFixJobRole.TeamLead);
                 _unitOfWork.JobRoles.Update(jobRole);
 
                 return await _unitOfWork.CommitAsync() > 0;

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DTO.TaskType>
 
 @{
-    ViewBag.Title = "List Of Task Type";
+    ViewBag.Title = "Project | Promana";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -42,3 +42,10 @@
     </tbody>
 
 </table>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $("#sidebar2").addClass("active");
+        })
+    </script>
+}

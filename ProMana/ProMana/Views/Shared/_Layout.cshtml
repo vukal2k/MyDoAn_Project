@@ -7,12 +7,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Starter</title>
+    <title>@ViewBag.Title</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/fontawesome-free-5.10.0-web/css/all.min.css" rel="stylesheet" />
     <!-- Ionicons -->
     <link href="~/Content/ionicons.min.css" rel="stylesheet" />
     <!-- Theme style -->
@@ -42,6 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .aHover:hover {
                 cursor: pointer;
             }
+
         .errors {
             color: red;
         }
@@ -76,9 +78,9 @@ desired effect
             <!-- Logo -->
             <a href="" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b><i class="fa fa-dashboard"></i></b></span>
+                <span class="logo-mini"><i class="fas fa-tachometer-alt"></i></b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>AB-SD Software</b></span>
+                <span class="logo-lg"><b>Promana</b></span>
             </a>
 
             <!-- Header Navbar -->
@@ -146,29 +148,52 @@ desired effect
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">HEADER</li>
                     <!-- Optionally, you can add icons to the links -->
-                    <li class="active"><a href="#"><i class="fa fa-industry"></i> <span>Organisation</span></a></li>
-                    <li class="treeview">
+                    <li class="treeview" id="sidebar1">
                         <a href="#">
-                            <i class="fa fa-diamond"></i> <span>Services</span>
+                            <i class="fas fa-project-diagram"></i> <span>Job Role</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i>Programme Maintenance</a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i>Service Maintenance</a></li>
+                            <li><a id="sidebar11" href="@Url.Action("Index", "JobRole", new {area="Admin" })"><i class="fas fa-genderless"></i> Job Role List</a></li>
+                            <li><a id="sidebar12" href="@Url.Action("Create", "JobRole", new {area="Admin" })"><i class="fas fa-genderless"></i> Create Job Role</a></li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview" id="sidebar2">
                         <a href="#">
-                            <i class="fa fa-map"></i> <span>Geography</span>
+                            <i class="fas fa-tasks"></i> <span>Task Type</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Trust Regions/Trust Districts</a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i> Government Office Region</a></li>
+                            <li><a id="sidebar21" href="@Url.Action("Index", "TaskType", new {area="Admin" })"><i class="fas fa-genderless"></i> Task Type List</a></li>
+                            <li><a id="sidebar22" href="@Url.Action("Create", "TaskType", new {area="Admin" })"><i class="fas fa-genderless"></i> Create Task Type</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview" id="sidebar3">
+                        <a href="#">
+                            <i class="fas fa-first-aid"></i> <span>Resolve Type</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a id="sidebar31" href="@Url.Action("Index", "ResolveType", new {area="Admin" })"><i class="fas fa-genderless"></i> Resolve Type List</a></li>
+                            <li><a id="sidebar32" href="@Url.Action("Create", "ResolveType", new {area="Admin" })"><i class="fas fa-genderless"></i> Create Resolve Type</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview" id="sidebar4">
+                        <a href="#">
+                            <i class="fab fa-docker"></i> <span>Project</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a id="sidebar41" href="@Url.Action("Index", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Project List</a></li>
+                            <li><a id="sidebar42" href="@Url.Action("Create", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Project Type</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -199,7 +224,7 @@ desired effect
                 Anything you want
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2016 <a href="">AB-SD Software</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2019 <a href="@Url.Action("Index","Home", new { area="Admin"})">Promana</a>.</strong> All rights reserved.
         </footer>
         <!-- Add the sidebar's background. This div must be placed
         immediately after the control sidebar -->
