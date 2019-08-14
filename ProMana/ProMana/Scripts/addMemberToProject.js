@@ -33,11 +33,13 @@ function AddProject()
         listUserSelected.push(userName);
 
         if (roleId != 1) {
+            var phay = "'";
             $("#listMember" + roleId).append("<div id='row" + userName + "'></div>");
             $("#row" + userName).append("<label class='control-label'>" +
                 $('#user option:selected').text() + " - "
                 + $('#role  option:selected').text() + "</label>");
-            $("#row" + userName).append('<button class="btn btn-danger pull-right" onclick="RemoveMember(\'' + userName + '\')"><i class="fas fa-user-times"></i></button>');
+            $("#row" + userName).append('<a type="button" class="btn btn-danger pull-right" onclick="RemoveMember(' + phay + '' + userName + '' + phay + ',' + roleId + ')"><i class="fas fa-user-times"></i></a>');
+            $("#row" + userName).append("<hr/>");
         }
         ResetSelect();
         $('#memberModal').modal('hide');
@@ -48,11 +50,14 @@ function AddProject()
 }
 
 function SelectMember(membersJson) {
+    var phay = "'";
     var members = JSON.parse(membersJson);
     for (var i = 0; i < members.length; i++) {
         var roleInProject = new RoleInProjectViewModel(members[i].Username, members[i].RoleId);
         listMemeberAndRole.push(roleInProject);
-        listUserSelected.push(members[i].Username);
+        if (members[i].RoleId != 1 && members[i].RoleId != 2) {
+            listUserSelected.push(members[i].Username);
+        }
 
         if (members[i].RoleId!=1) {
             $("#listMember" + members[i].RoleId).append("<div id='row" + members[i].Username + "'></div>");
@@ -60,9 +65,9 @@ function SelectMember(membersJson) {
                 members[i].FullName + "(" + members[i].Username + ") - "
                 + members[i].RoleTitle + "</label>");
             if (members[i].RoleId!=2) {
-                $("#row" + members[i].Username).append('<button class="btn btn-danger pull-right" onclick="RemoveMember(\'' + members[i].Username + '\')"><i class="fas fa-user-times"></i></button>');
+                $("#row" + members[i].Username).append('<a type="button" class="btn btn-danger pull-right" onclick="RemoveMember(' + phay + '' + members[i].Username + '' + phay + ', ' + members[i].RoleId + ')"><i class="fas fa-user-times"></i></a>');
             }
-            $("#row" + members[i].Username).append("<hr/>");
+            $("#row" + members[i].Username).append("<hr/>"); 
         }
     }
     ResetSelect();
@@ -80,14 +85,14 @@ function ResetSelect() {
     })
 }
 
-function RemoveMember(userName) {
+function RemoveMember(userName,roleId) {
     $("#row" + userName).remove();
 
     var memberRemoveIndex = listUserSelected.indexOf(userName);
     listUserSelected.splice(memberRemoveIndex, 1);
 
     for (var i = 0; i < listMemeberAndRole.length; i++) {
-        if (listMemeberAndRole[i].username === userName) {
+        if (listMemeberAndRole[i].username == userName && listMemeberAndRole[i].roleId == roleId) {
             listMemeberAndRole.splice(i, 1);
             ResetSelect();
             return;
