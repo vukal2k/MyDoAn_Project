@@ -58,8 +58,15 @@ namespace COMMON
     {
         public const int PM = 1;
         public const int TeamLead = 2;
+        public const int Watcher = 3;
     }
-    
+
+    public static class HardFixJobRoleTitle
+    {
+        public const string PM = "PM";
+        public const string TeamLead = "Team Lead";
+        public const string Watcher = "Watcher";
+    }
 
     public static class StoreProcedure
     {

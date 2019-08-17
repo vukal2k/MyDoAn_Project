@@ -29,7 +29,7 @@ namespace DTO
         [StringLength(50)]
         public string AssignedTo { get; set; }
 
-        public int TaskTypeId { get; set; }
+        public string TaskType { get; set; }
 
         public int? ModuleId { get; set; }
 
@@ -38,6 +38,7 @@ namespace DTO
         public DateTime To { get; set; }
 
         public int Level { get; set; }
+        public bool IsTask { get; set; }
 
         public int StatusId { get; set; }
 
@@ -52,8 +53,6 @@ namespace DTO
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Solution> Solutions { get; set; }
-
-        public virtual TaskType TaskType { get; set; }
 
         public virtual UserInfo UserInfo { get; set; }
 

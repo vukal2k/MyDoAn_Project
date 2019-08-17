@@ -49,6 +49,108 @@ function AddProject()
     }
 }
 
+function InitListMember(listMember) {
+    var roleInProject;
+    for (var i = 0; i < listMember.length; i++) {
+        if (listMember[i].RoleId != 2) {
+            roleInProject = new RoleInProjectViewModel(listMember[i].Username, listMember[i].RoleId);
+            listMemeberAndRole.push(roleInProject);
+            listUserSelected.push(listMember[i].Username);
+        }
+    }
+    ResetSelect();
+}
+
+function AddMember() {
+    var isValid = true;
+    var userName = $('#user').val();
+    if (userName === "0") {
+        $('#user').parent().addClass('has-error');
+        isValid = false;
+    } else {
+        $('#user').parent().removeClass('has-error');
+    }
+
+    var roleId = $('#role').val();
+    if (roleId === "0") {
+        $('#role').parent().addClass("has-error");
+        isValid = false;
+    } else {
+        $('#role').parent().removeClass("has-error");
+    }
+
+    if (isValid === true) {
+        var roleInProject = new RoleInProjectViewModel(userName, roleId);
+        listMemeberAndRole.push(roleInProject);
+        listUserSelected.push(userName);
+        alert(roleId)
+        //post data
+        $.ajax({
+            url: "../../Module/AddMember?username=" + userName + "&roleId=" + roleId,
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'GET',
+            data: {
+                "username": userName
+            },
+            success: function (result) {
+                if (result !== "0") {
+                    $("#listMember").append(result);
+                    ResetSelect();
+                    $('#memberModal').modal('hide');
+                } else {
+                    $.notify("Failed!", "error");
+                }
+            }
+        });
+    }
+    else {
+        return false;
+    }
+}
+
+function AddWatcher() {
+    var isValid = true;
+    var userName = $('#user').val();
+    if (userName === "0") {
+        $('#user').parent().addClass('has-error');
+        isValid = false;
+    } else {
+        $('#user').parent().removeClass('has-error');
+    }
+
+    if (isValid === true) {
+        var roleInProject = new RoleInProjectViewModel(userName, "3");
+        listMemeberAndRole.push(roleInProject);
+        listUserSelected.push(userName);
+
+        //post data
+        $.ajax({
+            url: "../../Project/AddWatcher?username=" + userName,
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'GET',
+            data: {
+                "username": userName
+            },
+            success: function (result) {
+                if (result !== "0") {
+                    $("#listMember").append(result);
+                    ResetSelect();
+                    $('#memberModal').modal('hide');
+                } else {
+                    $.notify("Failed!", "error");
+                }
+            }
+        });
+    }
+    else {
+        return false;
+    }
+}
+
 function SelectMember(membersJson) {
     var phay = "'";
     var members = JSON.parse(membersJson);
@@ -93,6 +195,21 @@ function RemoveMember(userName,roleId) {
 
     for (var i = 0; i < listMemeberAndRole.length; i++) {
         if (listMemeberAndRole[i].username == userName && listMemeberAndRole[i].roleId == roleId) {
+            listMemeberAndRole.splice(i, 1);
+            ResetSelect();
+            return;
+        }
+    }
+}
+
+function RemoveWatcher(userName) {
+    $("#row" + userName).remove();
+
+    var memberRemoveIndex = listUserSelected.indexOf(userName);
+    listUserSelected.splice(memberRemoveIndex, 1);
+
+    for (var i = 0; i < listMemeberAndRole.length; i++) {
+        if (listMemeberAndRole[i].username == userName) {
             listMemeberAndRole.splice(i, 1);
             ResetSelect();
             return;

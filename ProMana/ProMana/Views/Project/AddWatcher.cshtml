@@ -1,0 +1,8 @@
+﻿@model DTO.UserInfo
+<tr id="@string.Format("row{0}",Model.UserName)">
+    <td>@Model.UserName</td>
+    <td>@Model.FullName</td>
+    <td>@Model.CurrentJob</td>
+    <td>@Model.Company</td>
+    <td><a class="aHover" onclick="RemoveWatcher('@Model.UserName')">Remove</a></td>
+</tr>

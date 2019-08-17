@@ -143,29 +143,48 @@ namespace IdentitySample.Models
     // This is useful if you do not want to tear down the database each time you run the application.
     // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     // This example shows you how to create a new database if the Model changes
-    public class ApplicationDbInitializer : CreateDatabaseIfNotExists<ApplicationDbContext> 
+    public class ApplicationDbInitializer : CreateDatabaseIfNotExists<ApplicationDbContext>
     {
-        protected override void Seed(ApplicationDbContext context) {
+        protected override void Seed(ApplicationDbContext context)
+        {
             InitializeIdentityForEF(context);
             base.Seed(context);
         }
 
         //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        
-        public static void InitializeIdentityForEF(ApplicationDbContext db) {
+        public static void InitializeIdentityForEF(ApplicationDbContext db)
+        {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             const string name = "SuperAdmin";
-            const string password = "Admin@123456";
+            const string password = "123456";
             const string roleName = "Super User";
             const string roleName2 = "Normal User";
+            //HieuPD2
+            const string name1 = "pmtest";
+            const string password1 = "123456";
+            const string email1 = "vuanlbv@gmail.com";
             //TramTLN
-            const string name2 = "TramTLN";
-            const string password2 = "123456789";
+            const string name2 = "devtest";
+            const string password2 = "123456";
             const string email2 = "vuanlbv@gmail.com";
+            //HungNQ37
+            const string name3 = "teamleadtest";
+            const string password3 = "123456";
+            const string email3 = "vuanlbv@gmail.com";
+            //HuyVD8
+            const string name4 = "testertest";
+            const string password4 = "123456";
+            const string email4 = "vuanlbv@gmail.com";
+            //AnhNK7
+            const string name5 = "watchertest";
+            const string password5 = "123456";
+            const string email5 = "vuanlbv@gmail.com";
 
             //Create Role SuperAdmin , NormalAdmin
             var role = roleManager.FindByName(roleName);
-            if (role == null) {
+            if (role == null)
+            {
                 role = new IdentityRole(roleName);
                 var roleresult = roleManager.Create(role);
             }
@@ -178,32 +197,44 @@ namespace IdentitySample.Models
 
 
             var user = userManager.FindByName(name);
-            if (user == null) {
-                user = new ApplicationUser { UserName = name, Email = name+"@gmail.com" };
+            if (user == null)
+            {
+                user = new ApplicationUser { UserName = name, Email = name + "@gmail.com" };
                 var result = userManager.Create(user, password);
-                result = userManager.SetLockoutEnabled(user.Id, false);
+            }
+            var user1 = userManager.FindByName(name1);
+            if (user1 == null)
+            {
+                user1 = new ApplicationUser { UserName = name1, Email = email1 };
+                var result = userManager.Create(user1, password1);
             }
             var user2 = userManager.FindByName(name2);
             if (user2 == null)
             {
                 user2 = new ApplicationUser { UserName = name2, Email = email2 };
                 var result = userManager.Create(user2, password2);
-                result = userManager.SetLockoutEnabled(user2.Id, false);
             }
-            
-
-            // Add user admin to Role Admin if not already added
-            var rolesForUser = userManager.GetRoles(user.Id);
-            if (!rolesForUser.Contains(role.Name)) {
-                var result = userManager.AddToRole(user.Id, role.Name);
-            }
-            var rolesForUser2 = userManager.GetRoles(user2.Id);
-            if (!rolesForUser2.Contains(role.Name))
+            var user3 = userManager.FindByName(name3);
+            if (user3 == null)
             {
-                var result = userManager.AddToRole(user2.Id, role.Name);
+                user3 = new ApplicationUser { UserName = name3, Email = email3 };
+                var result = userManager.Create(user3, password3);
+            }
+            var user4 = userManager.FindByName(name4);
+            if (user4 == null)
+            {
+                user4 = new ApplicationUser { UserName = name4, Email = email4 };
+                var result = userManager.Create(user4, password4);
+            }
+            var user5 = userManager.FindByName(name5);
+            if (user5 == null)
+            {
+                user5 = new ApplicationUser { UserName = name5, Email = email5 };
+                var result = userManager.Create(user5, password5);
             }
         }
     }
+
 
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {

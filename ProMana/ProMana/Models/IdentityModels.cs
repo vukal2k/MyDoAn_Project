@@ -37,17 +37,5 @@ namespace IdentitySample.Models
         {
             return new ApplicationDbContext();
         }
-
-        public System.Data.Entity.DbSet<DTO.Task> Tasks { get; set; }
-
-        public System.Data.Entity.DbSet<DTO.Module> Modules { get; set; }
-
-        public System.Data.Entity.DbSet<DTO.TaskType> TaskTypes { get; set; }
-
-        public System.Data.Entity.DbSet<DTO.Project> Projects { get; set; }
-
-        public System.Data.Entity.DbSet<DTO.JobRole> JobRoles { get; set; }
-
-        public System.Data.Entity.DbSet<DTO.ResolveType> ResolveTypes { get; set; }
     }
 }

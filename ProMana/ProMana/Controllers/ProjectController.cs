@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using BUS;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
 
 namespace ProMana.Controllers
 {
@@ -15,6 +16,7 @@ namespace ProMana.Controllers
         private ProjectBUS _projectBus = new ProjectBUS();
         private JobRoleBUS _jobRoleBUS = new JobRoleBUS();
         private TaskTypeBUS _taskTypeBUS = new TaskTypeBUS();
+        private UserInfoBUS _userInfoBUS = new UserInfoBUS();
         List<string> errors = new List<string>();
         // GET: Project
         public ActionResult Index()
@@ -41,12 +43,12 @@ namespace ProMana.Controllers
                 if (ModelState.IsValid)
                 {
                     var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
-                    result=await _projectBus.Create(project, listMembers, "pmtest",errors);
+                    result=await _projectBus.Create(project, listMembers, User.Identity.GetUserName(),errors);
                 }
 
                 if (result)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index","Module",new { id = project.Id});
                 }
                 else
                 {
@@ -88,15 +90,7 @@ namespace ProMana.Controllers
             ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
             ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             ViewBag.GetAllRole = await _jobRoleBUS.GetAll();
-            var members = project.RoleInProjects.Select(r => new MemberDetailViewModel
-            {
-                RoleId = r.RoleId,
-                FullName = r.UserInfo.FullName,
-                RoleTitle = r.JobRole.Title,
-                Username = r.UserName
-            });
-            var memberJson = JsonConvert.SerializeObject(members.ToList());
-            ViewBag.GetMemberInProject = memberJson;
+           
             return View(project);
         }
 
@@ -105,7 +99,7 @@ namespace ProMana.Controllers
         {
             try
             {
-                Project result = null;
+                bool result = false;
                 if (ModelState.IsValid)
                 {
                     var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
@@ -124,6 +118,20 @@ namespace ProMana.Controllers
                 ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
                 ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 return RedirectToAction("Infomation","Project",new { Id =project.Id});
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddWatcher(string username)
+        {
+            try
+            {
+                var result = await _userInfoBUS.GetById(username);
+               return View(result);
+            }
+            catch
+            {
+                return Content("0");
             }
         }
     }

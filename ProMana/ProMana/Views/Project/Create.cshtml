@@ -1,8 +1,9 @@
 ﻿@model DTO.Project
-
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Your Project";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    ViewBag.ReturnUrl = Url.Action("Create", "Action");
 }
 
 
@@ -14,22 +15,23 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @{
-    var errors = (List<string>
-        )ViewBag.Errors;
-        if (errors != null && errors.Any())
-        {
-        <ul class="list-group">
-            @foreach (var item in errors)
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{
+            var errors = (List<string>
+                )ViewBag.Errors;
+            if (errors != null && errors.Any())
             {
-            <li class="list-group-item-danger">@item</li>
+                <ul class="list-group">
+                    @foreach (var item in errors)
+                    {
+                        <li class="list-group-item text-danger">@item</li>
+                    }
+                </ul>
             }
-        </ul>
         }
-        }
+        <input name="CreatedBy" type="hidden" value="abc"/>
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -63,9 +65,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-2">Members</label>
+            <label class="control-label col-md-2">Watcher</label>
             <div class="col-md-10">
-                <div id="listMember">
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Fullname</th>
+                                <th>Current Job</th>
+                                <th>Company</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="listMember"></tbody>
+                    </table>
                 </div>
                 <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
             </div>
@@ -76,7 +90,7 @@
                 <input id="submit" type="submit" value="Create" class="btn btn-success" />
             </div>
         </div>
-</div>
+    </div>
 }
 
 <br />
@@ -100,42 +114,32 @@
                         <div class="form-inline">
                             <select style="width:100%" type="text" id="user" class="form-control">
                                 @{
-                                <option value="0"> -- Choose User --</option>
-                                var user = (IEnumerable
-                                <DTO.UserInfo>
-                                    )ViewBag.GetUserDoNotInProject;
+                                    <option value="0"> -- Choose User --</option>
+                                    var user = (IEnumerable
+                                    <DTO.UserInfo>
+                                        )ViewBag.GetUserDoNotInProject;
                                     foreach (var item in user)
                                     {
-                                    <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                        if (!item.UserName.Equals(User.Identity.GetUserName()))
+                                        {
+                                            <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                        }
                                     }
-                                    }
+                                }
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <br />
-                        <label>Role In Project</label><span style="color:red">*</span>
-                        <br />
-                        <div class="form-inline">
-                            <select style="width:100%" type="text" id="role" class="form-control">
-                                <option value="0"> -- Choose Role --</option>
-                                @{
-                                var roles = (IEnumerable
-                                <DTO.JobRole>
-                                    )ViewBag.GetSoftRole;
-                                    foreach (var item in roles)
-                                    {
-                                    <option value="@item.Id"> @item.Title</option>
-                                    }
-                                    }
-                            </select>
-                        </div>
+                        <p>
+                            These users act as a customer or project related people but do not directly participate in the project.
+                        </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <br />
-                        <label style="width:100% !important" onclick="AddProject()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                        <label style="width:100% !important" onclick="AddMember()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
                     </div>
                 </div>
             </div>
@@ -148,67 +152,67 @@
 </div>
 
 @section Scripts{
-<script src="~/Scripts/bootstrap-select.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.datetimepicker.full.js"></script>
-<script src="~/Scripts/addMemberToProject.js"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script src="~/Scripts/addMemberToProject.js"></script>
 
-<script>
+    <script>
 
-    $(document).ready(function () {
-        $('#from').datetimepicker({
-            timepicker: false,
-            format: 'm/d/Y'
-        });
-        $('#to').datetimepicker({
-            timepicker: false,
-            format: 'm/d/Y'
-        });
+        $(document).ready(function () {
+            $('#from').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+            $('#to').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
 
-        $('#form').validate({
-            errorClass: 'errors',
-            rules: {
-                Name: {
-                    required: true,
-                    maxlength: 100
+            $('#form').validate({
+                errorClass: 'errors',
+                rules: {
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    Code: {
+                        required: true,
+                        maxlength: 100
+                    }
                 },
-                Code: {
-                    required: true,
-                    maxlength: 100
-                }
-            },
-            messages: {
-                Name: {
-                    required: "Project name is required",
-                    maxlength: "Max length is 100"
+                messages: {
+                    Name: {
+                        required: "Project name is required",
+                        maxlength: "Max length is 100"
+                    },
+                    Code: {
+                        required: "Project Code is required",
+                        maxlength: "Max length is 100"
+                    }
                 },
-                Code: {
-                    required: "Project Code is required",
-                    maxlength: "Max length is 100"
-                }
-            },
-            highlight: function (element) {
-                $(element).parent().addClass('has-error');
-            },
-            unhighlight: function (element) {
-                $(element).parent().removeClass('has-error');
-            },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#submit").click(function () {
+                $('#fromValue').val($('#from').val());
+                $('#toValue').val($('#to').val());
+                $("#members").val(JSON.stringify(listMemeberAndRole));
+                return $("#form").valid();
+            });
         });
 
-        $("#submit").click(function () {
-            $('#fromValue').val($('#from').val());
-            $('#toValue').val($('#to').val());
-            $("#members").val(JSON.stringify(listMemeberAndRole));
-            return $("#form").valid();
-        });
-    });
-
-    function ValidateDateTo() {
-        $('#to').datetimepicker({
-            format: 'm/d/Y',
-            timepicker: false,
-            minDate: new Date($('#from').val())
-        });
-    }
-</script>
+        function ValidateDateTo() {
+            $('#to').datetimepicker({
+                format: 'm/d/Y',
+                timepicker: false,
+                minDate: new Date($('#from').val())
+            });
+        }
+    </script>
 }

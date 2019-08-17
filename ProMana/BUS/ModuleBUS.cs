@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using COMMON;
+using DTO;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,15 @@ namespace BUS
             }
         }
 
-        public async Task<bool>Insert(Module module, List<string> errors)
+        public async Task<bool>Insert(Module module,IEnumerable<MemberParamsViewModel> members, List<string> errors)
         {
             try
             {
                 module.IsActive = true;
+                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username }).ToList();
+                listMember.Add(new RoleInProject { IsActive=true,RoleId=HardFixJobRole.TeamLead,UserName=module.TeamLead});
+                module.RoleInProjects = listMember;
+
                 _unitOfWork.Modules.Insert(module);
                 return await _unitOfWork.CommitAsync() > 0;
             }
@@ -45,10 +50,28 @@ namespace BUS
             return await _unitOfWork.Modules.GetById(id);
         }
 
-        public async Task<bool> Update(Module module, List<string> errors)
+        public async Task<bool> Update(Module module, IEnumerable<MemberParamsViewModel> members, List<string> errors)
         {
             try
             {
+                //delete old member
+                var oldMembers = await _unitOfWork.RoleInProjects.Get(m => m.ModuleId == moduleId);
+                foreach (var member in oldMembers)
+                {
+                    member.IsActive = false;
+                    _unitOfWork.RoleInProjects.Update(member);
+                }
+
+
+                //insert new member
+                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username, ModuleId=module.Id}).ToList();
+                listMember.Add(new RoleInProject { IsActive = true, RoleId = HardFixJobRole.TeamLead, UserName = module.TeamLead , ModuleId = module.Id });
+                foreach (var item in listMember)
+                {
+                    _unitOfWork.RoleInProjects.Insert(item);
+                }
+
+                //update module
                 module.IsActive = true;
                 _unitOfWork.Modules.Update(module);
                 return await _unitOfWork.CommitAsync() > 0;
@@ -64,6 +87,14 @@ namespace BUS
         {
             try
             {
+                //delete old member
+                var oldMembers = await _unitOfWork.RoleInProjects.Get(m => m.ModuleId == moduleId);
+                foreach (var member in oldMembers)
+                {
+                    member.IsActive = false;
+                    _unitOfWork.RoleInProjects.Update(member);
+                }
+
                 var module = await _unitOfWork.Modules.GetById(moduleId);
                 module.IsActive = false;
                 _unitOfWork.Modules.Update(module);

@@ -11,8 +11,13 @@ namespace COMMON
     {
         public static IEnumerable<UserInfo>GetMember(this Project project)
         {
-            var result = project.RoleInProjects.GroupBy(m => m.UserInfo)
-                                .Select(u => u.Key);
+            var result = project.Modules.SelectMany(r => r.RoleInProjects).GroupBy(m=> m.UserInfo).Select(u=>u.Key);
+            return result;
+        }
+
+        public static IEnumerable<MemberParamsViewModel> GetMemberParams(this Module module)
+        {
+            var result = module.RoleInProjects.Where(r => r.IsActive).Select(m => new MemberParamsViewModel { RoleId = m.RoleId, Username = m.UserName });
             return result;
         }
     }

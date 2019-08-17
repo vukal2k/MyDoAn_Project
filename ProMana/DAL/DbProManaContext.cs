@@ -156,9 +156,9 @@ namespace DAL
                 .WithRequired(e => e.Project)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Project>()
+            modelBuilder.Entity<Module>()
                 .HasMany(e => e.RoleInProjects)
-                .WithRequired(e => e.Project)
+                .WithRequired(e => e.Module)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ProjectLog>()
@@ -193,11 +193,6 @@ namespace DAL
             modelBuilder.Entity<Task>()
                 .Property(e => e.AssignedTo)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<TaskType>()
-                .HasMany(e => e.Tasks)
-                .WithRequired(e => e.TaskType)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserInfo>()
                 .Property(e => e.UserName)

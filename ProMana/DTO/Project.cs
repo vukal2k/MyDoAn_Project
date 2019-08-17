@@ -15,7 +15,6 @@ namespace DTO
             Modules = new HashSet<Module>();
             ProjectLogs = new HashSet<ProjectLog>();
             Requests = new HashSet<Request>();
-            RoleInProjects = new HashSet<RoleInProject>();
         }
 
         public int Id { get; set; }
@@ -61,7 +60,5 @@ namespace DTO
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RoleInProject> RoleInProjects { get; set; }
     }
 }

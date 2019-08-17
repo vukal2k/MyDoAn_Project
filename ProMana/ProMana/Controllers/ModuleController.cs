@@ -1,5 +1,7 @@
 ﻿using BUS;
+using COMMON;
 using DTO;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -9,7 +11,9 @@ namespace ProMana.Controllers
     public class ModuleController : Controller
     {
         private ModuleBUS _moduleBus = new ModuleBUS();
+        private UserInfoBUS _userInforBus = new UserInfoBUS();
         private ProjectBUS _projectBus = new ProjectBUS();
+        private JobRoleBUS _jobRoleBUS = new JobRoleBUS();
         private List<string> errors = new List<string>();
         // GET: Module
         //id is project id
@@ -31,36 +35,38 @@ namespace ProMana.Controllers
         public async Task<ActionResult> Create(int id)
         {
             ViewBag.Project = await _projectBus.GetById(id);
+            ViewBag.Users = await _projectBus.GetUserNotWatcher(id);
+            ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             return View();
         }
 
         // POST: Module/Create
         [HttpPost]
-        public async Task<ActionResult> Create(Module module)
+        public async Task<ActionResult> Create(Module module, string members)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await _moduleBus.Insert(module,errors);
+                    var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
+                    var result = await _moduleBus.Insert(module, listMembers, errors);
                     if (result)
                     {
                         TempData["isSuccess"] = true;
                         return RedirectToAction("Index","Module",new { id = module.ProjectId});
                     }
-                    else
-                    {
-                        ViewBag.Project = await _projectBus.GetById(module.ProjectId);
-                        ViewBag.InsertFailed = true;
-                        return View();
-                    }
                 }
+                ViewBag.Project = await _projectBus.GetById(module.ProjectId);
+                ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 ViewBag.InsertFailed = true;
                 return View();
             }
             catch
             {
                 ViewBag.Project = await _projectBus.GetById(module.ProjectId);
+                ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 ViewBag.InsertFailed = true;
                 return View();
             }
@@ -70,38 +76,44 @@ namespace ProMana.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var module = await _moduleBus.GetById(id);
+            ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
+            ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
+            ViewBag.Members = JsonConvert.SerializeObject(module.GetMemberParams());
             return View(module);
         }
 
         // POST: Module/Edit/5
         [HttpPost]
-        public async Task<ActionResult> Edit(Module module)
+        public async Task<ActionResult> Edit(Module module, string members)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await _moduleBus.Update(module, errors);
+                    var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
+                    var result = await _moduleBus.Update(module, listMembers, errors);
                     if (result)
                     {
                         TempData["isSuccess"] = true;
                         return RedirectToAction("Index", "Module", new { id = module.ProjectId});
                     }
-                    else
-                    {
-                        ViewBag.Project = await _projectBus.GetById(module.ProjectId);
-                        ViewBag.InsertFailed = true;
-                        return View();
-                    }
                 }
+
+                var originalModule = await _moduleBus.GetById(module.Id);
+                ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 ViewBag.InsertFailed = true;
-                return View();
+                ViewBag.Members = JsonConvert.SerializeObject(originalModule.GetMemberParams());
+                return View(originalModule);
             }
             catch
             {
-                ViewBag.Project = await _projectBus.GetById(module.ProjectId);
+                var originalModule = await _moduleBus.GetById(module.Id);
+                ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
+                ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 ViewBag.InsertFailed = true;
-                return View();
+                ViewBag.Members = JsonConvert.SerializeObject(originalModule.GetMemberParams());
+                return View(originalModule);
             }
         }
 
@@ -117,6 +129,20 @@ namespace ProMana.Controllers
             else
             {
                 return RedirectToAction("Index", "Module", new { id = projectId });
+            }
+        }
+        
+        public async Task<ActionResult> AddMember(string username, int roleId)
+        {
+            try
+            {
+                var result = await _userInforBus.GetById(username);
+                ViewBag.JobRole = await _jobRoleBUS.GetById(roleId);
+                return View(result);
+            }
+            catch
+            {
+                return Content("0");
             }
         }
     }

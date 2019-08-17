@@ -6,13 +6,12 @@ namespace DTO
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("TaskType")]
+    [Table("LookupTaskType")]
     public partial class TaskType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaskType()
         {
-            Tasks = new HashSet<Task>();
         }
 
         public int Id { get; set; }
@@ -25,8 +24,5 @@ namespace DTO
         public string Description { get; set; }
 
         public bool IsActive { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

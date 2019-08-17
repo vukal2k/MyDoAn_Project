@@ -28,18 +28,21 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @item.UserInfo.FullName (@item.UserInfo.UserName)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        <a href="@Url.Action("Delete","Module", new { moduleId = item.Id, projectId = item.ProjectId })" onclick="return confirm('Are u sure? Delete: @item.Title now?')">Delete</a>
-                    </td>
-                </tr>
+                if (!item.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName (@item.UserInfo.UserName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            <a href="@Url.Action("Delete","Module", new { moduleId = item.Id, projectId = item.ProjectId })" onclick="return confirm('Are u sure? Delete: @item.Title now?')">Delete</a>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
 

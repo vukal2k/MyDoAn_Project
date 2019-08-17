@@ -11,7 +11,7 @@ namespace DTO
     {
         public int Id { get; set; }
 
-        public int ProjectId { get; set; }
+        public int ModuleId { get; set; }
 
         public int RoleId { get; set; }
 
@@ -23,7 +23,7 @@ namespace DTO
 
         public virtual JobRole JobRole { get; set; }
 
-        public virtual Project Project { get; set; }
+        public virtual Module Module { get; set; }
 
         public virtual UserInfo UserInfo { get; set; }
     }

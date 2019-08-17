@@ -1,5 +1,6 @@
 ﻿@model DTO.Module
 @using COMMON
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
@@ -23,13 +24,14 @@
 
     <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
     <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="members" id="members" />
 
     <div class="form-group">
         @Html.LabelFor(model => model.TeamLead, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <select class="form-control" name="TeamLead" id="TeamLead">
                 <option value="0">-- Choose Team Lead --</option>
-                @foreach (var item in (IEnumerable<DTO.UserInfo>)Model.Project.GetMember())
+                @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
                 {
                     if (item.UserName == Model.TeamLead)
                     {
@@ -45,6 +47,29 @@
     </div>
 
     <div class="form-group">
+        <label class="control-label col-md-2">
+            Member
+        </label>
+        <div class="col-md-10">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Fullname</th>
+                        <th>Role In Project</th>
+                        <th>Company</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="listMember">
+                    @Html.Partial("~/Views/Module/EditMember.cshtml", Model)
+                </tbody>
+            </table>
+            <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+        </div>
+    </div>
+
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" id="btnSubmit" value="Save" class="btn btn-default" />
         </div>
@@ -52,12 +77,73 @@
 </div>
 }
 
+<br />
+<br />
+<br />
+<br />
+
+<div id="memberModal" class="modal fade" role="dialog" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#memberModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Add member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <label>User</label><span style="color:red">*</span>
+                        <br />
+                        <div class="form-inline">
+                            <select style="width:100%" type="text" id="user" class="form-control">
+                                <option value="0"> -- Choose User --</option>
+                                @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
+                                {
+                                    if (!item.UserName.Equals(User.Identity.GetUserName()))
+                                    {
+                                        <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <label>Role In Project</label><span style="color:red">*</span>
+                        <br />
+                        <div class="form-inline">
+                            <select style="width:100%" type="text" id="role" class="form-control">
+                                <option value="0"> -- Choose Role --</option>
+                                @{
+                                    var roles = (IEnumerable<DTO.JobRole>)ViewBag.GetSoftRole;
+                                    foreach (var item in roles)
+                                    {
+                                        <option value="@item.Id"> @item.Title</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br />
+                        <label style="width:100% !important" onclick="AddMember()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div>
     <a href="@Url.Action("Index","Module",new { id = Model.ProjectId})">Back to list</a>
 </div>
 
 @section Scripts{
     <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/addMemberToProject.js"></script>
     <script>
         $(document).ready(() => {
             $("#sidebar3").addClass('active');
@@ -81,6 +167,9 @@
             {
                 $.notify("Failed!", "error");
             }
+
+            var members = JSON.parse('@Html.Raw(ViewBag.Members)');
+            InitListMember(members);
         })
         function validateTask() {
             $('#formModule').validate({
@@ -111,7 +200,8 @@
                     $("#TeamLead").parent().addClass('has-error');
                     result = false;
                 }
-
+                alert(JSON.stringify(listMemeberAndRole));
+                $("#members").val(JSON.stringify(listMemeberAndRole));
                 return $("#formModule").valid() && result;
             })
         }

@@ -2071,6 +2071,9 @@
     <Content Include="Views\Module\Create.cshtml" />
     <Content Include="Views\Module\Edit.cshtml" />
     <Content Include="Views\Project\Infomation.cshtml" />
+    <Content Include="Views\Project\AddWatcher.cshtml" />
+    <Content Include="Views\Module\AddMember.cshtml" />
+    <Content Include="Views\Module\EditMember.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

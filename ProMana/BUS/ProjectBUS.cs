@@ -35,14 +35,6 @@ namespace BUS
                 project.StatusId = ProjectStatusKey.Opened;
                 project.CreatedDate = DateTime.Now;
 
-                //insert member
-                project.RoleInProjects = new List<RoleInProject> { new RoleInProject
-                {
-                    IsActive = true,
-                    RoleId = HardFixJobRole.PM,
-                    UserName = project.CreatedBy,
-                } };
-
                 _unitOfWork.Projects.Insert(project);
 
 
@@ -60,10 +52,10 @@ namespace BUS
             try
             {
                 project.IsActive = true;
-                var owner = await _unitOfWork.RoleInProjects.Get(o => o.ProjectId==project.Id 
+                var owner = await _unitOfWork.RoleInProjects.Get(o => o.ModuleId==project.Id 
                                                                     && o.UserName.Equals(project.CreatedBy) 
                                                                     && o.IsActive && o.RoleId==HardFixJobRole.PM);
-                var oldOwner = await _unitOfWork.RoleInProjects.Get(o => o.IsActive && o.RoleId == HardFixJobRole.PM && o.ProjectId == project.Id);
+                var oldOwner = await _unitOfWork.RoleInProjects.Get(o => o.IsActive && o.RoleId == HardFixJobRole.PM && o.ModuleId == project.Id);
                 if (owner.FirstOrDefault()!=null)
                 {
                     await _unitOfWork.RoleInProjects.Delete(oldOwner.FirstOrDefault().Id);
@@ -71,7 +63,7 @@ namespace BUS
                         IsActive = true,
                         RoleId = HardFixJobRole.PM,
                         UserName = project.CreatedBy,
-                        ProjectId=project.Id
+                        ModuleId=project.Id
                     });
                 }
                 _unitOfWork.Projects.Update(project);
@@ -117,28 +109,27 @@ namespace BUS
                 project.StatusId = ProjectStatusKey.Opened;
                 project.CreatedDate = DateTime.Now;
 
-                //insert member
-                project.RoleInProjects = new List<RoleInProject> { new RoleInProject
-                {
+
+                //insert watcher
+                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = HardFixJobRole.Watcher, UserName = m.Username }).ToList();
+                listMember.Add(new RoleInProject {
                     IsActive = true,
                     RoleId = HardFixJobRole.PM,
-                    UserName = userCreate,
-                } };
-
-                foreach (var member in members)
+                    UserName = userCreate
+                });
+                project.Modules = new List<Module>()
                 {
-                    project.RoleInProjects.Add(new RoleInProject
+                    new Module
                     {
-                        IsActive = true,
-                        RoleId = member.RoleId,
-                        UserName = member.Username
-                    });
-                }
-            
-                _unitOfWork.Projects.Insert(project);
+                        IsActive=true,
+                        Title=HardFixJobRoleTitle.Watcher,
+                        RoleInProjects= listMember
+                    }
+                };
 
 
                 //commit
+                _unitOfWork.Projects.Insert(project);
                 var result = await _unitOfWork.CommitAsync() > 0;
                 
                 return result;
@@ -150,69 +141,25 @@ namespace BUS
             }
         }
 
-        public async Task<Project> Update(Project project, IEnumerable<MemberParamsViewModel> members, List<string> errors)
+        public async Task<bool> Update(Project project, IEnumerable<MemberParamsViewModel> members, List<string> errors)
         {
             try
             {
                 if (await Validate(project, errors) == false)
                 {
-                    return project;
+                    return false;
                 }
-                //delete old member
-                var oldMembers = await _unitOfWork.RoleInProjects.Get(o => o.ProjectId == project.Id);
-                foreach (var item in oldMembers)
-                {
-                    await _unitOfWork.RoleInProjects.Delete(item.Id);
-                }
-                //insert member
-                List<RoleInProject> newListMember = new List<RoleInProject>();
-
-                var member = new RoleInProject
-                {
-                    IsActive = true,
-                    RoleId = HardFixJobRole.PM,
-                    UserName = project.CreatedBy,
-                    ProjectId = project.Id
-                };
-                 _unitOfWork.RoleInProjects.Insert(member);
-                newListMember.Add(member);
-
-                foreach (var item in members)
-                {
-                    member = new RoleInProject
-                    {
-                        IsActive = true,
-                        RoleId = item.RoleId,
-                        UserName = item.Username,
-                        ProjectId = project.Id
-                    };
-                    newListMember.Add(member);
-                    _unitOfWork.RoleInProjects.Insert(member);
-                }
-
-                var oldProject = await _unitOfWork.Projects.GetById(project.Id);
-                oldProject.Name = project.Name;
-                oldProject.Code = project.Code;
-                oldProject.CreatedBy = project.CreatedBy;
-                oldProject.From = project.From;
-                oldProject.To = project.To;
-                oldProject.Description = project.Description;
-                _unitOfWork.Projects.Update(oldProject);
-
-
+                _unitOfWork.Projects.Update(project);
+                
                 //commit
                 var result = await _unitOfWork.CommitAsync() > 0;
-                if (result)
-                {
-                    oldProject.RoleInProjects = newListMember;
-                }
 
-                return oldProject;
+                return result;
             }
             catch (Exception ex)
             {
                 errors.Add(ex.Message);
-                return project;
+                return false;
             }
         }
 
@@ -233,6 +180,16 @@ namespace BUS
             var result = await _unitOfWork.UserInfos.Get(u => u.IsActive);
             return result;
         }
+
+        public async Task<IEnumerable<UserInfo>> GetUserNotWatcher(int projectId)
+        { 
+            var watchers = await _unitOfWork.RoleInProjects.Get(u => u.IsActive && u.Module.Title.Equals(HardFixJobRoleTitle.Watcher));
+            var watcherIds = watchers.Select(u => u.UserName);
+            var result = await _unitOfWork.UserInfos.Get(u => u.IsActive && !watcherIds.Contains(u.UserName));
+            return result;
+        }
+
+
         #endregion
 
         #region private method

@@ -129,7 +129,7 @@ namespace BUS
                 updateTask.Description = task.Description;
                 updateTask.AssignedTo = task.AssignedTo;
                 updateTask.Level = task.Level;
-                updateTask.TaskTypeId = task.TaskTypeId;
+                updateTask.TaskType = task.TaskType;
                 updateTask.ModuleId = task.ModuleId;
                 updateTask.Title = task.Title;
 

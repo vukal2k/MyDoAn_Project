@@ -21,5 +21,11 @@ namespace BUS
         {
             return await _unitOfWork.UserInfos.Get(j => j.IsActive == true);
         }
+        
+
+        public async Task<UserInfo> GetById(string username)
+        {
+            return await _unitOfWork.UserInfos.GetById(username);
+        }
     }
 }
