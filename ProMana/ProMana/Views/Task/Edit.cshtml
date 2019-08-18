@@ -1,5 +1,6 @@
 ﻿@model DTO.Task
 @using COMMON
+@using Microsoft.AspNet.Identity
 
 @{
     Layout = null;
@@ -14,7 +15,7 @@
     InsertionMode = InsertionMode.Replace,
     HttpMethod = "POST",
     UpdateTargetId = "noiDetailDungChan",
-    OnSuccess="resetSumarry"
+    OnSuccess = "resetSumarry"
 }, new { @id = "editFormTask" }))
 {
     <input type="hidden" value="@Model.Id" name="Id" />
@@ -30,11 +31,31 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-md-2">Module</label>
+            <div class="col-md-10">
+                <select name="ModuleId" onchange="changeModule(this,'editAssignedTo')" id="editModuleId" class="form-control">
+                    <option value="0">-- Choose module --</option>
+                    @foreach (var item in project.GetOwnModule(User.Identity.GetUserName()))
+                    {
+                        if (item.Id == Model.ModuleId)
+                        {
+                            <option value="@item.Id" selected>@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label class="control-label col-md-2">Assigned To</label>
             <div class="col-md-10">
                 <select name="AssignedTo" id="editAssignedTo" class="form-control">
                     <option value="0">-- Choose member --</option>
-                    @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMember())
+                    @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMemberByModule(Model.ModuleId))
                     {
                         if (item.UserName.Equals(Model.AssignedTo))
                         {
@@ -49,43 +70,48 @@
             </div>
         </div>
 
+        <input type="hidden" name="TaskType" id="editTaskTypeValue" value="@Model.TaskType"/>
         <div class="form-group">
             <label class="control-label col-md-2">Task Type</label>
             <div class="col-md-10">
-                <select name="TaskTypeId" id="editTaskTypeId" class="form-control">
+                @{
+                    var hasSelected = false;
+                }
+                <select name="TaskType" onchange="ChangeTaskType(this,'editTaskTypeOther')" id="editTaskTypeId" class="form-control">
                     <option value="0">-- Choose task type --</option>
                     @foreach (var item in (IEnumerable<DTO.TaskType>)ViewBag.TaskTypes)
                     {
-                        if (item.Id == Model.TaskTypeId)
+                        if (item.Title.Equals(Model.TaskType))
                         {
-                            <option selected value="@item.Id">@item.Title</option>
+                            <option selected value="@item.Title">@item.Title</option>
+                            hasSelected = true;
                         }
                         else
                         {
-                            <option value="@item.Id">@item.Title</option>
+                            <option value="@item.Title">@item.Title</option>
                         }
                     }
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Module</label>
-            <div class="col-md-10">
-                <select name="ModuleId" id="editModuleId" class="form-control">
-                    <option value="0">-- Choose module --</option>
-                    @foreach (var item in project.Modules.Where(m => m.IsActive))
+                    @if (!hasSelected)
                     {
-                        if (item.Id == Model.ModuleId)
-                        {
-                            <option value="@item.Id" selected>@item.Title</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Id">@item.Title</option>
-                        }
+                        <option selected value="other">Others: </option>
+                    }
+                    else
+                    {
+                        <option value="other">Others: </option>
                     }
                 </select>
+                @if (!hasSelected)
+                {
+                    <div id="editTaskTypeOther">
+                        is <input type="text" value="@Model.TaskType" class="form-control" />
+                    </div>
+                }
+                else
+                {
+                    <div id="editTaskTypeOther" class="hidden">
+                        is <input type="text" class="form-control" />
+                    </div>
+                }
             </div>
         </div>
 
@@ -102,24 +128,57 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Level</label>
+            <label class="control-label col-md-2">Severity</label>
             <div class="col-md-10">
-                <select class="form-control" name="Level" id="editLevel">
-                    <option value="0">-- Choose level --</option>
-                    @for (int i = 1; i < 5; i++)
+                <select class="form-control" name="Severity" id="editSeverity">
+                    <option value="0">-- Choose severity --</option>
+                    @{
+                        var keySeverity = COMMON.CONSTANCT.Severities.Keys;
+                    }
+                    @foreach (var key in keySeverity)
                     {
-                        if (Model.Level == i)
+                        foreach (var item in COMMON.CONSTANCT.Severities[key])
                         {
-                            <option value="@i" selected>@i</option>
-                        }
-                        else
-                        {
-                            <option value="@i">@i</option>
+                            if (Model.Severity.Equals(key))
+                            {
+                                <option selected value="@key" data-toggle="tooltip" data-placement="right" title="@item">@key</option>
+                            }
+                            else
+                            {
+                                <option value="@key" data-toggle="tooltip" data-placement="right" title="@item">@key</option>
+                            }
                         }
                     }
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Priority</label>
+            <div class="col-md-10">
+                <select class="form-control" name="Priority" id="editPriority">
+                    <option value="0">-- Choose priority --</option>
+                    @{
+                        var keyPiority = COMMON.CONSTANCT.Priorities.Keys;
+                    }
+                    @foreach (var key in keyPiority)
+                    {
+                        foreach (var item in COMMON.CONSTANCT.Priorities[key])
+                        {
+                            if (Model.Priority.Equals(key))
+                            {
+                                <option selected value="@key" data-toggle="tooltip" data-placement="right" title="@item">@key</option>
+                            }
+                            else
+                            {
+                                <option value="@key" data-toggle="tooltip" data-placement="right" title="@item">@key</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+
         <div class="form-group">
             <label class="control-label col-md-2">Description</label>
             <div class="col-md-10">
@@ -132,10 +191,10 @@
                 <div class="col-md-offset-2 col-md-8">
                     <input form="editFormTask" type="submit" id="editSubmit" value="Save" class="btn btn-success pull-right" />
                 </div>
-                <div class="col-md-1"><input form="editFormTask" type="button" onclick="chooseTask(null,@Model.Id)" value="Cancel" class="btn btn-warning pull-right" />
+                <div class="col-md-1">
+                    <input form="editFormTask" type="button" onclick="chooseTask(null,@Model.Id)" value="Cancel" class="btn btn-warning pull-right" />
                 </div>
             </div>
         </div>
     </div>
 }
-

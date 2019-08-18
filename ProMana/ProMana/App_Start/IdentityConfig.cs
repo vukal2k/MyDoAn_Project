@@ -167,19 +167,19 @@ namespace IdentitySample.Models
             //TramTLN
             const string name2 = "devtest";
             const string password2 = "123456";
-            const string email2 = "vuanlbv@gmail.com";
+            const string email2 = "vuanlbv1@gmail.com";
             //HungNQ37
             const string name3 = "teamleadtest";
             const string password3 = "123456";
-            const string email3 = "vuanlbv@gmail.com";
+            const string email3 = "vuanlbv2@gmail.com";
             //HuyVD8
             const string name4 = "testertest";
             const string password4 = "123456";
-            const string email4 = "vuanlbv@gmail.com";
+            const string email4 = "vuanlbv3@gmail.com";
             //AnhNK7
             const string name5 = "watchertest";
             const string password5 = "123456";
-            const string email5 = "vuanlbv@gmail.com";
+            const string email5 = "vuanlbv4@gmail.com";
 
             //Create Role SuperAdmin , NormalAdmin
             var role = roleManager.FindByName(roleName);

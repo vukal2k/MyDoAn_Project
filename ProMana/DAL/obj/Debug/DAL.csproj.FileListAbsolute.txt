@@ -57,3 +57,6 @@ D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav6.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav7.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav8.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav10.resources
+D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav11.resources
+D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav12.resources
+D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav13.resources

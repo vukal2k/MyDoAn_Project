@@ -1,0 +1,26 @@
+﻿@model IEnumerable<DTO.Comment>
+@foreach (var item in Model.OrderByDescending(c => c.CommentId))
+            {
+    <div name="commentPanel">
+        <div class="col-sm-11">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>@item.Username</strong>
+                </div>
+                <div class="panel-body">
+                    @item.Content
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-success" onclick="DeleteComment(@item.CommentId, this)">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        @*<div class="tag tag">@item.Username</div><br />
+            <div>@item.Content</div>
+            <hr />*@
+}
+
+<script src="~/Scripts/jquery-3.0.0.min.js"></script>
+<script src="~/Scripts/pagingComment.js"></script>
+

@@ -1,0 +1,145 @@
+﻿@model DTO.Post
+
+@{
+    /**/
+
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="https://cloud.tinymce.com/5/tinymce.min.js"></script>
+<script src="~/Scripts/timyMCE.js"></script>
+
+@using (Html.BeginForm("Edit", "PostManager", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PostId)
+    @Html.HiddenFor(model => model.PostedOn)
+    <div class="form-horizontal">
+        <h2>Edit Post</h2>
+        <hr />
+        @Html.Partial("~/Views/Shared/_ErrorList.cshtml")
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" name="Title" value="@Model.Title" class="form-control text-box single-line" data-val="true" data-val-required="The Title field is required." id="Title" />
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea class="form-control text-box single-line" data-val="true" data-val-required="The ShortDescription field is required." id="ShortDescription" name="ShortDescription" maxlength="5000" rows="15">@Model.ShortDescription</textarea>
+                @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea class="form-control text-box single-line" data-val="true" data-val-required="The Description field is required." id="Description" name="Description" maxlength="5000" rows="15">@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Meta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" name="Meta" value="@Model.Meta" class="form-control text-box single-line" data-val="true" data-val-required="The Meta field is required." id="Meta" />
+                @Html.ValidationMessageFor(model => model.Meta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @if (Model.Published == true)
+                    {
+                        <input type="checkbox" checked name="Published" value="false" class="custom-checkbox" /><label>Publisher</label>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="Published" value="false" class="custom-checkbox" /><label>Publisher</label>
+                    }
+
+                    @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Tags</label>
+            <div class="col-md-10">
+                <ul class="widget tag">
+                    @{
+                        var tags = (List<DTO.Tag>)ViewBag.Tags;
+                        foreach (var item in tags)
+                        {
+                            <li class="list-inline-item">
+                                @if (Model.Tags.Where(t => t.TagId == item.TagId).FirstOrDefault() != null)
+                                {
+                                    <input type="checkbox" checked name="tagId" value="@string.Format("tag{0}",@item.TagId)" />@item.Name
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name=tagId value="@string.Format("tag{0}",@item.TagId)" />@item.Name
+                                }
+
+                            </li>
+                        }
+                    }
+                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    var categories = (SelectList)ViewBag.Categories;
+                    <select name="CategoryId">
+                        @foreach (var item in categories)
+                        {
+                            if (Model.CategoryId == int.Parse(item.Value))
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                }
+                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UrlSlug, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.UrlSlug, new { htmlAttributes = new { @class = "form-control" } })*@
+                <input type="file" onchange="readURL(this)" name="UrlSlug" id="UrlSlug" value=@Model.UrlSlug /> Add img
+                @Html.ValidationMessageFor(model => model.UrlSlug, "", new { @class = "text-danger" })
+                <img id="UrlSlugReview" src=@Model.UrlSlug style="width:652px;height:367px" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section script{
+    <script src="~/Scripts/review-image-jquery.js"></script>
+}

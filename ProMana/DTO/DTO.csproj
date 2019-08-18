@@ -51,8 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JobRole.cs" />
+    <Compile Include="LookupSeverity.cs" />
     <Compile Include="LookupStatus.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="LookupPriority.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

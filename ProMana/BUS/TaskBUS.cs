@@ -94,15 +94,10 @@ namespace BUS
         {
             try
             {
-                if(task.Level<=0 || task.Level > 5)
-                {
-                    errors.Add("Level between from 1 to 5");
-                    return false;
-                }
-
                 task.CreatedBy = userName;
                 task.StatusId = TaskStatusKey.Opened;
                 task.IsActive = true;
+                task.IsTask = true;
                 _unitOfWork.Tasks.Insert(task);
                 return await _unitOfWork.CommitAsync() > 0;
             }
@@ -113,25 +108,87 @@ namespace BUS
             }
         }
 
-        public async Task<DTO.Task> Update(DTO.Task task, List<string> errors)
+        public async Task<bool> InsertRequest(DTO.Task task, string userName, List<string> errors)
         {
             try
             {
-                if (task.Level <= 0 || task.Level > 5)
+                var module = await _unitOfWork.Modules.GetById(task.ModuleId);
+                if (module.Title.Equals(HardFixJobRoleTitle.Watcher))
                 {
-                    errors.Add("Level between from 1 to 5");
-                    return null;
+                    task.AssignedTo = module.Project.CreatedBy;
                 }
+                else
+                {
+                    task.AssignedTo = module.TeamLead;
+                }
+                task.CreatedBy = userName;
+                task.StatusId = RequestStatusKey.PendingApproval;
+                task.IsActive = true;
+                task.IsTask = false;
+                _unitOfWork.Tasks.Insert(task);
+                return await _unitOfWork.CommitAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return false;
+            }
+        }
 
+        public async Task<DTO.Task> Update(DTO.Task task,List<string> errors, string userName=null)
+        {
+            try
+            {
                 var updateTask = await _unitOfWork.Tasks.GetById(task.Id);
                 updateTask.From = task.From;
                 updateTask.To = task.To;
                 updateTask.Description = task.Description;
                 updateTask.AssignedTo = task.AssignedTo;
-                updateTask.Level = task.Level;
+                updateTask.Severity = task.Severity;
                 updateTask.TaskType = task.TaskType;
                 updateTask.ModuleId = task.ModuleId;
                 updateTask.Title = task.Title;
+                updateTask.IsTask = true;
+                if (userName != null)
+                {
+                    updateTask.CreatedBy = userName;
+                }
+
+                _unitOfWork.Tasks.Update(updateTask);
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                return updateTask;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<DTO.Task> UpdateRequest(DTO.Task task, List<string> errors)
+        {
+            try
+            {
+                var updateTask = await _unitOfWork.Tasks.GetById(task.Id);
+                updateTask.From = task.From;
+                updateTask.To = task.To;
+                updateTask.Description = task.Description;
+                updateTask.Severity = task.Severity;
+                updateTask.TaskType = task.TaskType;
+                updateTask.ModuleId = task.ModuleId;
+                updateTask.Title = task.Title;
+                updateTask.IsTask = false;
+
+                var module = await _unitOfWork.Modules.GetById(task.ModuleId);
+                if (module.Title.Equals(HardFixJobRoleTitle.Watcher))
+                {
+                    updateTask.AssignedTo = module.Project.CreatedBy;
+                }
+                else
+                {
+                    updateTask.AssignedTo = module.TeamLead;
+                }
 
                 _unitOfWork.Tasks.Update(updateTask);
                 var result = await _unitOfWork.CommitAsync() > 0;

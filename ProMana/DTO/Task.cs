@@ -37,7 +37,8 @@ namespace DTO
 
         public DateTime To { get; set; }
 
-        public int Level { get; set; }
+        public string Severity { get; set; }
+        public string Priority { get; set; }
         public bool IsTask { get; set; }
 
         public int StatusId { get; set; }
@@ -57,5 +58,7 @@ namespace DTO
         public virtual UserInfo UserInfo { get; set; }
 
         public virtual UserInfo UserInfo1 { get; set; }
+        public virtual LookupSeverity LookupSeverity { get; set; }
+        public virtual LookupPriority LookupPriority { get; set; }
     }
 }

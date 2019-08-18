@@ -1,0 +1,7 @@
+﻿@model IEnumerable<DTO.Tag>
+
+
+@foreach (var item in Model)
+{
+    <li class="list-inline-item"><a href="~/Blog/GetPostByTag/@item.TagId"class="tag">#@item.Name</a></li>
+}

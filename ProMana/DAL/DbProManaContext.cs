@@ -113,6 +113,8 @@ namespace DAL
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<UserInfo> UserInfoes { get; set; }
+        public virtual DbSet<LookupSeverity> LookupSeverities { get; set; }
+        public virtual DbSet<LookupPriority> LookupPriorities { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -177,6 +179,17 @@ namespace DAL
                 .HasMany(e => e.Solutions)
                 .WithOptional(e => e.ResolveType1)
                 .HasForeignKey(e => e.ResolveType);
+            
+
+            modelBuilder.Entity<LookupSeverity>()
+                .HasMany(e => e.Tasks)
+                .WithOptional(e => e.LookupSeverity)
+                .HasForeignKey(e => e.Severity);
+
+            modelBuilder.Entity<LookupPriority>()
+                .HasMany(e => e.Tasks)
+                .WithOptional(e => e.LookupPriority)
+                .HasForeignKey(e => e.Priority);
 
             modelBuilder.Entity<RoleInProject>()
                 .Property(e => e.UserName)

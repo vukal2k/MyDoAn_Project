@@ -55,7 +55,7 @@ namespace BUS
             try
             {
                 //delete old member
-                var oldMembers = await _unitOfWork.RoleInProjects.Get(m => m.ModuleId == moduleId);
+                var oldMembers = await _unitOfWork.RoleInProjects.Get(m => m.ModuleId == module.Id);
                 foreach (var member in oldMembers)
                 {
                     member.IsActive = false;
@@ -101,6 +101,29 @@ namespace BUS
                 var result = await _unitOfWork.CommitAsync()>0;
 
                 return result? module:null;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<UserInfo>> GetMembers(int moduleId,string currentUser,List<string> errors)
+        {
+            try
+            {
+                var module = await _unitOfWork.Modules.GetById(moduleId);
+                IEnumerable<UserInfo> roleInProject = null;
+                if (module.Project.CreatedBy.Equals(currentUser))
+                {
+                    roleInProject = module.RoleInProjects.Where(rp => rp.IsActive).GroupBy(r => r.UserName).Select(r=>r.FirstOrDefault().UserInfo);
+                }
+                else
+                {
+                    roleInProject = module.RoleInProjects.Where(rp => rp.IsActive && rp.RoleId!=HardFixJobRole.TeamLead).GroupBy(r => r.UserName).Select(r => r.FirstOrDefault().UserInfo);
+                }
+                return roleInProject;
             }
             catch (Exception ex)
             {

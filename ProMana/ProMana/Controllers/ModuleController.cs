@@ -1,6 +1,7 @@
 ﻿using BUS;
 using COMMON;
 using DTO;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -138,6 +139,19 @@ namespace ProMana.Controllers
             {
                 var result = await _userInforBus.GetById(username);
                 ViewBag.JobRole = await _jobRoleBUS.GetById(roleId);
+                return View(result);
+            }
+            catch
+            {
+                return Content("0");
+            }
+        }
+
+        public async Task<ActionResult> GetMemberOption(int id)
+        {
+            try
+            {
+                var result = await _moduleBus.GetMembers(id,User.Identity.GetUserName(),errors);
                 return View(result);
             }
             catch

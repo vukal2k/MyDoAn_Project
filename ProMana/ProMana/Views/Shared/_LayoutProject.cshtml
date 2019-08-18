@@ -132,35 +132,7 @@ desired effect
                 </ul>
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-                        <!-- Messages: style can be found in dropdown.less-->
-                        <!-- Notifications Menu -->
-                        <!-- Tasks Menu -->
-                        <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
-                            <!-- Menu Toggle Button -->
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">Alexander Pierce</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- The user image in the menu -->
-                                <li class="user-header">
-                                    <p>
-                                        Alexander Pierce - Web Developer
-                                        <small>Member since Nov. 2012</small>
-                                    </p>
-                                </li>
-
-                        </li>
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                            </div>
-                        </li>
-                    </ul>
-                    </ul>
+                    @Html.Partial("~/Views/Shared/_LoginPartialProject.cshtml")
                 </div>
             </nav>
         </header>
@@ -190,6 +162,14 @@ desired effect
                         </ul>
                     </li>
 
+                    <li class="treeview" id="sidebar2">
+                        <a><i class="fas fa-tasks"></i> <span>Task List</span></a>
+                        <ul class="treeview-menu">
+                            <li><a id="linkSidebar2-51" href="#"><i class="fas fa-tasks"></i> <span>Request List</span></a></li>
+                            <li><a id="linkSidebar2-52" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Request</span> </a></li>
+                        </ul>
+                    </li>
+
                     <li class="treeview" id="sidebar3">
                         <a><i class="fas fa-sitemap"></i> <span>Modules</span></a>
                         <ul class="treeview-menu">
@@ -199,7 +179,7 @@ desired effect
                     </li>
 
                     <li class="treeview" id="sidebar4">
-                        <a href="#" id="sidebar41"><i class="fas fa-info"></i> <span>Project Infomation</span></a> 
+                        <a href="#" id="sidebar41"><i class="fas fa-info"></i> <span>Project Infomation</span></a>
                     </li>
                 </ul>
                 <!-- /.sidebar-menu -->

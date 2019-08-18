@@ -1,0 +1,8 @@
+﻿@model IEnumerable<DTO.Category>
+
+@foreach (var item in Model)
+{
+    <div class="item d-flex justify-content-between"><a href="~/Blog/GetPostByCate/@item.CategoryId">@item.Name</a><span>@item.Posts.Where(p=>p.Published==true).Count()</span></div>
+}
+
+

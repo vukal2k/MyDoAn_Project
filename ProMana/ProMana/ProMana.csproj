@@ -1872,6 +1872,7 @@
     <Content Include="Scripts\jquery-lookupContact.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\kanban.js" />
+    <Content Include="Scripts\requestPage_jquery.js" />
     <Content Include="Scripts\scrollFocusItem_jquery.js" />
     <Content Include="Scripts\tab_w3s.js" />
     <Content Include="Scripts\updateMemberToProject.js" />
@@ -2074,6 +2075,13 @@
     <Content Include="Views\Project\AddWatcher.cshtml" />
     <Content Include="Views\Module\AddMember.cshtml" />
     <Content Include="Views\Module\EditMember.cshtml" />
+    <Content Include="Views\Shared\_LoginPartialProject.cshtml" />
+    <Content Include="Views\Module\GetMemberOption.cshtml" />
+    <Content Include="Views\Project\RequestList.cshtml" />
+    <Content Include="Views\Task\CreateRequest.cshtml" />
+    <Content Include="Views\Task\DetailsRequest.cshtml" />
+    <Content Include="Views\Task\EditRequest.cshtml" />
+    <Content Include="Views\Task\ConvertToTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

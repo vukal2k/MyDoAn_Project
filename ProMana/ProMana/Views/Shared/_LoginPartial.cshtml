@@ -45,10 +45,10 @@ else
 {
 <ul class="nav navbar-nav navbar-right">
     @{ 
-        var loginLink = Url.Action("Login", "Accout") + "?returnUrl=" + Url.Action(ViewContext.RouteData.Values["Action"].ToString(), ViewContext.RouteData.Values["Controller"].ToString());
+        var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action(ViewContext.RouteData.Values["Action"].ToString(), ViewContext.RouteData.Values["Controller"].ToString());
     }
     <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-    <li> <a id="loginLink" href="loginLink">Login</a> </li>
+    <li> <a id="loginLink" href="@loginLink">Login</a> </li>
 </ul>
 }
 

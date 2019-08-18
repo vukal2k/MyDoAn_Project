@@ -1,4 +1,6 @@
 ﻿@model DTO.Project
+@using COMMON
+@using Microsoft.AspNet.Identity
 
 @{
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
@@ -35,12 +37,12 @@
         <div id="noiListTaskDungChan">
             @foreach (var item in Model.Modules)
             {
-                foreach (var task in item.Tasks.Where(m => m.IsActive))
+                foreach (var task in item.Tasks.Where(m => m.IsActive && m.IsTask))
                 {
                     <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
                         <div class="card-body">
                             <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
-                            <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType.Title</label></h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType</label></h6>
                             <p class="card-text">Created By: @task.UserInfo1.UserName</p>
                             <p class="card-text">Deadline: @task.To</p>
                         </div>
@@ -84,13 +86,19 @@
     <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
     <script>
         $(document).ready(function () {
+            var roleCurrentUser = @Model.GetRoleInModule(User.Identity.GetUserName());
             $("#sidebar2").addClass('active');
-            $("#sidebar1").children().attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
 
-            $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+            if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+            }
+            else {
+                $("#linkSidebar22").remove();
+            }
+
+            $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id})')
+            $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id, createTask =true})')
 
             $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
             $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
@@ -109,6 +117,26 @@
                 $("#noiListTaskDungChan").scrollTop($('#card' + choosedTask).position().top);
             }
         });
+
+        function changeModule(element, idAssignee) {
+            var moduleId = $(element).val();
+
+            //post data
+            $.ajax({
+                url: "@Url.Action("GetMemberOption", "Module")/" + moduleId,
+                cache: false,
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                data: {
+                },
+                success: function (result) {
+                    if (result !== "0") {
+                        $("#"+idAssignee).html(result);
+                    }
+                }
+            });
+        }
 
         function chooseTask(btn, taskId) {
             if (btn != null) {
@@ -222,13 +250,33 @@
                     $("#" + mode + "ModuleId").parent().addClass('has-error');
                     result = false;
                 }
-                if ($("#" + mode + "Level").val() === "0") {
-                    $("#" + mode + "Level").parent().addClass('has-error');
+                if ($("#" + mode + "Severity").val() === "0") {
+                    $("#" + mode + "Severity").parent().addClass('has-error');
                     result = false;
+                }
+                if ($("#" + mode + "Priority").val() === "0") {
+                    $("#" + mode + "Priority").parent().addClass('has-error');
+                    result = false;
+                }
+
+                if ($("#" + mode + "TaskTypeId").val() === "other") {
+                    $("#" + mode + "TaskTypeValue").val($("#" + mode + "TaskTypeOther input").val());
+                }
+                else {
+                    $("#" + mode + "TaskTypeValue").val($("#" + mode + "TaskTypeId").val());
                 }
 
                 return $("#" + mode + "FormTask").valid() && result;
             })
+        }
+
+        function ChangeTaskType(item, idTextBox) {
+            if ($(item).val() === "other") {
+                $("#" + idTextBox).removeClass("hidden");
+            }
+            else {
+                $("#" + idTextBox).addClass("hidden");
+            }
         }
 
         function ValidateDateTo(mode) {

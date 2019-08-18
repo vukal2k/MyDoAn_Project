@@ -1,0 +1,118 @@
+﻿@model DTO.Task
+@using Microsoft.AspNet.Identity
+@{
+
+}
+
+<h4>Task</h4>
+<hr />
+<dl class="dl-horizontal">
+    <dd>
+        <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
+    </dd>
+
+    <dd>
+        @switch (Model.StatusId)
+        {
+            case COMMON.RequestStatusKey.PendingApproval:
+                if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                {
+                    <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="chooseEditTask(@Model.Id)">Assign To</a>
+                    <a class="btn btn-danger pull-right" style="margin-left:2%">Reject</a>
+                }
+                else if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+                {
+                    <a class="btn btn-danger pull-right" style="margin-left:2%">Cancel</a>
+                }
+                break;
+            default:
+                break;
+        }
+    </dd>
+    <dt>
+        Module
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Module.Title)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.CreatedBy)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.CreatedBy)
+    </dd>
+
+    <dt>
+        Reporting To
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.AssignedTo)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.From)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.From)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.To)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.To)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Severity)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Severity)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Priority)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Priority)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.StatusId)
+    </dt>
+
+    <dd>
+        @switch (Model.StatusId)
+        {
+            case COMMON.RequestStatusKey.PendingApproval:
+                <label class="label label-primary">@Model.LookupStatus.Name</label>
+                break;
+            case COMMON.RequestStatusKey.Rejected:
+                <label class="label label-danger">@Model.LookupStatus.Name</label>
+                break;
+            default:
+                break;
+        }
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Description)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+
+</dl>
+@if (Model.CreatedBy.Equals(User.Identity.GetUserName()) || Model.AssignedTo.Equals(User.Identity.GetUserName()))
+{
+    <a class="aHover" onclick="chooseEditRequest(@Model.Id)">Edit</a>
+}

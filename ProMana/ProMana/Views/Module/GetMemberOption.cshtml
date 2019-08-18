@@ -1,0 +1,6 @@
+﻿@model IEnumerable<DTO.UserInfo>
+<option value="0">-- Choose member --</option>
+@foreach (var item in Model)
+{
+    <option value="@item.UserName">@item.FullName (@item.UserName)</option>
+}

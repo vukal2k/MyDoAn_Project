@@ -1,5 +1,7 @@
 ﻿@model DTO.Task
+@using Microsoft.AspNet.Identity
 @{
+                /**/
 
 }
 
@@ -7,7 +9,7 @@
 <hr />
 <dl class="dl-horizontal">
     <dd>
-        <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType.Title</label>
+        <span class="h1">@  </span> <label class="label-default">@</label>
     </dd>
 
     <dd>
@@ -15,13 +17,19 @@
         {
             case COMMON.TaskStatusKey.Opened:
             case COMMON.TaskStatusKey.ReOpened:
-                <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'InProgress')">In Progress</a>
+                if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                {
+                    <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'InProgress')">In Progress</a>
+                }
                 break;
             case COMMON.TaskStatusKey.InProgress:
-                <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Resolved')">Resolve</a>
+                if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                {
+                    <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Resolved')">Resolve</a>
+                }
                 break;
             case COMMON.TaskStatusKey.Resolved:
-                if (Model.CreatedBy.Equals("pmtest"))
+                if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
                 {
                     <a class="btn btn-success pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Closed')">Close</a>
                     <a class="btn btn-warning pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'ReOpened')">ReOpen</a>
@@ -72,11 +80,19 @@
     </dd>
 
     <dt>
-        @Html.DisplayNameFor(model => model.Level)
+        @Html.DisplayNameFor(model => model.Severity)
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.Level)
+        @Html.DisplayFor(model => model.Severity)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Priority)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Priority)
     </dd>
 
     <dt>
@@ -112,7 +128,10 @@
     </dd>
 
 </dl>
-<a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>
+@if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+{
+    <a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>
+}
 <hr />
 <h3>Solutions</h3>
 <table class="table table-hover table-bordered">
@@ -147,5 +166,5 @@
 
 @foreach (var item in Model.Solutions)
 {
-    @Html.Partial("~/Views/Solution/DetailModal.cshtml",item)
+    @Html.Partial("~/Views/Solution/DetailModal.cshtml", item)
 }

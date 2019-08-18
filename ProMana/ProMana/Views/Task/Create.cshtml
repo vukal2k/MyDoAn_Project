@@ -1,5 +1,6 @@
 ﻿@model DTO.Project
 @using COMMON
+@using Microsoft.AspNet.Identity
 
 @{
     Layout = null;
@@ -27,41 +28,42 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-md-2">Module</label>
+            <div class="col-md-10">
+                <select name="ModuleId" id="createModuleId" onchange="changeModule(this,'createAssignedTo')" class="form-control">
+                    <option value="0">-- Choose module --</option>
+                    @foreach (var item in Model.GetOwnModule(User.Identity.GetUserName()))
+                    {
+                        <option value="@item.Id">@item.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label class="control-label col-md-2">Assigned To</label>
             <div class="col-md-10">
                 <select name="AssignedTo" id="createAssignedTo" class="form-control">
                     <option value="0">-- Choose member --</option>
-                    @foreach (var item in (IEnumerable<DTO.UserInfo>)Model.GetMember())
-                    {
-                        <option value="@item.UserName">@item.FullName (@item.UserName)</option>
-                    }
                 </select>
             </div>
         </div>
 
+        <input type="hidden" name="TaskType" id="createTaskTypeValue" />
         <div class="form-group">
             <label class="control-label col-md-2">Task Type</label>
             <div class="col-md-10">
-                <select name="TaskTypeId" id="createTaskTypeId" class="form-control">
-                    <option value="0">-- Choose task type --</option>
+                <select id="createTaskTypeId" onchange="ChangeTaskType(this,'createTaskTypeOther')" class="form-control">
+                    <option value="0">-- Choose Task Type --</option>
                     @foreach (var item in (IEnumerable<DTO.TaskType>)ViewBag.TaskTypes)
                     {
-                        <option value="@item.Id">@item.Title</option>
+                        <option value="@item.Title">@item.Title</option>
                     }
+                    <option value="other">Others: </option>
                 </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Module</label>
-            <div class="col-md-10">
-                <select name="ModuleId" id="createModuleId" class="form-control">
-                    <option value="0">-- Choose module --</option>
-                    @foreach (var item in Model.Modules.Where(m => m.IsActive))
-                    {
-                        <option value="@item.Id">@item.Title</option>
-                    }
-                </select>
+                <div id="createTaskTypeOther" class="hidden">
+                    is <input type="text" class="form-control" />
+                </div>
             </div>
         </div>
 
@@ -78,18 +80,36 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Level</label>
+            <label class="control-label col-md-2">Severity</label>
             <div class="col-md-10">
-                <select class="form-control" name="Level" id="createLevel">
-                    <option value="0">-- Choose level --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                <select class="form-control" name="Severity" id="createSeverity">
+                    <option value="0">-- Choose severity --</option>
+                    @{
+                        var keySeverity = COMMON.CONSTANCT.Severities.Keys;
+                    }
+                    @foreach (var key in keySeverity)
+                    {
+                        <option value="@key" data-toggle="tooltip" data-placement="right" title="@COMMON.CONSTANCT.Severities[key]">@key</option>
+                    }
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Priority</label>
+            <div class="col-md-10">
+                <select class="form-control" name="Priority" id="createPriority">
+                    <option value="0">-- Choose priority --</option>
+                    @{
+                        var keyPiority = COMMON.CONSTANCT.Priorities.Keys;
+                    }
+                    @foreach (var key in keyPiority)
+                    {
+                        <option value="@key" data-toggle="tooltip" data-placement="right" title="@COMMON.CONSTANCT.Priorities[key]">@key</option>
+                    }
+                </select>
+            </div>
+        </div>
+
         <div class="form-group">
             <label class="control-label col-md-2">Description</label>
             <div class="col-md-10">

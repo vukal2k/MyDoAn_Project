@@ -1,4 +1,6 @@
 ﻿@model DTO.Project
+@using COMMON
+@using Microsoft.AspNet.Identity
 
 @{
     /**/
@@ -8,7 +10,7 @@
 }
 <link href="~/Content/kanban.css" rel="stylesheet" />
 <h2>Kanban Board</h2>
-@if (!Model.Modules.Any())
+@if (!Model.Modules.Where(m => m.IsActive && !m.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher)).Any())
 {
     <div>
         Project do not have any module.
@@ -20,7 +22,7 @@
 else
 {
     <ul class="nav nav-tabs">
-        @foreach (var item in Model.Modules.Where(m => m.IsActive))
+        @foreach (var item in Model.Modules.Where(m => m.IsActive && !m.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher)))
         {
             <li><a data-toggle="tab" href="@string.Format("#{0}",item.Id)">@item.Title</a></li>
         }
@@ -31,7 +33,7 @@ else
         {
             <div id="@item.Id" class="tab-pane fade">
                 <br />
-                <div id="sortableKanbanBoards"  class="row" style="margin-left:5% !important">
+                <div id="sortableKanbanBoards" class="row" style="margin-left:5% !important">
                     <!--sütun başlangıç-->
                     <div class="panel panel-danger kanban-col">
                         <div class="panel-heading">
@@ -43,13 +45,13 @@ else
                                     var inProgressList = item.Tasks.Where(t => t.IsActive == true && t.StatusId == COMMON.TaskStatusKey.InProgress);
                                     foreach (var task in inProgressList)
                                     {
-                                        <article class="kanban-entry grab"  id="@string.Format("task{0}",task.Id)" draggable="true">
+                                        <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>
-                                                        Deadline: @task.To 
+                                                        Deadline: @task.To
                                                         @if (task.To > DateTime.Now)
                                                         {
                                                             <lable class="label-danger">Overdue</lable>
@@ -68,7 +70,7 @@ else
                     </div>
                     <!--sütun bitiş-->
                     <!--sütun başlangıç-->
-                    <div class="panel panel-primary kanban-col"> 
+                    <div class="panel panel-primary kanban-col">
                         <div class="panel-heading">
                             Resolved
                         </div>
@@ -81,7 +83,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
@@ -110,7 +112,7 @@ else
                                         <article class="kanban-entry grab" id="@string.Format("task{0}",task.Id)" draggable="true">
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
-                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType.Title</span></h2>
+                                                    <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
                                                     <p>Created by: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
@@ -138,14 +140,22 @@ else
     <script src="~/Scripts/kanban.js"></script>
     <script>
         $(document).ready(function () {
+            var roleCurrentUser = @Model.GetRoleInModule(User.Identity.GetUserName());
+
             $("#sidebar1").addClass("active");
             $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-
-            $("#linkSidebar21").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            
             $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id})')
 
-            $("#linkSidebar22").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+            if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
+            }
+            else {
+                $("#linkSidebar22").remove();
+            }
+            
+            $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id})')
+            $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id, createTask =true})')
 
             $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
             $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')

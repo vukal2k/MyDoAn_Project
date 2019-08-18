@@ -1,0 +1,86 @@
+﻿<li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Tag Manager</span>
+    </a>
+    <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Action</h6>
+            <a class="collapse-item" href="~/Admin/TagManager/Create">Create New</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">View:</h6>
+            <a class="collapse-item" href="~/Admin/TagManager">Show All Tags</a>
+        </div>
+    </div>
+</li>
+
+<li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages1" aria-expanded="true" aria-controls="collapsePages1">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Category Manager</span>
+    </a>
+    <div id="collapsePages1" class="collapse show" aria-labelledby="headingPages1" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Action</h6>
+            <a class="collapse-item" href="~/Admin/CategoryManager/Create">Create New</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">View:</h6>
+            <a class="collapse-item" href="~/Admin/CategoryManager">Show All Categories</a>
+        </div>
+    </div>
+</li>
+
+<li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages2" aria-expanded="true" aria-controls="collapsePages2">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Post Manager</span>
+    </a>
+    <div id="collapsePages2" class="collapse show" aria-labelledby="headingPages2" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Action</h6>
+            <a class="collapse-item" href="~/Admin/PostManager/Create">Create New</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">View:</h6>
+            <a class="collapse-item" href="~/Admin/PostManager">Show All Posts</a>
+        </div>
+    </div>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages3" aria-expanded="true" aria-controls="collapsePages3">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Account Manager</span>
+    </a>
+    <div id="collapsePages3" class="collapse show" aria-labelledby="headingPages3" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Action</h6>
+            @*@Html.ActionLink("Roles", "Create", "RolesAdmin", new { @class = "collapse-item" })*@
+            <a class="collapse-item" href="~/Admin/RolesAdmin/Create">Create New Roles</a>
+            @*@Html.ActionLink("Users", "Create", "UsersAdmin", new { @class = "collapse-item" })*@
+            <a class="collapse-item" href="~/Admin/UsersAdmin/Create">Create New User</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">View:</h6>
+            @*@Html.ActionLink("Roles", "Index", "RolesAdmin", new { @class = "collapse-item" })*@
+            <a class="collapse-item" href="~/Admin/RolesAdmin">Show All Roles</a>
+            @*@Html.ActionLink("Users", "Index", "UsersAdmin", new { @class = "collapse-item" })*@
+            <a class="collapse-item" href="~/Admin/UsersAdmin">Show All Users</a>
+        </div>
+    </div>
+</li>
+
+
+
+
+@*<div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+            }
+        </ul>
+        @Html.Partial("_LoginPartial")
+    </div>*@

@@ -72,4 +72,18 @@ namespace COMMON
     {
         public const string GetUserDoNotInProject = "dbo.GetUserDoNotInProject";
     }
+
+    public static class CONSTANCT
+    {
+        public static Dictionary<string,string> Severities = new Dictionary<string, string> { { "1.Normal","The severity of the bug has not been assessed or not yet classified" },
+                                                                                              { "2.Text/Cosmetic" ,"Error related to interface, content. The degree of seriousness is assessed on cosmetic regulations"},
+                                                                                              { "3.Minor" ,"The bugs do not damage the system's usability. Bug may be due to user rating or tester. There are cases that the proposal is not in the scope of the project"},
+                                                                                              { "4.Major","These bugs affect the functionality of the system and the system still works but give false, incomplete, inaccurate results, affecting other features." },
+                                                                                              { "5.Crash/Critial" ,"Extremely serious bugs, the system doesn't work. The user cannot perform the next operation in the system"} };
+        public static Dictionary<string, string> Priorities = new Dictionary<string,string> { { "1.N/A" ,"These are issues that have not identified priorities"},
+                                                                                              { "2.Low" ,"There are issues with low priority, usually without affecting product release. Can be processed later"},
+                                                                                              { "3.Normal","These are issues with normal money. With these issues, the assigner handles the proposed plan" },
+                                                                                              { "4.High","There are high priority issues. With the issue of these issues, people who are assigned a handle should do it as soon as possible" },
+                                                                                              { "5.Urgent","These are issues that have urgent priority, need urgent handling. When the issue has this priority, it should be handled during the session or at least 24 hours" } };
+    }
 }
