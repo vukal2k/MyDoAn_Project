@@ -98,15 +98,27 @@
             }
 
             $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id})')
-            $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id, createTask =true})')
+            if (roleCurrentUser !== @HardFixJobRole.PM) {
+                $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id, createTask =true})')
+            }
+            else {
+                $("#linkSidebar2-52").remove();
+            }
+            
 
-            $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
+            if (roleCurrentUser === @HardFixJobRole.PM) {
+                $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+                $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
 
-            $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-            $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Id })')
+                $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+                $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Id })')
 
-            $("#sidebar41").attr("href",'@Url.Action("Infomation", "Project", new { id = Model.Id })')
+                $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.Id })')
+            }
+            else {
+                $("#sidebar3").remove();
+                $("#sidebar4").remove();
+            }
 
             validateTask("create");
 

@@ -24,7 +24,7 @@ namespace ProMana.Controllers
             return View();
         }
         
-
+        [Authorize]
         // GET: Project/Create
         public async Task<ActionResult> Create()
         {
@@ -32,7 +32,7 @@ namespace ProMana.Controllers
             ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             return View();
         }
-
+        [Authorize]
         // POST: Project/Create
         [HttpPost]
         public async Task<ActionResult> Create(Project project,string members)

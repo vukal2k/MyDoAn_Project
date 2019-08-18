@@ -43,13 +43,30 @@
 }
 else
 {
-<ul class="nav navbar-nav navbar-right">
-    @{ 
-        var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action(ViewContext.RouteData.Values["Action"].ToString(), ViewContext.RouteData.Values["Controller"].ToString());
-    }
+<div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+        <!-- Messages: style can be found in dropdown.less-->
+        <!-- Notifications Menu -->
+        <!-- Tasks Menu -->
+        <!-- User Account Menu -->
+        <li class="dropdown user user-menu">
+            @{
+                var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action(ViewContext.RouteData.Values["Action"].ToString(), ViewContext.RouteData.Values["Controller"].ToString());
+            }
+            <a class="pull-right" id="loginLink" href="@loginLink">Login</a>
+        </li>
+        <li class="dropdown user user-menu">
+            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+            @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        </li>
+
+    </ul>
+</div>
+
+@*<ul class="nav navbar-nav navbar-right">
     <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
     <li> <a id="loginLink" href="@loginLink">Login</a> </li>
-</ul>
+</ul>*@
 }
 
 

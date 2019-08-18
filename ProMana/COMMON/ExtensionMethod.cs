@@ -80,7 +80,7 @@ namespace COMMON
                     result = project.Modules.Where(m => m.Title.Equals(HardFixJobRoleTitle.Watcher));
                     break;
                 case HardFixJobRole.TeamLead:
-                    result = project.Modules.Where(m => m.IsActive && m.TeamLead.Equals(userName));
+                    result = project.Modules;
                     break;
                 default:
                     result = project.Modules.Where(m => !m.Title.Equals(HardFixJobRoleTitle.Watcher)).Where(m => m.IsActive && m.RoleInProjects.Where(r => r.UserName.Equals(userName) && r.IsActive).FirstOrDefault() != null);
