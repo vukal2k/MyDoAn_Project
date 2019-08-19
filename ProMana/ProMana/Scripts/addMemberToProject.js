@@ -83,7 +83,6 @@ function AddMember() {
         var roleInProject = new RoleInProjectViewModel(userName, roleId);
         listMemeberAndRole.push(roleInProject);
         listUserSelected.push(userName);
-        alert(roleId)
         //post data
         $.ajax({
             url: "../../Module/AddMember?username=" + userName + "&roleId=" + roleId,

@@ -38,7 +38,7 @@ namespace ProMana.Controllers
             var task = await _taskBus.GetById(id, errors);
             if (isSummary)
             {
-                return PartialView("~/Views/Task/DetailSummary.cshtml", task);
+                return PartialView("~/Views/Task/RequestDetailSummary.cshtml", task);
             }
             return View(task);
         }

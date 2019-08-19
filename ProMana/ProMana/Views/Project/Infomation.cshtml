@@ -1,5 +1,8 @@
 ﻿@model DTO.Project
 
+@using COMMON;
+@using Microsoft.AspNet.Identity
+
 @{
     ViewBag.Title = "Your Project";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
@@ -14,7 +17,7 @@
     @using (Html.BeginForm("Infomation", "Project", FormMethod.Post, new { @id = "form" }))
     {
         @Html.AntiForgeryToken()
-        <input type="hidden" name="Id" value="@Model.Id"/>
+        <input type="hidden" name="Id" value="@Model.Id" />
 
         <div class="form-horizontal">
             <hr />
@@ -75,7 +78,7 @@
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
-                <input type="text" onchange="ValidateDateTo()" autocomplete="off" value="@Model.From.ToString("MM/dd/yyyy")"  name="From" class="control-label col-md-3" id="from" style="margin-left:1.3% !important" />
+                <input type="text" onchange="ValidateDateTo()" autocomplete="off" value="@Model.From.ToString("MM/dd/yyyy")" name="From" class="control-label col-md-3" id="from" style="margin-left:1.3% !important" />
                 <input type="hidden" name="From" id="fromValue" />
                 @{
                     string toValue = "";
@@ -105,26 +108,42 @@
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
+
             <div class="form-group">
-                <label class="control-label col-md-2">Members</label>
+                <label class="control-label col-md-2">Watcher</label>
                 <div class="col-md-10">
-                    @{
-                        var jobRoles = ViewBag.GetAllRole;
-                        foreach (var item in jobRoles)
-                        {
-                            if (item.Id != 1)
-                            {
-                                <fieldset>
-                                    <legend>@item.Title</legend>
-                                    <div id="@string.Format("listMember{0}",item.Id)">
-                                    </div>
-                                </fieldset>
-                            }
-                        }
-                    }
+                    <div>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Fullname</th>
+                                    <th>Current Job</th>
+                                    <th>Company</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="listMember">
+                                @{
+                                    var module = Model.Modules.Where(m => m.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher)).FirstOrDefault();
+                                    foreach (var item in Model.GetMemberByModule(module.Id))
+                                    {
+                                        if (!item.UserName.Equals(Model.CreatedBy))
+                                        {
+                                            @Html.Partial("~/Views/Project/AddWatcher.cshtml", item)
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                     <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
                 </div>
             </div>
+            <input type="hidden" name="members" id="members" />
+        </div>
+        <div>
+
             <input type="hidden" name="members" id="members" />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -134,12 +153,6 @@
         </div>
     }
 </div>
-
-<br />
-<br />
-<br />
-<br />
-
 <div id="memberModal" class="modal fade" role="dialog" data-backdrop="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -162,7 +175,10 @@
                                         )ViewBag.GetUserDoNotInProject;
                                     foreach (var item in user)
                                     {
-                                        <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                        if (!item.UserName.Equals(User.Identity.GetUserName()))
+                                        {
+                                            <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                        }
                                     }
                                 }
                             </select>
@@ -170,28 +186,15 @@
                     </div>
                     <div class="col-md-6">
                         <br />
-                        <label>Role In Project</label><span style="color:red">*</span>
-                        <br />
-                        <div class="form-inline">
-                            <select style="width:100%" type="text" id="role" class="form-control">
-                                <option value="0"> -- Choose Role --</option>
-                                @{
-                                    var roles = (IEnumerable
-                                    <DTO.JobRole>
-                                        )ViewBag.GetSoftRole;
-                                    foreach (var item in roles)
-                                    {
-                                        <option value="@item.Id"> @item.Title</option>
-                                    }
-                                }
-                            </select>
-                        </div>
+                        <p>
+                            These users act as a customer or project related people but do not directly participate in the project.
+                        </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <br />
-                        <label style="width:100% !important" onclick="AddProject()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                        <label style="width:100% !important" onclick="AddWatcher()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
                     </div>
                 </div>
             </div>
@@ -214,9 +217,12 @@
     <script>
 
         $(document).ready(function () {
+            var roleCurrentUser = @Model.GetRoleInModule(User.Identity.GetUserName());
             $("#sidebar4").addClass('active');
-            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+            $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.Id })')
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id })')
 
+            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id })')
             if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
                 $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id, createTask =true})')
             }
@@ -224,20 +230,20 @@
                 $("#linkSidebar22").remove();
             }
 
-            $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id})')
+            $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id })')
             if (roleCurrentUser !== @HardFixJobRole.PM) {
                 $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Id, createTask =true})')
             }
             else {
                 $("#linkSidebar2-52").remove();
             }
-            
+
 
             if (roleCurrentUser === @HardFixJobRole.PM) {
-                $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
-                $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id})')
+                $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id })')
+                $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Id })')
 
-                $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id})')
+                $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.Id })')
                 $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Id })')
 
                 $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.Id })')
@@ -247,7 +253,8 @@
                 $("#sidebar4").remove();
             }
 
-            SelectMember('@Html.Raw(@ViewBag.GetMemberInProject)');
+            var members = JSON.parse('@Html.Raw(ViewBag.WatchersJson)');
+            InitListMember(members);
             $('#from').datetimepicker({
                 timepicker: false,
                 format: 'm/d/Y'
@@ -291,6 +298,7 @@
                 $('#fromValue').val($('#from').val());
                 $('#toValue').val($('#to').val());
                 $("#members").val(JSON.stringify(listMemeberAndRole));
+                alert(JSON.stringify(listMemeberAndRole))
                 return $("#form").valid();
             });
 

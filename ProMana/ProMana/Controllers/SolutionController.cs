@@ -1,6 +1,7 @@
 ﻿using BUS;
 using COMMON;
 using DTO;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace ProMana.Controllers
                 //int.TryParse(formCollection["taskId"], out taskId);
                 //int.TryParse(formCollection["statusId"], out statusId);
 
-                var task = await _taskBus.CheckSolutionTaskPermission(taskId, statusId, "pmtest", errors);
+                var task = await _taskBus.CheckSolutionTaskPermission(taskId, statusId,User.Identity.GetUserName(), errors);
                 if (task == null)
                 {
                     return Content("0");
@@ -72,7 +73,7 @@ namespace ProMana.Controllers
                 int statusId = int.Parse(formCollection["statusId"]);
                 bool result = false;
 
-                result = await _solutionBUS.Create(solution, "pmtest", statusId,errors);
+                result = await _solutionBUS.Create(solution, User.Identity.GetUserName(), statusId,errors);
 
                 if (result)
                 {

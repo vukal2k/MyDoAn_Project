@@ -209,6 +209,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\gantt.css" />
+    <Content Include="Content\googleRoboto.css" />
     <Content Include="Content\ionicons.css" />
     <Content Include="Content\ionicons.min.css" />
     <Content Include="Content\jquery.datetimepicker.min.css" />
@@ -1949,6 +1951,7 @@
     <Content Include="Areas\Admin\Views\ProjectAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ProjectAdmin\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ProjectAdmin\Edit.cshtml" />
+    <Content Include="Content\Gantt.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
@@ -2082,6 +2085,8 @@
     <Content Include="Views\Task\DetailsRequest.cshtml" />
     <Content Include="Views\Task\EditRequest.cshtml" />
     <Content Include="Views\Task\ConvertToTask.cshtml" />
+    <Content Include="Views\Project\GanttChart.cshtml" />
+    <Content Include="Views\Task\RequestDetailSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

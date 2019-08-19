@@ -149,9 +149,26 @@ namespace BUS
                 {
                     return false;
                 }
-                _unitOfWork.Projects.Update(project);
+
+                //delete old member
+                var module = await _unitOfWork.Modules.GetOne(m => m.ProjectId == project.Id && m.Title.Equals(HardFixJobRoleTitle.Watcher));
+                var watchers = await _unitOfWork.RoleInProjects.Get(m => m.IsActive && m.ModuleId == module.Id);
+                foreach (var item in watchers)
+                {
+                    await _unitOfWork.RoleInProjects.Delete(item);
+                }
                 
+                //insert new member
+                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username, ModuleId = module.Id }).ToList();
+                foreach (var item in listMember)
+                {
+                    _unitOfWork.RoleInProjects.Insert(item);
+                }
+
+                _unitOfWork.Projects.Update(project);
+
                 //commit
+                project.StatusId = ProjectStatusKey.Opened;
                 var result = await _unitOfWork.CommitAsync() > 0;
 
                 return result;
@@ -171,12 +188,18 @@ namespace BUS
 
         public async Task<IEnumerable<UserInfo>>GetUserDoNotInProject(int projectId)
         {
-            //SqlParameter[] prams =
-            //{
-            // new SqlParameter { ParameterName = "@projectId", Value = projectId , DbType = DbType.Int32 }
-            //};
+            SqlParameter[] prams =
+            {
+             new SqlParameter { ParameterName = "@projectId", Value = projectId , DbType = DbType.Int32 }
+            };
 
-            //var result = await _unitOfWork.UserInfos.Get(StoreProcedure.GetUserDoNotInProject, prams);
+            var result = await _unitOfWork.UserInfos.Get(StoreProcedure.GetUserDoNotInProject, prams);
+            //var result = await _unitOfWork.UserInfos.Get(u => u.IsActive);
+            return result;
+        }
+
+        public async Task<IEnumerable<UserInfo>> GetUsercCanNotWatcher(int projectId)
+        {
             var result = await _unitOfWork.UserInfos.Get(u => u.IsActive);
             return result;
         }
@@ -189,7 +212,69 @@ namespace BUS
             return result;
         }
 
+        public async Task<GanttChartViewModel> GetGanttChart(int projectId, int page)
+        {
+            GanttChartViewModel result = new GanttChartViewModel()
+            {
+                ListDay = new List<DateTime>(),
+                Page = page,
+                ListTask = new List<TaskViewModel>()
+            };
 
+            var currentDate = DateTime.Today;
+            var startDate = StartOfWeek(currentDate, DayOfWeek.Sunday).AddDays(page*7);
+            var endDate = StartOfWeek(currentDate, DayOfWeek.Saturday).AddDays(page * 7);
+
+            //insert list date
+            DateTime dateTemp = startDate;
+            while (dateTemp<=endDate)
+            {
+                result.ListDay.Add(dateTemp);
+                dateTemp = dateTemp.AddDays(1);
+            }
+
+            //insert list task
+            var project = await _unitOfWork.Projects.GetById(projectId);
+            result.Project = project;
+            var taskDateTo = DateTime.MinValue;
+            var taskDateFrom = DateTime.MinValue;
+            foreach (var module in project.Modules.Where(m => m.IsActive))
+            {
+                foreach (var task in module.Tasks.Where(m => m.IsActive && m.IsTask))
+                {
+                    taskDateTo = new DateTime(task.To.Year, task.To.Month, task.To.Day);
+                    taskDateFrom = new DateTime(task.From.Year, task.From.Month, task.From.Day);
+                    if (taskDateTo>=startDate && taskDateTo<=endDate)
+                    {
+                        result.ListTask.Add(new TaskViewModel {
+                            Task=task,
+                            FromIndex= taskDateFrom.Subtract(startDate).Days > 0 ? taskDateFrom.Subtract(startDate).Days+1 : 1,
+                            ToIndex = 8-endDate.Subtract(taskDateTo).Days,
+                        });
+                    }
+                    else if (taskDateFrom >= startDate && taskDateFrom <= endDate)
+                    {
+                        result.ListTask.Add(new TaskViewModel
+                        {
+                            Task = task,
+                            FromIndex = taskDateFrom.Subtract(startDate).Days+1,
+                            ToIndex = endDate.Subtract(startDate).Days > 0 ? 8-endDate.Subtract(startDate).Days : 8,
+                        });
+                    }
+                    else if(taskDateFrom < startDate && taskDateTo > endDate)
+                    {
+                        result.ListTask.Add(new TaskViewModel
+                        {
+                            Task = task,
+                            FromIndex = 1,
+                            ToIndex = 8,
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
         #endregion
 
         #region private method
@@ -207,6 +292,13 @@ namespace BUS
                 return false;
             }
             return true;
+        }
+
+        private DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
+        {
+            //int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            //return dt.AddDays(-1 * diff).Date;
+            return dt.AddDays(startOfWeek - dt.DayOfWeek);
         }
         #endregion
     }

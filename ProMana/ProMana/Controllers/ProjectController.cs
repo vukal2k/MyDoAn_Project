@@ -8,6 +8,7 @@ using BUS;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using COMMON;
 
 namespace ProMana.Controllers
 {
@@ -67,6 +68,13 @@ namespace ProMana.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> GanttChart(int id, int page=0)
+        {
+            var ganttChart = await _projectBus.GetGanttChart(id,page);
+            return View(ganttChart);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> KanbanBoard(int id)
         {
             var project = await _projectBus.GetById(id);
@@ -97,9 +105,12 @@ namespace ProMana.Controllers
         public async Task<ActionResult> Infomation(int id)
         {
             var project = await _projectBus.GetById(id);
-            ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);
+            ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(id);
             ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             ViewBag.GetAllRole = await _jobRoleBUS.GetAll();
+
+            var module = project.Modules.Where(m => m.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher)).FirstOrDefault();
+            ViewBag.WatchersJson = JsonConvert.SerializeObject(module.GetMemberParams());
            
             return View(project);
         }

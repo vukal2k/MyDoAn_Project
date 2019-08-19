@@ -66,6 +66,7 @@
     <Compile Include="Task.cs" />
     <Compile Include="TaskType.cs" />
     <Compile Include="UserInfo.cs" />
+    <Compile Include="ViewModel\GanttChartViewModel.cs" />
     <Compile Include="ViewModel\MemberParamsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

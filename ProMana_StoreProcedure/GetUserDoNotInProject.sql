@@ -18,15 +18,26 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE GetUserDoNotInProject
+ALTER PROCEDURE GetUserDoNotInProject
 	@projectId INT
 AS
 BEGIN
-	SELECT * FROM dbo.UserInfo ui
-	LEFT JOIN dbo.RoleInProject rip
-		ON ui.UserName=rip.UserName
-		AND rip.IsActive = 1
-	WHERE rip.Id is null
-		  AND ProjectId = @projectId
+	IF @projectId<>0
+	BEGIN
+			SELECT ui.* FROM dbo.UserInfo ui
+		LEFT JOIN dbo.RoleInProject rip
+			ON ui.UserName=rip.UserName
+			AND rip.IsActive = 1
+		LEFT JOIN dbo.Module m
+			ON rip.ModuleId=m.Id
+				AND m.IsActive=1
+		WHERE rip.Id is null
+			  AND m.ProjectId = @projectId
+			  AND m.Title <> 'Watcher'
+	END;
+	ELSE
+	BEGIN
+		SELECT * FROM dbo.UserInfo
+	END;
 END
 GO
