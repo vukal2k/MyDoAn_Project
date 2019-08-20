@@ -49,10 +49,11 @@ else
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
                                                     <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
-                                                    <p>Created by: @task.UserInfo.FullName</p>
+                                                    <p>Created by: @task.UserInfo1.FullName</p>
+                                                    <p>Assign to: @task.UserInfo.FullName</p>
                                                     <p>
                                                         Deadline: @task.To
-                                                        @if (task.To < DateTime.Now)
+                                                        @if (task.To < DateTime.Now.AddDays(1))
                                                         {
                                                             <lable class="label-danger">Overdue</lable>
                                                         }
@@ -83,7 +84,8 @@ else
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
                                                     <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
-                                                    <p>Created by: @task.UserInfo.FullName</p>
+                                                    <p>Created by: @task.UserInfo1.FullName</p>
+                                                    <p>Assign to: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
                                             </div>
@@ -111,7 +113,8 @@ else
                                             <div class="kanban-entry-inner">
                                                 <div class="kanban-label">
                                                     <h2><a href="@Url.Action("TaskList","Project", new { id = task.Module.ProjectId,chooseTaskId=task.Id})">@task.Title</a> <span>@task.TaskType</span></h2>
-                                                    <p>Created by: @task.UserInfo.FullName</p>
+                                                    <p>Created by: @task.UserInfo1.FullName</p>
+                                                    <p>Assign to: @task.UserInfo.FullName</p>
                                                     <p>Deadline: @task.To</p>
                                                 </div>
                                             </div>

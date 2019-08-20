@@ -49,7 +49,7 @@
                     @item.Task.Title
                 </div>
                 <ul class="gantt__row-bars">
-                    @if (item.Task.To < DateTime.Today.AddDays(1))
+                    @if (item.Task.To < DateTime.Today.AddDays(1) && item.Task.StatusId<TaskStatusKey.Resolved)
                     {
                         <li style="grid-column: @string.Format("{0}/{1}",item.FromIndex,item.ToIndex); background-color: #ff6252;" class="stripes">@item.Task.AssignedTo</li>
                     }

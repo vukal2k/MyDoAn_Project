@@ -31,9 +31,8 @@ BEGIN
 		LEFT JOIN dbo.Module m
 			ON rip.ModuleId=m.Id
 				AND m.IsActive=1
-		WHERE rip.Id is null
-			  AND m.ProjectId = @projectId
-			  AND m.Title <> 'Watcher'
+		WHERE (rip.Id is null OR m.Title = 'Watcher')
+			  AND m.ProjectId = @projectId 
 	END;
 	ELSE
 	BEGIN
