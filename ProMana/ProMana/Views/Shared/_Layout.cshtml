@@ -168,8 +168,20 @@ desired effect
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a id="sidebar41" href="@Url.Action("Index", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Project List</a></li>
-                            <li><a id="sidebar42" href="@Url.Action("Create", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Project Type</a></li>
+                            <li><a id="sidebar41" href="@Url.Action("Index", "ProjectAdmin", new {area="Admin" })"><i class="fas fa-genderless"></i> Project List</a></li>
+                            <li><a id="sidebar42" href="@Url.Action("Create", "ProjectAdmin", new {area="Admin" })"><i class="fas fa-genderless"></i> Create Project</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview" id="sidebar5">
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i> <span>Account</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a id="sidebar51" href="@Url.Action("Index", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Account List</a></li>
+                            <li><a id="sidebar52" href="@Url.Action("Create", "Project", new {area="Admin" })"><i class="fas fa-genderless"></i> Create Account</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -217,30 +229,7 @@ desired effect
     <script>
         var table;
         $(document).ready(function () {
-            table = $(".UseDataTables").DataTable({
-                "bLengthChange": false,
-                "pageLength": 15,
-                "searching": false,
-                "language": {
-                    "sProcessing": "Processing...",
-                    "sLengthMenu": "Count of Records _MENU_",
-                    "sZeroRecords": "Do not have any record",
-                    "sInfo": "From record _START_ to record _END_ in total _TOTAL_ record",
-                    "sInfoEmpty": "Do not have any record",
-                    "sInfoFiltered": "(filted from _MAX_ records)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Search: ",
-                    "sUrl": "",
-                    "oPaginate": {
-                        "sFirst": "<i class='fa fa-angle-double-left fa-lg'></i>",
-                        "sPrevious": "<i class='fa fa-angle-left fa-lg'></i>",
-                        "sNext": "<i class='fa fa-angle-right fa-lg'></i>",
-                        "sLast": "<i class='fa fa-angle-double-right fa-lg'></i>"
-                    }
-                },
-                "pagingType": "full_numbers",
-                "deferRender": true,
-            });
+            table = $(".UseDataTables").DataTable();
             SetDataTable();
         })
 

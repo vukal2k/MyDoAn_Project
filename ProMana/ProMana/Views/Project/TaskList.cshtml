@@ -20,8 +20,8 @@
     }
 
     .card:hover {
-        transform: scale(1, 1.1);
         background-color: #dffff6;
+        cursor:pointer;
     }
 
     .cardActive {
@@ -39,7 +39,7 @@
             {
                 foreach (var task in item.Tasks.Where(m => m.IsActive && m.IsTask))
                 {
-                    <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                    <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%;  padding:1%; transition: transform 1s;">
                         <div class="card-body">
                             <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
                             <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType</label></h6>
@@ -47,7 +47,7 @@
                             <p class="card-text">Deadline: @task.To</p>
                         </div>
                     </div>
-                    <br />
+                    <hr />
                 }
             }
         </div>

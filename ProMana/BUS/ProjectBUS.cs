@@ -96,6 +96,17 @@ namespace BUS
         #endregion
 
         #region Public method
+        public async Task<IEnumerable<Project>> GetMyProject(string username)
+        {
+            SqlParameter[] prams =
+            {
+             new SqlParameter { ParameterName = "@username", Value = username , DbType = DbType.String }
+            };
+
+            var result = await _unitOfWork.Projects.Get(StoreProcedure.GetMyProject, prams);
+            //var result = await _unitOfWork.UserInfos.Get(u => u.IsActive);
+            return result;
+        }
         public async Task<bool> Create(Project project,IEnumerable<MemberParamsViewModel>members,string userCreate, List<string>errors)
         {
             try
@@ -169,6 +180,7 @@ namespace BUS
 
                 //commit
                 project.StatusId = ProjectStatusKey.Opened;
+                project.IsActive = true;
                 var result = await _unitOfWork.CommitAsync() > 0;
 
                 return result;

@@ -6,9 +6,104 @@
 
 }
 
-<h4>Task</h4>
-<hr />
-<dl class="dl-horizontal">
+<div class="container">
+    <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
+    <br />
+    <br />
+    @switch (Model.StatusId)
+    {
+        case COMMON.TaskStatusKey.Opened:
+        case COMMON.TaskStatusKey.ReOpened:
+            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+            {
+                <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'InProgress')">In Progress</a>
+            }
+            break;
+        case COMMON.TaskStatusKey.InProgress:
+            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+            {
+                <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Resolved')">Resolve</a>
+            }
+            break;
+        case COMMON.TaskStatusKey.Resolved:
+            if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+            {
+                <a class="btn btn-success pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Closed')">Close</a>
+                <a class="btn btn-warning pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'ReOpened')">ReOpen</a>
+            }
+            break;
+        default:
+            break;
+    }
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Module</td>
+                        <td>
+                            @Html.DisplayFor(model => model.Module.Title)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Created By</td>
+                        <td>
+                            @Html.DisplayFor(model => model.CreatedBy)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Assigned To</td>
+                        <td>@Html.DisplayFor(model => model.AssignedTo)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Date</td>
+                        <td>@Html.DisplayFor(model => model.From) - @Html.DisplayNameFor(model => model.To)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Severity</td>
+                        <td>@Html.DisplayFor(model => model.Severity)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Priority</td>
+                        <td>@Html.DisplayFor(model => model.Priority)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                        <td>
+                            @switch (Model.StatusId)
+                            {
+                                case COMMON.TaskStatusKey.Opened:
+                                    <label class="label label-default">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.TaskStatusKey.InProgress:
+                                    <label class="label label-warning">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.TaskStatusKey.Resolved:
+                                    <label class="label label-danger">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.TaskStatusKey.Closed:
+                                    <label class="label label-success">@Model.LookupStatus.Name</label>
+                                    break;
+                                default:
+                                    break;
+                            }
+                            @Model.LookupStatus.Name
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <label class="control-label text-success">Description</label>
+    <p>@Model.Description</p>
+</div>
+@*<dl class="dl-horizontal">
     <dd>
         <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
     </dd>
@@ -128,10 +223,10 @@
         @Html.DisplayFor(model => model.Description)
     </dd>
 
-</dl>
+</dl>*@
 @if (Model.CreatedBy.Equals(User.Identity.GetUserName()) || (Model.AssignedTo.Equals(User.Identity.GetUserName()) && Model.Module.Project.GetRoleInModule(User.Identity.GetUserName())!=0 && Model.Module.Project.GetRoleInModule(User.Identity.GetUserName())!= HardFixJobRole.Watcher))
 {
-<a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>
+@*<a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>*@
 }
 <hr />
 <h3>Solutions</h3>

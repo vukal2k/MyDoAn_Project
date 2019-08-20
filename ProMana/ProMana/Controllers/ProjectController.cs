@@ -12,6 +12,7 @@ using COMMON;
 
 namespace ProMana.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         private ProjectBUS _projectBus = new ProjectBUS();
@@ -20,12 +21,18 @@ namespace ProMana.Controllers
         private UserInfoBUS _userInfoBUS = new UserInfoBUS();
         List<string> errors = new List<string>();
         // GET: Project
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var result = await _projectBus.GetMyProject(User.Identity.GetUserName());
+            return View(result);
         }
-        
-        [Authorize]
+
+        public async Task<ActionResult> Details(int id)
+        {
+            var result = await _projectBus.GetById(id);
+            return View(result);
+        }
+
         // GET: Project/Create
         public async Task<ActionResult> Create()
         {
@@ -33,7 +40,6 @@ namespace ProMana.Controllers
             ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
             return View();
         }
-        [Authorize]
         // POST: Project/Create
         [HttpPost]
         public async Task<ActionResult> Create(Project project,string members)

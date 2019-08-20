@@ -71,6 +71,7 @@ namespace COMMON
     public static class StoreProcedure
     {
         public const string GetUserDoNotInProject = "dbo.GetUserDoNotInProject";
+        public const string GetMyProject = "dbo.GetMyproject";
     }
 
     public static class CONSTANCT

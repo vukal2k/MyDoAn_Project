@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DTO.Project>
+
+@{
+    ViewBag.Title = "Your Project List";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<style>
+    .myShadow {
+        -webkit-box-shadow: -6px 10px 19px 1px rgba(0,0,0,0.75);
+        -moz-box-shadow: -6px 10px 19px 1px rgba(0,0,0,0.75);
+        box-shadow: -6px 10px 19px 1px rgba(0,0,0,0.75);
+        height:270px !important;
+    }
+</style>
+<div style="margin-top:100px;margin-bottom:200px">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                <div class="box-part text-center myShadow">
+                    <br />
+
+                    <img style="height:45%" src="~/img/professional.png" />
+
+                    <div class="title">
+                        <h4>@item.Name</h4>
+                    </div>
+
+                    <div class="text">
+                        <span>@item.Description</span>
+                    </div>
+
+                    <a href="@Url.Action("Details","Project",new { id = item.Id})">Come in</a>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

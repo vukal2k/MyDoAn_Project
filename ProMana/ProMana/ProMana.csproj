@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\JobRoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProjectAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ResolveTypeController.cs" />
@@ -1864,6 +1865,8 @@
     <Content Include="DataTables\Vietnamese.json" />
     <Content Include="Content\adminlte.css.map" />
     <Content Include="Content\adminlte.min.css.map" />
+    <Content Include="img\PM-Logo.png" />
+    <Content Include="img\professional.png" />
     <Content Include="Scripts\addMemberToProject.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -1952,6 +1955,7 @@
     <Content Include="Areas\Admin\Views\ProjectAdmin\Create.cshtml" />
     <Content Include="Areas\Admin\Views\ProjectAdmin\Edit.cshtml" />
     <Content Include="Content\Gantt.scss" />
+    <Content Include="Areas\Admin\Views\AccountAdmin\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
@@ -2087,6 +2091,8 @@
     <Content Include="Views\Task\ConvertToTask.cshtml" />
     <Content Include="Views\Project\GanttChart.cshtml" />
     <Content Include="Views\Task\RequestDetailSummary.cshtml" />
+    <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

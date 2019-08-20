@@ -145,9 +145,9 @@ namespace IdentitySample.Controllers
         public ActionResult Register()
         {
             var roleStore = new RoleStore<IdentityRole>();
-            var roleManage = new RoleManager<IdentityRole>(roleStore);
-            var roles = roleManage.Roles.ToList();
-            ViewBag.Roles = roles;
+            //var roleManage = new RoleManager<IdentityRole>(roleStore);
+            //var roles = roleManage.Roles.ToList();
+            //ViewBag.Roles = roles;
             return View();
         }
 

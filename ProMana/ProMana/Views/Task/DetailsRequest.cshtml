@@ -4,9 +4,86 @@
 
 }
 
-<h4>Task</h4>
-<hr />
-<dl class="dl-horizontal">
+<div class="container">
+    <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
+    <br />
+    <br />
+    @switch (Model.StatusId)
+    {
+        case COMMON.RequestStatusKey.PendingApproval:
+            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+            {
+                <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="chooseEditTask(@Model.Id)">Assign To</a>
+                <a class="btn btn-danger pull-right" style="margin-left:2%">Reject</a>
+            }
+            else if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+            {
+                <a class="btn btn-danger pull-right" style="margin-left:2%">Cancel</a>
+            }
+            break;
+        default:
+            break;
+    }
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Module</td>
+                <td>
+                    @Html.DisplayFor(model => model.Module.Title)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Created By</td>
+                <td>
+                    @Html.DisplayFor(model => model.CreatedBy)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Reporting To</td>
+                <td>@Html.DisplayFor(model => model.AssignedTo)</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Date</td>
+                <td>@Html.DisplayFor(model => model.From) - @Html.DisplayNameFor(model => model.To)</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Severity</td>
+                <td>@Html.DisplayFor(model => model.Severity)</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Priority</td>
+                <td>@Html.DisplayFor(model => model.Priority)</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                <td>
+                    @*@switch (Model.StatusId)
+                        {
+                            case COMMON.TaskStatusKey.Opened:
+                                <label class="label label-default">@Model.LookupStatus.Name</label>
+                                break;
+                            case COMMON.TaskStatusKey.InProgress:
+                                <label class="label label-warning">@Model.LookupStatus.Name</label>
+                                break;
+                            case COMMON.TaskStatusKey.Resolved:
+                                <label class="label label-danger">@Model.LookupStatus.Name</label>
+                                break;
+                            case COMMON.TaskStatusKey.Closed:
+                                <label class="label label-success">@Model.LookupStatus.Name</label>
+                                break;
+                            default:
+                                break;
+                        }*@
+                    @Model.LookupStatus.Name
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <label class="control-label text-success">Description</label>
+    <p>@Model.Description</p>
+</div>
+
+@*<dl class="dl-horizontal">
     <dd>
         <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
     </dd>
@@ -111,7 +188,7 @@
         @Html.DisplayFor(model => model.Description)
     </dd>
 
-</dl>
+</dl>*@
 @if (Model.CreatedBy.Equals(User.Identity.GetUserName()) || Model.AssignedTo.Equals(User.Identity.GetUserName()))
 {
     <a class="aHover" onclick="chooseEditRequest(@Model.Id)">Edit</a>

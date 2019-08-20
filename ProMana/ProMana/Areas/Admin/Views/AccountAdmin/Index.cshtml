@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DTO.UserInfo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="container">
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>
+                    Username
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th>
+                    Current Job
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Company)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentJob)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.UserName }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.UserName })
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $("#sidebar5").addClass("active");
+        })
+    </script>
+}

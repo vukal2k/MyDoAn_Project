@@ -1,0 +1,50 @@
+﻿@model DTO.Project
+
+@{
+    ViewBag.Title = "Infomation";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+
+<div class="container">
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
+    <hr />
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-success"><i class="fab fa-centercode"></i> Code</td>
+                <td>
+                    @Model.Code
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fa fa-calendar"></i> Date</td>
+                @{
+                    var toValue = "";
+                    if (Model.To != null)
+                    {
+                        var dateTo = (DateTime)Model.To;
+                        toValue = " - " + dateTo.ToLongDateString();
+                    }
+                }
+                <td>
+                    @Model.From.ToLongDateString() @toValue
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fa fa-user"></i> Created By</td>
+                <td> @Html.DisplayFor(model => model.CreatedBy)</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fa fa-book"></i> Created Date</td>
+                <td>@Model.CreatedDate.ToLongDateString()</td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                <td><label class="label label-success">@Model.LookupStatu.Name</label></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <label class="control-label text-success">Description</label>
+    <p>@Model.Description</p>
+</div>
