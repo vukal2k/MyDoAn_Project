@@ -1865,8 +1865,10 @@
     <Content Include="DataTables\Vietnamese.json" />
     <Content Include="Content\adminlte.css.map" />
     <Content Include="Content\adminlte.min.css.map" />
+    <Content Include="img\demystifying-the-5-phases2.jpg" />
     <Content Include="img\PM-Logo.png" />
     <Content Include="img\professional.png" />
+    <Content Include="img\Project-Management-Career.jpg" />
     <Content Include="Scripts\addMemberToProject.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -2093,6 +2095,7 @@
     <Content Include="Views\Task\RequestDetailSummary.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
     <Content Include="Views\Project\Details.cshtml" />
+    <Content Include="Views\Shared\_LayoutGuest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

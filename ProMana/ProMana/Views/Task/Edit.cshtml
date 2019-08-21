@@ -55,13 +55,13 @@
             <div class="col-md-10">
                 <select name="AssignedTo" id="editAssignedTo" class="form-control">
                     <option value="0">-- Choose member --</option>
-                    @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMemberByModule(Model.ModuleId))
+                    @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMemberByModule((int)Model.ModuleId))
                     {
                         if (item.UserName.Equals(Model.AssignedTo))
                         {
                             <option selected value="@item.UserName">@item.FullName (@item.UserName)</option>
                         }
-                        else
+                        else if(Model.Module.Project.GetRoleInModule(item.UserName)!= HardFixJobRole.Watcher)
                         {
                             <option value="@item.UserName">@item.FullName (@item.UserName)</option>
                         }

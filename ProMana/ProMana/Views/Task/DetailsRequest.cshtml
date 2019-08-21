@@ -1,84 +1,109 @@
 ﻿@model DTO.Task
 @using Microsoft.AspNet.Identity
+@using COMMON
 @{
 
 }
 
 <div class="container">
-    <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
+    <span class="h1">@Model.Title  </span> <label class="label label-default">@Model.TaskType</label>
     <br />
     <br />
-    @switch (Model.StatusId)
-    {
-        case COMMON.RequestStatusKey.PendingApproval:
-            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+    
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-6">
+            @switch (Model.StatusId)
             {
-                <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="chooseEditTask(@Model.Id)">Assign To</a>
-                <a class="btn btn-danger pull-right" style="margin-left:2%">Reject</a>
+                case COMMON.RequestStatusKey.PendingApproval:
+                    if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                    {
+                        <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="chooseEditTask(@Model.Id)">Assign To</a>
+                        <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="chooseChangeStatusRequest(this,@Model.Id,@COMMON.RequestStatusKey.Rejected,'reject')">Reject</a>
+                    }
+                    else if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+                    {
+                        <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="chooseChangeStatusRequest(this,@Model.Id,@COMMON.RequestStatusKey.Cancelled,'cancel')">Cancel</a>
+                    }
+                    break;
+                default:
+                    break;
             }
-            else if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
-            {
-                <a class="btn btn-danger pull-right" style="margin-left:2%">Cancel</a>
-            }
-            break;
-        default:
-            break;
-    }
-    <table class="table">
-        <tbody>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Module</td>
-                <td>
-                    @Html.DisplayFor(model => model.Module.Title)
-                </td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Created By</td>
-                <td>
-                    @Html.DisplayFor(model => model.CreatedBy)
-                </td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Reporting To</td>
-                <td>@Html.DisplayFor(model => model.AssignedTo)</td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Date</td>
-                <td>@Html.DisplayFor(model => model.From) - @Html.DisplayNameFor(model => model.To)</td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Severity</td>
-                <td>@Html.DisplayFor(model => model.Severity)</td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Priority</td>
-                <td>@Html.DisplayFor(model => model.Priority)</td>
-            </tr>
-            <tr>
-                <td class="text-success"><i class="fas fa-star"></i> Status</td>
-                <td>
-                    @*@switch (Model.StatusId)
-                        {
-                            case COMMON.TaskStatusKey.Opened:
-                                <label class="label label-default">@Model.LookupStatus.Name</label>
-                                break;
-                            case COMMON.TaskStatusKey.InProgress:
-                                <label class="label label-warning">@Model.LookupStatus.Name</label>
-                                break;
-                            case COMMON.TaskStatusKey.Resolved:
-                                <label class="label label-danger">@Model.LookupStatus.Name</label>
-                                break;
-                            case COMMON.TaskStatusKey.Closed:
-                                <label class="label label-success">@Model.LookupStatus.Name</label>
-                                break;
-                            default:
-                                break;
-                        }*@
-                    @Model.LookupStatus.Name
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Module</td>
+                        <td>
+                            @{ 
+                                var title = Model.Module.Title;
+                                if (title.Equals(HardFixJobRoleTitle.Watcher))
+                                {
+                                    title = "Project Manager";
+                                }
+                            }
+                            @title
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Created By</td>
+                        <td>
+                            @Html.DisplayFor(model => model.CreatedBy)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Reporting To</td>
+                        <td>@Html.DisplayFor(model => model.AssignedTo)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Date</td>
+                        <td>@Model.From - @Model.To</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Severity</td>
+                        <td>@Html.DisplayFor(model => model.Severity)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Priority</td>
+                        <td>@Html.DisplayFor(model => model.Priority)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                        <td>
+                            @switch (Model.StatusId)
+                            {
+                                case COMMON.RequestStatusKey.PendingApproval:
+                                    <label class="label label-default">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.RequestStatusKey.Rejected:
+                                    <label class="label label-danger">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.RequestStatusKey.Approved:
+                                    <label class="label label-success">@Model.LookupStatus.Name</label>
+                                    break;
+                                case COMMON.RequestStatusKey.Cancelled:
+                                    <label class="label label-warning">@Model.LookupStatus.Name</label>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <label class="control-label text-success">Description</label>
     <p>@Model.Description</p>
 </div>

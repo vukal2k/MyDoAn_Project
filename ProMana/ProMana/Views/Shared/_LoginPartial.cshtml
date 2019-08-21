@@ -51,7 +51,7 @@ else
         <!-- User Account Menu -->
         <li class="dropdown user user-menu">
             @{
-                var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action(ViewContext.RouteData.Values["Action"].ToString(), ViewContext.RouteData.Values["Controller"].ToString());
+                var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action("Index", "Project");
             }
             <a class="pull-right" id="loginLink" href="@loginLink">Login</a>
         </li>

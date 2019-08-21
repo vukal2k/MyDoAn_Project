@@ -43,6 +43,17 @@ namespace ProMana.Controllers
             return View(task);
         }
 
+        // GET: Task/Details/5
+        public async Task<ActionResult> ChangeStatus(int taskId, int statusId)
+        {
+            var result = await _taskBus.ChangeStatus(taskId, statusId);
+            if (result)
+            {
+                return Content("1");
+            }
+            return Content("0");
+        }
+
         // GET: Task/Create
         public ActionResult Create()
         {
@@ -154,8 +165,7 @@ namespace ProMana.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    task.StatusId = COMMON.TaskStatusKey.Opened;
-                    var result = await _taskBus.Update(task, errors,User.Identity.GetUserName());
+                    var result = await _taskBus.ConvertToTask(task, errors,User.Identity.GetUserName());
                     if (result != null)
                     {
                         var redirectTo = "window.location.href = '" + Url.Action("TaskList", "Project", new { id = result.Module.ProjectId, chooseTaskId = result.Id }) + "';";

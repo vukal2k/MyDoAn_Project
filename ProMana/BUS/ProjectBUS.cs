@@ -37,6 +37,23 @@ namespace BUS
 
                 _unitOfWork.Projects.Insert(project);
 
+                //insert watcher
+                var listMember = new List<RoleInProject>();
+                listMember.Add(new RoleInProject
+                {
+                    IsActive = true,
+                    RoleId = HardFixJobRole.PM,
+                    UserName = project.CreatedBy
+                });
+                project.Modules = new List<Module>()
+                {
+                    new Module
+                    {
+                        IsActive=true,
+                        Title=HardFixJobRoleTitle.Watcher,
+                        RoleInProjects= listMember
+                    }
+                };
 
                 return await _unitOfWork.CommitAsync() > 0;
             }

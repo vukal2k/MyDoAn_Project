@@ -7,36 +7,43 @@
 }
 
 <div class="container">
-    <span class="h1">@Model.Title  </span> <label class="label-default">@Model.TaskType</label>
+    <span class="h1">@Model.Title  </span> <label class="label label-default">@Model.TaskType</label>
     <br />
     <br />
-    @switch (Model.StatusId)
-    {
-        case COMMON.TaskStatusKey.Opened:
-        case COMMON.TaskStatusKey.ReOpened:
-            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
-            {
-                <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'InProgress')">In Progress</a>
-            }
-            break;
-        case COMMON.TaskStatusKey.InProgress:
-            if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
-            {
-                <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Resolved')">Resolve</a>
-            }
-            break;
-        case COMMON.TaskStatusKey.Resolved:
-            if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
-            {
-                <a class="btn btn-success pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Closed')">Close</a>
-                <a class="btn btn-warning pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'ReOpened')">ReOpen</a>
-            }
-            break;
-        default:
-            break;
-    }
     <div class="row">
-        <div class="col-md-6">
+       <div class="col-md-4"></div>
+       <div class="col-md-6">
+           @switch (Model.StatusId)
+           {
+               case COMMON.TaskStatusKey.Opened:
+               case COMMON.TaskStatusKey.ReOpened:
+                   if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                   {
+                       <a class="btn btn-danger pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'InProgress')">In Progress</a>
+                   }
+                   break;
+               case COMMON.TaskStatusKey.InProgress:
+                   if (Model.AssignedTo.Equals(User.Identity.GetUserName()))
+                   {
+                       <a class="btn btn-primary pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Resolved')">Resolve</a>
+                   }
+                   break;
+               case COMMON.TaskStatusKey.Resolved:
+                   if (Model.CreatedBy.Equals(User.Identity.GetUserName()))
+                   {
+                       <a class="btn btn-success pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'Closed')">Close</a>
+                       <a class="btn btn-warning pull-right" style="margin-left:2%" onclick="startSolutionByButton(@Model.Id,'ReOpened')">ReOpen</a>
+                   }
+                   break;
+               default:
+                   break;
+           }
+       </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-7">
             <table class="table">
                 <tbody>
                     <tr>
@@ -57,12 +64,12 @@
                     </tr>
                     <tr>
                         <td class="text-success"><i class="fas fa-star"></i> Date</td>
-                        <td>@Html.DisplayFor(model => model.From) - @Html.DisplayNameFor(model => model.To)</td>
+                        <td>@Model.From - @Model.To</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <table class="table">
                 <tbody>
                     <tr>
@@ -93,7 +100,6 @@
                                 default:
                                     break;
                             }
-                            @Model.LookupStatus.Name
                         </td>
                     </tr>
                 </tbody>
@@ -226,7 +232,7 @@
 </dl>*@
 @if (Model.CreatedBy.Equals(User.Identity.GetUserName()) || (Model.AssignedTo.Equals(User.Identity.GetUserName()) && Model.Module.Project.GetRoleInModule(User.Identity.GetUserName())!=0 && Model.Module.Project.GetRoleInModule(User.Identity.GetUserName())!= HardFixJobRole.Watcher))
 {
-@*<a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>*@
+<a class="aHover" onclick="chooseEditTask(@Model.Id)">Edit</a>
 }
 <hr />
 <h3>Solutions</h3>

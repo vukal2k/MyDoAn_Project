@@ -1,14 +1,20 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = " Home Page";
+    Layout = "~/Views/Shared/_LayoutGuest.cshtml";
 }
+<style>
+    .myTitle {
+        background-image: url("../../img/Project-Management-Career.jpg");
+    }
+</style>
 
-<div class="jumbotron">
-    <h1>ASP.NET Identity</h1>
-    <p class="lead">ASP.NET Identity is the membership system for ASP.NET apps. Following are the features of ASP.NET Identity in this sample application.</p>
-    <p><a href="http://www.asp.net/identity" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+<div class="jumbotron myTitle" style="width:100% !important;">
+    <h1 class="label label-danger">Project Management System</h1>
+    <p class="label lead label-danger">Promana helps you work more collaboratively and do more.</p>
+    <br />
+    <a href="@Url.Action("Register","Account")" class="btn btn-danger btn-large pull-right">Resgiter Now &raquo;</a>
 </div>
-
+<img src="~/img/demystifying-the-5-phases2.jpg" style="width:100%" />
 <div class="row">
     <div class="col-md-4">
         <dl>

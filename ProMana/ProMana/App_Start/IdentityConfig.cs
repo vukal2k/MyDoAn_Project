@@ -232,6 +232,34 @@ namespace IdentitySample.Models
                 user5 = new ApplicationUser { UserName = name5, Email = email5 };
                 var result = userManager.Create(user5, password5);
             }
+
+            var user6 = userManager.FindByName("devtest2");
+            if (user6 == null)
+            {
+                user6 = new ApplicationUser { UserName = "devtest2", Email = "devtest2@gmail.com" };
+                var result = userManager.Create(user6, "123456");
+            }
+
+            var user7 = userManager.FindByName("teamleadtest2");
+            if (user7 == null)
+            {
+                user7 = new ApplicationUser { UserName = "teamleadtest2", Email = "teamleadtest2@gmail.com" };
+                var result = userManager.Create(user7, "123456");
+            }
+
+            var user8 = userManager.FindByName("tester2");
+            if (user8 == null)
+            {
+                user8 = new ApplicationUser { UserName = "tester2", Email = "tester2@gmail.com" };
+                var result = userManager.Create(user8, "123456");
+            }
+
+            var user9 = userManager.FindByName("watchertest2");
+            if (user9 == null)
+            {
+                user9 = new ApplicationUser { UserName = "watchertest2", Email = "watchertest2@gmail.com" };
+                var result = userManager.Create(user9, "123456");
+            }
         }
     }
 

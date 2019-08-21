@@ -16,17 +16,18 @@
 
     #noiDetailDungChan {
         overflow-y: scroll;
+        overflow-x: hidden;
         height: 500px;
     }
 
     .card:hover {
-        transform: scale(1, 1.1);
-        background-color: #dffff6;
+        background-color: #d2fb6b;
+        cursor: pointer;
     }
 
     .cardActive {
         border-style: groove;
-        background-color: #dffff6;
+        background-color: #d2fb6b;
     }
 </style>
 
@@ -39,7 +40,7 @@
             {
                 foreach (var task in item.Tasks.Where(m => m.IsActive && !m.IsTask))
                 {
-                    <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%; background-color:#f6e8e8; padding:10%; transition: transform 1s;">
+                    <div class="card" onclick="chooseTask(this,@task.Id);" id="@String.Format("card{0}",task.Id)" style="width: 100%;  padding:1%; transition: transform 1s;">
                         <div class="card-body">
                             <h4 class="card-title"><i class="fas fa-file-invoice"></i> @task.Title</h4>
                             <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@task.TaskType</label></h6>
@@ -47,13 +48,13 @@
                             <p class="card-text">Deadline: @task.To</p>
                         </div>
                     </div>
-                    <br />
+                    <hr />
                 }
             }
         </div>
     </div>
     <div class="col-md-9" id="noiDetailDungChan">
-        Request detail
+        Task detail
     </div>
 </div>
 
@@ -207,6 +208,40 @@
                     }
                 }
             });
+        }
+
+        
+        function chooseChangeStatusRequest(btn, taskId, statusId, actionName) {
+            if (confirm("Do you want to " + actionName + " this request?") == false) {
+                return;
+            }
+            //post data
+            $.ajax({
+                url: "@Url.Action("ChangeStatus","Task")?taskId=" + taskId + "&statusId=" + statusId,
+                cache: false,
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                data: {
+                    'taskId': taskId,
+                    'statusId': statusId
+                },
+                success: function (result) {
+                    if (result == "1") {
+                        $(btn).remove();
+                        $.notify("Success!", "success");
+                        var btn = document.getElementById("card" + taskId);
+                        chooseTask(btn, taskId);
+                    }
+                    else {
+                        $.notify("Failed!", "error");
+                    }
+                }
+            });
+        }
+        var isCreateTask = "@ViewBag.IsCreateTask";
+        if (isCreateTask =="True") {
+            $("#modalCreateTask").modal("show");
         }
 
         function chooseEditRequest(taskId) {

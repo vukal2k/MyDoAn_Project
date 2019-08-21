@@ -46,7 +46,7 @@
         {
             <div class="gantt__row">
                 <div class="gantt__row-first">
-                    @item.Task.Title
+                    <a href="@Url.Action("TaskList","Project", new { id = item.Task.Module.ProjectId,chooseTaskId=item.Task.Id})">@item.Task.Title</a>
                 </div>
                 <ul class="gantt__row-bars">
                     @if (item.Task.To < DateTime.Today.AddDays(1) && item.Task.StatusId<TaskStatusKey.Resolved)

@@ -166,6 +166,63 @@ namespace BUS
             }
         }
 
+        public async Task<DTO.Task> ConvertToTask(DTO.Task task, List<string> errors, string userName = null)
+        {
+            try
+            {
+                //update request
+                var updateRequest = await _unitOfWork.Tasks.GetById(task.Id);
+                updateRequest.StatusId = RequestStatusKey.Approved;
+                _unitOfWork.Tasks.Update(updateRequest);
+
+                //clone and insert new task
+                var createNewTask = new DTO.Task();
+                createNewTask.From = task.From;
+                createNewTask.To = task.To;
+                createNewTask.Description = task.Description;
+                createNewTask.AssignedTo = task.AssignedTo;
+                createNewTask.Severity = task.Severity;
+                createNewTask.TaskType = task.TaskType;
+                createNewTask.Module = updateRequest.Module;
+                createNewTask.Title = task.Title;
+                createNewTask.IsTask = true;
+                createNewTask.IsActive = false;
+                createNewTask.StatusId = TaskStatusKey.Opened;
+                if (userName != null)
+                {
+                    createNewTask.CreatedBy = userName;
+                }
+                _unitOfWork.Tasks.Insert(createNewTask);
+
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                return createNewTask;
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<bool> ChangeStatus(int taskId, int statusKey)
+        {
+            try
+            {
+                var updateRequest = await _unitOfWork.Tasks.GetById(taskId);
+                updateRequest.StatusId = statusKey;
+                _unitOfWork.Tasks.Update(updateRequest);
+
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<DTO.Task> UpdateRequest(DTO.Task task, List<string> errors)
         {
             try
