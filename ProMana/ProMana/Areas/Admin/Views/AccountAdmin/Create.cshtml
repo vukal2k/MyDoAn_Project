@@ -1,0 +1,197 @@
+﻿@model IdentitySample.Models.UserInfoAccoutViewModel
+
+@{
+    ViewBag.Title = "Create | Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Job Role</h2>
+
+<div class="container">
+    @using (Html.BeginForm("Create", "AccountAdmin", null, FormMethod.Post, htmlAttributes: new { @id = "formAccountAdmin" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="Email" id="Email" type="email" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="Password" id="Password" type="password" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" />
+                    <label class="errors" id="ConfirmPasswordError"></label>
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CurrentJob, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CurrentJob, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CurrentJob, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CountExperience, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="CountExperience" id="CountExperience" type="number" step="0.1" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.CountExperience, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TimeUnit, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select name="TimeUnit" id="TimeUnit" class="form-control">
+                        <option value="">-- Choose Unit --</option>
+                        <option value="Week">Week</option>
+                        <option value="Month">Month</option>
+                        <option value="Year">Year</option>
+                    </select>
+                    <label class="errors" id="TimeUnitError"></label>
+                    @Html.ValidationMessageFor(model => model.TimeUnit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">
+                    Select User Role
+                </label>
+                <div class="col-md-10">
+                    @foreach (var item in (SelectList)ViewBag.RoleId)
+                    {
+                        <input type="checkbox" name="SelectedRoles" value="@item.Value" class="checkbox-inline" />
+                        @Html.Label(item.Value, new { @class = "control-label" })
+                        <span> | </span>
+                        
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" id="btnSubmit" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(() => {
+            $('#formAccountAdmin').validate({
+                errorClass: 'errors',
+                rules: {
+                    Username: {
+                        required: true
+                    },
+                    Email: {
+                        required: true
+                    },
+                    FullName: {
+                        required: true,
+                        maxlength: 200
+                    },
+                    Password: {
+                        required: true,
+                        maxlength: 200
+                    },
+                    CurrentJob: {
+                        required: true,
+                        maxlength: 200
+                    }
+                },
+                messages: {
+                    Username: {
+                        required: "Username is required"
+                    },
+                    Email: {
+                        required: "Email is required"
+                    },
+                    FullName: {
+                        required: "FullName is required",
+                        maxlength: "Max length is 200"
+                    },
+                    Password: {
+                        required: "Password is required",
+                        maxlength: "Max length is 200"
+                    },
+                    CurrentJob: {
+                        required: "Current Job is required",
+                        maxlength: "Max length is 200"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#btnSubmit").click(function () {
+                var valid = true;
+                if ($("#CountExperience").val() != "" && $("#TimeUnit").val() == "") {
+                    $("#TimeUnit").parent().addClass('has-error');
+                    $("#TimeUnitError").text("Time unit experience is required");
+                    valid = false;
+                }
+                if ($("#ConfirmPassword").val() != $("#Password").val()) {
+                    $("#ConfirmPassword").parent().addClass('has-error');
+                    $("#ConfirmPasswordError").text("Re-password is not match");
+                    valid = false;
+                }
+                return $("#formAccountAdmin").valid() && valid;
+            })
+
+            $("#sidebar1").addClass("active");
+        });
+    </script>
+}

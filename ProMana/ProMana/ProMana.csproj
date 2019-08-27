@@ -1958,6 +1958,8 @@
     <Content Include="Areas\Admin\Views\ProjectAdmin\Edit.cshtml" />
     <Content Include="Content\Gantt.scss" />
     <Content Include="Areas\Admin\Views\AccountAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AccountAdmin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\AccountAdmin\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />

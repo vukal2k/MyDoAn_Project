@@ -29,18 +29,22 @@ namespace DTO
 
         [Required]
         [StringLength(200)]
+        [Column(TypeName = "nvarchar")]
         public string FullName { get; set; }
 
         [Required]
         [StringLength(200)]
+        [Column(TypeName = "nvarchar")]
         public string CurrentJob { get; set; }
 
         [StringLength(200)]
+        [Column(TypeName = "nvarchar")]
         public string Company { get; set; }
 
         public double? CountExperience { get; set; }
 
         [StringLength(10)]
+        [Column(TypeName = "nvarchar")]
         public string TimeUnit { get; set; }
 
         public bool IsActive { get; set; }

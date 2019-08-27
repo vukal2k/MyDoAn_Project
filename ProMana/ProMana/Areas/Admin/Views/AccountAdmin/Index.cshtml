@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.UserName }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.UserName })
+                        <a href="@Url.Action("Delete","AccountAdmin",new { id = item.UserName})" onclick="return confirm('Are u sure? Delete @item.UserName')">Delete</a>
                     </td>
                 </tr>
             }

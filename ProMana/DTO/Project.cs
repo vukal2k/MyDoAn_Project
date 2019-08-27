@@ -21,6 +21,7 @@ namespace DTO
 
         [Required]
         [StringLength(100)]
+        [Column(TypeName = "nvarchar")]
         public string Name { get; set; }
 
         [Column(TypeName = "date")]
@@ -45,6 +46,7 @@ namespace DTO
         public string Code { get; set; }
 
         [StringLength(300)]
+        [Column(TypeName = "ntext")]
         public string Description { get; set; }
 
         public virtual LookupStatus LookupStatu { get; set; }

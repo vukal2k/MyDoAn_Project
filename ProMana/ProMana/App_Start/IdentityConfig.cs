@@ -158,7 +158,7 @@ namespace IdentitySample.Models
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             const string name = "SuperAdmin";
             const string password = "123456";
-            const string roleName = "Super User";
+            const string roleName = "Admin";
             const string roleName2 = "Normal User";
             //HieuPD2
             const string name1 = "pmtest";

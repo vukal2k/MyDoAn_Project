@@ -19,6 +19,7 @@ namespace DTO
 
         [Required]
         [StringLength(50)]
+        [Column(TypeName = "nvarchar")]
         public string Title { get; set; }
 
         [Column(TypeName = "ntext")]
