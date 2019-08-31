@@ -5,6 +5,31 @@
 }
 <link href="~/Content/piechart.css" rel="stylesheet" />
 <link href="~/Content/columnchart.min.css" rel="stylesheet" />
+<link href="~/Content/piechart_jquery.css" rel="stylesheet" />
+<style>
+    .tooltip {
+        /*position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;*/
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(0, 0, 0, 0.77);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+</style>
 
 <div class="container">
     <h2>Statistic: @Model.Project.Name</h2>
@@ -31,130 +56,268 @@
         </tbody>
     </table>
     <hr />
-    <h4><i>Member Points</i></h4>
-    <hr />
 
     <h4><i>Task Statistic By Modules</i></h4>
     <br />
     <div class="row">
-        <div class="col-md-4">
-            <div>
-                <div class="pie" data-start="0" data-value="30"></div>
-                <div class="pie highlight" data-start="30" data-value="30"></div>
-                <div class="pie" data-start="60" data-value="40"></div>
-                <div class="pie big" data-start="100" data-value="260"></div>
+        @foreach (var item in Model.TaskStatisticByModules)
+        {
+            <div class="col-md-4">
+                <div id="@string.Format("pieChart{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
+                <div style="margin-top:-63%">
+                    <b>@item.Module.Title</b>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>Status</th>
+                                <th>Total Task</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background-color:#2C3E50"></td>
+                                <td>Open</td>
+                                <td>@item.TaskByOpen.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fe4400"></td>
+                                <td>In Progress</td>
+                                <td>@item.TaskByInProgress.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#018ab6"></td>
+                                <td>Resolved</td>
+                                <td>@item.TaskByResolve.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fff100"></td>
+                                <td>Closed</td>
+                                <td>@item.TaskByClosed.Total</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div style="margin-top:55%">
-                <b>Front-end</b>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th>Status</th>
-                            <th>Total Task</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="background-color:blue"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:green"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:red"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:orange"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        }
     </div>
 
     <hr />
     <h4><i>Request Statistic By Modules</i></h4>
     <br />
     <div class="row">
-        <div class="col-md-4">
-            <div>
-                <div class="pie" data-start="0" data-value="30"></div>
-                <div class="pie highlight" data-start="30" data-value="30"></div>
-                <div class="pie" data-start="60" data-value="40"></div>
-                <div class="pie big" data-start="100" data-value="260"></div>
+        @foreach (var item in Model.RequestStatisticByModules)
+        {
+            <div class="col-md-4">
+                <div id="@string.Format("pieChartRequest{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
+                <div style="margin-top:-63%">
+                    <b>@item.Module.Title</b>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>Status</th>
+                                <th>Total Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background-color:#2C3E50"></td>
+                                <td>Pending Approve</td>
+                                <td>@item.RequestByPendingApproved.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fe4400"></td>
+                                <td>Approved</td>
+                                <td>@item.RequestByApproved.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#018ab6"></td>
+                                <td>Rejected</td>
+                                <td>@item.RequestByRejected.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fff100"></td>
+                                <td>Cancelled</td>
+                                <td>@item.RequestByCancelled.Total</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div style="margin-top:55%">
-                <b>Front-end</b>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th>Status</th>
-                            <th>Total Task</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="background-color:blue"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:green"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:red"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                        <tr>
-                            <td style="background-color:orange"></td>
-                            <td>Open</td>
-                            <td>12</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        }
     </div>
 
     <hr />
     <h4><i>Task Statistic By Task Type</i></h4>
     <br />
     <ul class="chart">
-        <li>
-            ActionScript: 5
-            <span style="height:5%" title="ActionScript"></span>
-        </li>
-        <li>
-            ActionScript:5
-            <span style="height:70%" title="JavaScript"></span>
-        </li>
-        <li>
-            ActionScript:5
-            <span style="height:50%" title="CoffeScript"></span>
-        </li>
-        <li>
-            ActionScript:5
-            <span style="height:150%" title="HTML"></span>
-        </li>
+        @foreach (var item in Model.TaskByTaskTypes)
+        {
+            <li>
+                <div style="text-align:center;width:100%"><i>Total: @item.Total</i></div>
+                <span style="height:@string.Format("{0}%", item.Percent); text-align:center" title="@item.TaskType"></span>
+                <div style="text-align:center;width:100%"><b class="text-info">@item.TaskType</b></div>
+            </li>
+        }
     </ul>
 
+    @{
+        DTO.Module module_tmp = null;
+    }
     <hr />
     <h4><i>Project Logs</i></h4>
-    <button class="btn btn-success pull-right"><i class="fas fa-download"></i> Download Excel</button>
+    <button class="btn btn-success pull-left"><i class="fas fa-download"></i> Download Excel</button>
     <br />
+    <br />
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Module</th>
+                <th>Full Name</th>
+                <th>Job Role</th>
+                <th>Content</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProjectLogs)
+            {
+                <tr>
+                    <td>
+                        @item.UserInfo.UserName
+                    </td>
+                    <td>
+                        @item.UserInfo.FullName
+                    </td>
+                    <td>
+                        @{
+                            module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                        }
+                        @module_tmp.Title
+                    </td>
+                    <td>
+                        @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
+                    </td>
+                    <td>
+                        @item.Content
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+    <h4><i>Member Points</i></h4>
+    <br />
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Module</th>
+                <th>Job Role</th>
+                <th>Total Created Task</th>
+                <th>Total Assigned Task</th>
+                <th>Total Created Request</th>
+                <th>Total Assign Request</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MemberPoints)
+            {
+                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                if (module_tmp != null)
+                {
+                    <tr>
+                        <td>
+                            @item.UserInfo.UserName
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName
+                        </td>
+                        <td>
+                            @{
+                                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                            }
+                            @module_tmp.Title
+                        </td>
+                        <td>
+                            @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                                @item.TotalCreatedTask.Total
+                                <div class="tooltiptext">
+                                    <ul>
+                                        <li>Open: @item.TotalCreatedTask.TotalByOpen</li>
+                                        <li>In Progress: @item.TotalCreatedTask.TotalByInProgress</li>
+                                        <li>Resolved: @item.TotalCreatedTask.TotalByResolve</li>
+                                        <li>Closed: @item.TotalCreatedTask.TotalByClosed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                                @item.TotalAssignTask.Total
+                                <div class="tooltiptext">
+                                    <ul>
+                                        <li>Open: @item.TotalAssignTask.TotalByOpen</li>
+                                        <li>In Progress: @item.TotalAssignTask.TotalByInProgress</li>
+                                        <li>Resolved: @item.TotalAssignTask.TotalByResolve</li>
+                                        <li>Closed: @item.TotalAssignTask.TotalByClosed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                                @item.TotalCreatedRequest.Total
+                                <div class="tooltiptext">
+                                    <ul>
+                                        <li>Pending Approved: @item.TotalCreatedRequest.TotalPendingApproved</li>
+                                        <li>Approved: @item.TotalCreatedRequest.TotalApproved</li>
+                                        <li>Rejected: @item.TotalCreatedRequest.TotalRejected</li>
+                                        <li>Cancelled: @item.TotalCreatedRequest.TotalCancelled</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                                @item.TotalAssignRequest.Total
+                                <div class="tooltiptext">
+                                    <ul>
+                                        <li>Pending Approved: @item.TotalAssignRequest.TotalPendingApproved</li>
+                                        <li>Approved: @item.TotalAssignRequest.TotalApproved</li>
+                                        <li>Rejected: @item.TotalAssignRequest.TotalRejected</li>
+                                        <li>Cancelled: @item.TotalAssignRequest.TotalCancelled</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <hr />
 </div>
+
+@section Scripts{
+    <script src="~/Scripts/piechart_jquery.js"></script>
+    <script>
+        $(document).ready(() => {
+            InitPieChart('@Html.Raw(ViewBag.PieChartData)')
+            InitPieChartRequest('@Html.Raw(ViewBag.PieChartRequestData)')
+        });
+    </script>
+}

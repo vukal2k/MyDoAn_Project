@@ -19,7 +19,7 @@ namespace DTO
         [StringLength(50)]
         public string CreatedBy { get; set; }
 
-        public int CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual Project Project { get; set; }
 

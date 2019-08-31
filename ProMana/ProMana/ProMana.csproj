@@ -221,6 +221,7 @@
     <Content Include="Content\jquery.datetimepicker.min.css" />
     <Content Include="Content\kanban.css" />
     <Content Include="Content\piechart.css" />
+    <Content Include="Content\piechart_jquery.css" />
     <Content Include="Content\skins\skin-black-light.css" />
     <Content Include="Content\skins\skin-black-light.min.css" />
     <Content Include="Content\skins\skin-black.css" />
@@ -1885,6 +1886,7 @@
     <Content Include="Scripts\jquery-lookupContact.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\kanban.js" />
+    <Content Include="Scripts\piechart_jquery.js" />
     <Content Include="Scripts\requestPage_jquery.js" />
     <Content Include="Scripts\scrollFocusItem_jquery.js" />
     <Content Include="Scripts\tab_w3s.js" />
@@ -1971,6 +1973,7 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="Content\piechart_jquery.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />

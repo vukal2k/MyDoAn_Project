@@ -12,7 +12,8 @@
     position: relative;
     display: table-cell;
     vertical-align: bottom;
-    height: 200px; }
+    height: 300px;
+    padding-top: 6%; }
   .chart span {
     margin: 0 1em;
     display: block;

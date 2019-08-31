@@ -218,8 +218,141 @@ namespace BUS
         public async Task<ProjectStatistical> Statistical(int projectId)
         {
             ProjectStatistical result = new ProjectStatistical();
+            
+            //insert project
             var project = await _unitOfWork.Projects.GetById(projectId);
             result.Project = project;
+
+            //insert MemberPoint
+            var memberPoints = new List<MemberPoint>();
+            var members = project.GetMember();
+            foreach (var item in members)
+            {
+                var listRequest = project.Modules.SelectMany(m => m.Tasks).Where(m => m.IsActive && !m.IsTask);
+                var listTask = project.Modules.SelectMany(m => m.Tasks).Where(m => m.IsActive && m.IsTask);
+                memberPoints.Add(new MemberPoint {
+                    UserInfo=item,
+                    TotalAssignRequest=new MemberRequestByStatus
+                    {
+                        Total=listRequest.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        TotalApproved= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId==RequestStatusKey.Approved).Count(),
+                        TotalCancelled= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.Cancelled).Count(),
+                        TotalPendingApproved= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.PendingApproval).Count(),
+                        TotalRejected= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.Rejected).Count()
+                    },
+                    TotalCreatedRequest = new MemberRequestByStatus
+                    {
+                        Total = listRequest.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        TotalApproved = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Approved).Count(),
+                        TotalCancelled = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Cancelled).Count(),
+                        TotalPendingApproved = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.PendingApproval).Count(),
+                        TotalRejected = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Rejected).Count()
+                    },
+                    TotalAssignTask = new MemberTaskByStatus
+                    {
+                        Total = listTask.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        TotalByClosed = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.Closed).Count(),
+                        TotalByInProgress = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.InProgress).Count(),
+                        TotalByOpen = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.Opened).Count(),
+                        TotalByResolve = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.Resolved).Count()
+                    },
+                    TotalCreatedTask = new MemberTaskByStatus
+                    {
+                        Total = listTask.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        TotalByClosed = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Closed).Count(),
+                        TotalByInProgress = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.InProgress).Count(),
+                        TotalByOpen = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Opened).Count(),
+                        TotalByResolve = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Resolved).Count()
+                    }
+                });
+            }
+            result.MemberPoints = memberPoints;
+
+            //insert TaskStatisticByModules, requestStatisticByModules
+            var taskStatisticByModules = new List<TaskStatisticByModule>();
+            var requestStatisticByModules = new List<RequestStatisticByModule>();
+            var taskByTaskTypes = new List<TaskByTaskType>();
+            foreach (var item in project.Modules)
+            {
+                var tasks = item.Tasks.Where(t => t.IsActive && t.IsTask).ToList();
+                var requests = item.Tasks.Where(t => t.IsActive && !t.IsTask);
+                if (!item.Title.Equals(HardFixJobRoleTitle.Watcher))
+                {
+                    //insert task by module
+                    taskStatisticByModules.Add(new TaskStatisticByModule
+                    {
+                        Module = new Module {
+                            Id= item.Id,
+                            Title=item.Title
+                        },
+                        TaskByClosed = new TaskByStatus
+                        {
+                            Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count() / (float)tasks.Count()) * 100,
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count()
+                        },
+                        TaskByInProgress = new TaskByStatus
+                        {
+                            Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count() / (float)tasks.Count()) * 100,
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count()
+                        },
+                        TaskByOpen = new TaskByStatus
+                        {
+                            Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count() / (float)tasks.Count()) * 100,
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count()
+                        },
+                        TaskByResolve = new TaskByStatus
+                        {
+                            Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count() / (float)tasks.Count()) * 100,
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count()
+                        }
+                    });
+                }
+                //insert request
+                requestStatisticByModules.Add(new RequestStatisticByModule
+                {
+                    Module = new Module {
+                        Id=item.Id,
+                        Title=item.Title
+                    },
+                    RequestByApproved = new RequestByStatus
+                    {
+                        Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.Approved).Count() / (float)requests.Count()) * 100,
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Approved).Count()
+                    },
+                    RequestByCancelled = new RequestByStatus
+                    {
+                        Percent = requests.Count() == 0 ? 0 : (float)(requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Count() / (float)requests.Count()) * 100,
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Count()
+                    },
+                    RequestByPendingApproved = new RequestByStatus
+                    {
+                        Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Count() / (float)requests.Count()) * 100,
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Count()
+                    },
+                    RequestByRejected = new RequestByStatus
+                    {
+                        Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Count() / (float)requests.Count()) * 100,
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Count()
+                    }
+                });
+            }
+            //insert task by task type
+            var totalTask = project.Modules.SelectMany(m => m.Tasks).Where(t => t.IsActive && t.IsTask).ToList();
+            float totalTaskCount = totalTask.Count();
+            taskByTaskTypes= totalTask.GroupBy(t => t.TaskType)
+                                          .Select(t => new TaskByTaskType
+                                          {
+                                              TaskType = t.Key,
+                                              Total = totalTask.Where(ta => ta.TaskType.Equals(t.Key)).Count(),
+                                              Percent = totalTaskCount == 0 ? 0 : ((float)totalTask.Where(ta => ta.TaskType.Equals(t.Key)).Count() / totalTaskCount) * 100f
+                                          }).ToList();
+            result.TaskStatisticByModules = taskStatisticByModules;
+            result.RequestStatisticByModules = requestStatisticByModules;
+            result.TaskByTaskTypes = taskByTaskTypes;
+
+            //insert project log
+            result.ProjectLogs = project.ProjectLogs;
+
             return result;
         }
 

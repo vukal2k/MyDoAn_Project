@@ -166,6 +166,16 @@ namespace ProMana.Controllers
         public async Task<ActionResult> Statistic(int id)
         {
             var result = await _projectBus.Statistical(id);
+            ViewBag.PieChartData = JsonConvert.SerializeObject(result.TaskStatisticByModules, Formatting.None,
+                                                                new JsonSerializerSettings
+                                                                {
+                                                                    PreserveReferencesHandling = PreserveReferencesHandling.None
+                                                                });
+            ViewBag.PieChartRequestData = JsonConvert.SerializeObject(result.RequestStatisticByModules, Formatting.None,
+                                                                new JsonSerializerSettings
+                                                                {
+                                                                    PreserveReferencesHandling = PreserveReferencesHandling.None
+                                                                });
             return View(result);
         }
     }

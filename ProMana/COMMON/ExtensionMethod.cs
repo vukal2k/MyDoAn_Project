@@ -12,7 +12,7 @@ namespace COMMON
     {
         public static IEnumerable<UserInfo>GetMember(this Project project)
         {
-            var result = project.Modules.SelectMany(r => r.RoleInProjects).GroupBy(m=> m.UserInfo).Select(u=>u.Key);
+            var result = project.Modules.SelectMany(r => r.RoleInProjects).Where(r => r.IsActive).GroupBy(m=> m.UserInfo).Select(u=>u.Key);
             return result;
         }
 

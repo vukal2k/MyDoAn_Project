@@ -23,7 +23,6 @@ namespace DTO
         public MemberTaskByStatus TotalAssignTask { get; set; }
         public MemberRequestByStatus TotalCreatedRequest { get; set; }
         public MemberRequestByStatus TotalAssignRequest { get; set; }
-        public float Point { get; set; }
     }
 
     public class MemberTaskByStatus
@@ -55,7 +54,6 @@ namespace DTO
 
     public class TaskByStatus
     {
-        public LookupStatus Status { get; set; }
         public float Percent { get; set; }
         public int Total { get; set; }
     }
@@ -71,7 +69,6 @@ namespace DTO
 
     public class RequestByStatus
     {
-        public LookupStatus Status { get; set; }
         public float Percent { get; set; }
         public int Total { get; set; }
     }
@@ -80,5 +77,6 @@ namespace DTO
     {
         public string TaskType { get; set; }
         public int Total { get; set; }
+        public float Percent { get; set; }
     }
 }
