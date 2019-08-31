@@ -1,4 +1,6 @@
-﻿using IdentitySample.Models;
+﻿using BUS;
+using DTO;
+using IdentitySample.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -19,6 +21,7 @@ namespace IdentitySample.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private UserInfoBUS _userBus = new UserInfoBUS();
         public AccountController()
         {
         }
@@ -155,21 +158,73 @@ namespace IdentitySample.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Register(RegisterViewModel model, string RoleCode)
+        public async Task<ActionResult> Register(UserInfoAccoutViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                var x = await UserManager.AddToRoleAsync(user.Id, RoleCode);
-                if (result.Succeeded && x.Succeeded)
+                RegisterViewModel userViewModel = new RegisterViewModel
                 {
-                    return Json(new { Status = true, Message = "Create User Successed!" });
+                    Username = viewModel.Username,
+                    ConfirmPassword = viewModel.ConfirmPassword,
+                    Email = viewModel.Email,
+                    Password = viewModel.Password
+                };
+                UserInfo userInfo = new UserInfo
+                {
+                    Company = viewModel.Company,
+                    CountExperience = viewModel.CountExperience,
+                    CurrentJob = viewModel.CurrentJob,
+                    FullName = viewModel.FullName,
+                    TimeUnit = viewModel.TimeUnit,
+                    UserName = viewModel.Username,
+                    IsActive = true,
+                    Email = viewModel.Email
+                };
+
+                var user = new ApplicationUser { UserName = viewModel.Username, Email = viewModel.Email };
+                var result = await UserManager.CreateAsync(user, viewModel.Password);
+ 
+                if (result.Succeeded)
+                {
+                    //insert role
+                    var roleManager = HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+                    //var role = roleManager.Roles.Where(r => r.Name.Equals("Normal User")).FirstOrDefault();
+                    var x = await UserManager.AddToRoleAsync(user.Id, "Normal User");
+
+                    if (x.Succeeded)
+                    {
+                        //insert user info
+                        var resultUserInfo = await _userBus.Create(userInfo, new List<string>());
+                        if (!resultUserInfo)
+                        {
+                            var userDelete = await UserManager.FindByEmailAsync(viewModel.Email);
+                            if (userDelete != null)
+                            {
+                                await UserManager.DeleteAsync(userDelete);
+                            }
+
+                            return Json(new { Status = true, Message = "Resgister failed!" });
+                        }
+                        else
+                        {
+                            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                            var callbackUrl = Url.Action(
+                               "ConfirmEmail", "Account",
+                               new { userId = user.Id, code = code },
+                               protocol: Request.Url.Scheme);
+
+                            var emailContent = "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>";
+                            // ViewBag.Link = callbackUrl;   // Used only for initial demo.
+
+                            SendMail(new List<string>(), viewModel.Email, "[PROMANA] Please confirm your email!", emailContent);
+                            return View("DisplayEmail");
+                        }
+                    }
                 }
                 AddErrors(result);
             }
             // If we got this far, something failed, redisplay form
-            return Json(new { Status = false, Message = "Can't Create User Successed!" });
+            return View();
         }
 
         //

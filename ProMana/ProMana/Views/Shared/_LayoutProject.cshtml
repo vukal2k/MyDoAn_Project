@@ -87,10 +87,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
 
         .mySideBar {
-            margin-top: 10% !important;
             z-index: 1 !important;
             height:700px !important;
-            position:absolute;
+            position:relative;
+            border-right:none !important;
         }
 
         .myALink {
@@ -118,7 +118,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-purple-light sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-purple-light sidebar-mini sidebar-collapse" style="background-color: #f9fafc;">
         <!-- Main Header -->
         <header class="main-header" style="position:relative !important; background-color:#605ca8; margin-bottom:0px !important">
 
@@ -144,7 +144,7 @@ desired effect
             </div>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
-        <div class="main-sidebar mySideBar">
+        <div class="main-sidebar mySideBar pull-left">
 
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
@@ -194,10 +194,9 @@ desired effect
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" style="background-color:white !important">
             <!-- Content Header (Page header) -->
-            <section class="content-header"></section>
 
             <!-- Main content  class: container-fluid-->
-            <section class="content">
+            <section class="content" style="border-left: 1px solid #d2d6de;">
 
                 @RenderBody()
 

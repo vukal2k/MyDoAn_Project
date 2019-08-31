@@ -208,6 +208,10 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\columnchart.css" />
+    <Content Include="Content\columnchart.min.css">
+      <DependentUpon>columnchart.css</DependentUpon>
+    </Content>
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\gantt.css" />
@@ -216,6 +220,7 @@
     <Content Include="Content\ionicons.min.css" />
     <Content Include="Content\jquery.datetimepicker.min.css" />
     <Content Include="Content\kanban.css" />
+    <Content Include="Content\piechart.css" />
     <Content Include="Content\skins\skin-black-light.css" />
     <Content Include="Content\skins\skin-black-light.min.css" />
     <Content Include="Content\skins\skin-black.css" />
@@ -1869,6 +1874,7 @@
     <Content Include="img\PM-Logo.png" />
     <Content Include="img\professional.png" />
     <Content Include="img\Project-Management-Career.jpg" />
+    <Content Include="img\wp2570965.jpg" />
     <Content Include="Scripts\addMemberToProject.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
@@ -1960,6 +1966,11 @@
     <Content Include="Areas\Admin\Views\AccountAdmin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\AccountAdmin\Create.cshtml" />
     <Content Include="Areas\Admin\Views\AccountAdmin\Edit.cshtml" />
+    <Content Include="Content\columnchart.scss" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
@@ -2098,6 +2109,7 @@
     <Content Include="Views\Project\Index.cshtml" />
     <Content Include="Views\Project\Details.cshtml" />
     <Content Include="Views\Shared\_LayoutGuest.cshtml" />
+    <Content Include="Views\Project\Statistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

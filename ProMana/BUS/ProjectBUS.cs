@@ -215,6 +215,14 @@ namespace BUS
             return project;
         }
 
+        public async Task<ProjectStatistical> Statistical(int projectId)
+        {
+            ProjectStatistical result = new ProjectStatistical();
+            var project = await _unitOfWork.Projects.GetById(projectId);
+            result.Project = project;
+            return result;
+        }
+
         public async Task<IEnumerable<UserInfo>>GetUserDoNotInProject(int projectId)
         {
             SqlParameter[] prams =

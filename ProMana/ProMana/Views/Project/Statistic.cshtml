@@ -1,0 +1,160 @@
+﻿@model DTO.ProjectStatistical
+@{
+    ViewBag.Title = "Statistic";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+<link href="~/Content/piechart.css" rel="stylesheet" />
+<link href="~/Content/columnchart.min.css" rel="stylesheet" />
+
+<div class="container">
+    <h2>Statistic: @Model.Project.Name</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-success"><i class="fa fa-calendar"></i> Date</td>
+                @{
+                    var toValue = "";
+                    if (Model.Project.To != null)
+                    {
+                        var dateTo = (DateTime)Model.Project.To;
+                        toValue = " - " + dateTo.ToLongDateString();
+                    }
+                }
+                <td>
+                    @Model.Project.From.ToLongDateString() @toValue
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                <td><label class="label label-success">@Model.Project.LookupStatu.Name</label></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <h4><i>Member Points</i></h4>
+    <hr />
+
+    <h4><i>Task Statistic By Modules</i></h4>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <div class="pie" data-start="0" data-value="30"></div>
+                <div class="pie highlight" data-start="30" data-value="30"></div>
+                <div class="pie" data-start="60" data-value="40"></div>
+                <div class="pie big" data-start="100" data-value="260"></div>
+            </div>
+            <div style="margin-top:55%">
+                <b>Front-end</b>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>Status</th>
+                            <th>Total Task</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="background-color:blue"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:green"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:red"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:orange"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <h4><i>Request Statistic By Modules</i></h4>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <div class="pie" data-start="0" data-value="30"></div>
+                <div class="pie highlight" data-start="30" data-value="30"></div>
+                <div class="pie" data-start="60" data-value="40"></div>
+                <div class="pie big" data-start="100" data-value="260"></div>
+            </div>
+            <div style="margin-top:55%">
+                <b>Front-end</b>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>Status</th>
+                            <th>Total Task</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="background-color:blue"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:green"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:red"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color:orange"></td>
+                            <td>Open</td>
+                            <td>12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <h4><i>Task Statistic By Task Type</i></h4>
+    <br />
+    <ul class="chart">
+        <li>
+            ActionScript: 5
+            <span style="height:5%" title="ActionScript"></span>
+        </li>
+        <li>
+            ActionScript:5
+            <span style="height:70%" title="JavaScript"></span>
+        </li>
+        <li>
+            ActionScript:5
+            <span style="height:50%" title="CoffeScript"></span>
+        </li>
+        <li>
+            ActionScript:5
+            <span style="height:150%" title="HTML"></span>
+        </li>
+    </ul>
+
+    <hr />
+    <h4><i>Project Logs</i></h4>
+    <button class="btn btn-success pull-right"><i class="fas fa-download"></i> Download Excel</button>
+    <br />
+</div>

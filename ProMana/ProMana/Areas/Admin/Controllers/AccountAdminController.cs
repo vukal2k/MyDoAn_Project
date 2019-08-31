@@ -107,10 +107,11 @@ namespace ProMana.Areas.Admin.Controllers
                     FullName=viewModel.FullName,
                     TimeUnit=viewModel.TimeUnit,
                     UserName=viewModel.Username,
-                    IsActive=true
+                    IsActive=true,
+                    Email=viewModel.Email
                 };
 
-                var user = new ApplicationUser { UserName = userViewModel.Username, Email = userViewModel.Email };
+                var user = new ApplicationUser { UserName = userViewModel.Username, Email = userViewModel.Email ,EmailConfirmed=true};
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Add User to the selected Roles 
@@ -250,7 +251,8 @@ namespace ProMana.Areas.Admin.Controllers
                         FullName = viewModel.FullName,
                         TimeUnit = viewModel.TimeUnit,
                         UserName = user.UserName,
-                        IsActive = true
+                        IsActive = true,
+                        Email=user.Email
                     };
                     var resultUserInfo = await _userBus.Update(userInfo, new List<string>());
                 }

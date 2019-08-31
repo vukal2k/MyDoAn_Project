@@ -1,8 +1,0 @@
-﻿@model IEnumerable<DTO.Post>
-@{
-    ViewBag.Title = "Tag " + ViewBag.TagName;
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<div id="noiPostDungChan" class="col-xl-12 row">
-    @Html.Partial("~/Views/Shared/_Posts.cshtml", Model)
-</div>

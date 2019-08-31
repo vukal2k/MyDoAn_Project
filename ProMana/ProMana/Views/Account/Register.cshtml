@@ -1,50 +1,4 @@
-﻿@*@model IdentitySample.Models.RegisterViewModel
-    @{
-        /**/
-
-        Layout = "~/Views/Shared/_LayoutUser.cshtml";
-        ViewBag.Title = "Register";
-    }
-    @using Microsoft.AspNet.Identity;
-    @using Microsoft.AspNet.Identity.EntityFramework;
-    <h2>@ViewBag.Title.</h2>
-
-    <div class="row">
-        <div class="col-md-5">
-            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Create a new account.</h4>
-                <hr />
-                @Html.ValidationSummary("", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Username, new { @class = "control-label" })
-                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "control-label" })
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "control-label" })
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = " control-label" })
-                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-success pull-right" value="Register" />
-                </div>
-            }
-        </div>
-    </div>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@
-
-@model IdentitySample.Models.RegisterViewModel
+﻿@model IdentitySample.Models.UserInfoAccoutViewModel
 @{
     /**/
     
@@ -65,11 +19,11 @@
         }
 
         .login-container {
-            margin-top: 10%;
+            margin-top: 1%;
             border: 1px solid #CCD1D1;
             border-radius: 5px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            max-width: 50%;
+            max-width: 100%;
         }
 
         .ads {
@@ -113,7 +67,6 @@
         }
 
         .login-form {
-            padding: 15px;
         }
 
             .login-form h3 {
@@ -131,44 +84,118 @@
             text-decoration: none;
             font-size: 14px;
         }
+
+        body {
+            background-image: url('../../img/wp2570965.jpg');
+            /* Full height */
+            height: 100%;
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
     </style>
 </head>
 <!------ Include the above in your HEAD tag ---------->
-<body>
-    <div class="container login-container">
+<body style="background-color:rgba(0, 0, 0, 0.19)">
+    <div class="container login-container" style="background-color:#A569BD">
         <div class="row">
-            <div class="col-md-6 ads" style="height:538px">
-                <h1><span id="fl">PROMANA  </span></h1>
-                <h2>Project Management System</h2>
-                <p><img style="height:30%" src="~/img/PM-Logo.png" /></p>
-            </div>
-            <div class="col-md-6 login-form" style="height:538px">
-                <div style="padding:10px;">
+            <div class="col-md-12 row login-form" style="width:103%">
+                <div class="col-md-6 ads">
+                    <h1><span id="fl">PROMANA  </span></h1>
+                    <h2>Project Management System</h2>
+                    <p><img style="height:30%" src="~/img/PM-Logo.png" /></p>
+                </div>
+                <div class="col-md-6" style="padding:15px; background-color:white;">
                     <h3>Register</h3>
                     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <h4>Create a new account.</h4>
-                        <hr />
-                        @Html.ValidationSummary("", new { @class = "text-danger" })
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Username, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = " control-label" })
-                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-success pull-right" value="Register" />
+
+                        <div class="form-horizontal">
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label text-info" })
+                                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label text-info" })
+                                    <input name="Email" id="Email" type="email" class="form-control" />
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "control-label text-info" })
+                                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label text-info" })
+                                    <input name="Password" id="Password" type="password" class="form-control" />
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label text-info" })
+                                    <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" />
+                                    <label class="errors" id="ConfirmPasswordError"></label>
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.CurrentJob, htmlAttributes: new { @class = "control-label text-info" })
+                                    @Html.EditorFor(model => model.CurrentJob, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CurrentJob, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label text-info" })
+                                    @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-7">
+                                    @Html.LabelFor(model => model.CountExperience, htmlAttributes: new { @class = "control-label text-info" })
+                                    <input name="CountExperience" min="0" id="CountExperience" type="number" step="0.1" class="form-control" />
+                                    @Html.ValidationMessageFor(model => model.CountExperience, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-5">
+                                    @Html.LabelFor(model => model.TimeUnit, htmlAttributes: new { @class = "control-label text-info" })
+                                    <select name="TimeUnit" id="TimeUnit" class="form-control">
+                                        <option value="">-- Choose Unit --</option>
+                                        <option value="Week">Week</option>
+                                        <option value="Month">Month</option>
+                                        <option value="Year">Year</option>
+                                    </select>
+                                    <label class="errors" id="TimeUnitError"></label>
+                                    @Html.ValidationMessageFor(model => model.TimeUnit, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Register" id="btnSubmit" class="btn btn-success pull-right" />
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>

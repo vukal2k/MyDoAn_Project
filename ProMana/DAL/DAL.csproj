@@ -124,6 +124,10 @@
     <Compile Include="Migrations\201908271800543_promana-v18.Designer.cs">
       <DependentUpon>201908271800543_promana-v18.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908310706470_promana-v19.cs" />
+    <Compile Include="Migrations\201908310706470_promana-v19.Designer.cs">
+      <DependentUpon>201908310706470_promana-v19.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -195,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908271800543_promana-v18.resx">
       <DependentUpon>201908271800543_promana-v18.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908310706470_promana-v19.resx">
+      <DependentUpon>201908310706470_promana-v19.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

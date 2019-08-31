@@ -161,5 +161,12 @@ namespace ProMana.Controllers
                 return Content("0");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Statistic(int id)
+        {
+            var result = await _projectBus.Statistical(id);
+            return View(result);
+        }
     }
 }

@@ -1,6 +1,0 @@
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\bin\Release\DTO.dll
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\bin\Release\DTO.pdb
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\obj\Release\DTO.csprojAssemblyReference.cache
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\obj\Release\DTO.csproj.CoreCompileInputs.cache
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\obj\Release\DTO.dll
-C:\Users\vuanl\Desktop\TramTLN_SimpleBlog\TramTLN_SimpleBlog\DTO\obj\Release\DTO.pdb

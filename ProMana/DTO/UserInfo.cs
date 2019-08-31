@@ -34,6 +34,10 @@ namespace DTO
 
         [Required]
         [StringLength(200)]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(200)]
         [Column(TypeName = "nvarchar")]
         public string CurrentJob { get; set; }
 
