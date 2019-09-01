@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using COMMON;
+using System.IO;
 
 namespace ProMana.Controllers
 {
@@ -177,6 +178,37 @@ namespace ProMana.Controllers
                                                                     PreserveReferencesHandling = PreserveReferencesHandling.None
                                                                 });
             return View(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CloseOpen(int id,int status)
+        {
+            var project = await _projectBus.GetById(id);
+            project.StatusId = status;
+            await _projectBus.Update(project,errors);
+
+            return RedirectToAction("Infomation", "Project", new { id = id });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DownloadLog(int id)
+        {
+            var project = await _projectBus.GetById(id);
+            // Gọi lại hàm để tạo file excel
+            System.IO.Stream stream = await _projectBus.DownloadLog(id, errors);
+            // Tạo buffer memory strean để hứng file excel
+            var buffer = stream as MemoryStream;
+            // Đây là content Type dành cho file excel, còn rất nhiều content-type khác nhưng cái này mình thấy okay nhất
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            // Dòng này rất quan trọng, vì chạy trên firefox hay IE thì dòng này sẽ hiện Save As dialog cho người dùng chọn thư mục để lưu
+            // File name của Excel này là ExcelDemo
+            Response.AddHeader("Content-Disposition", $"attachment; filename={project.Code}-ProjectLog.xlsx");
+            // Lưu file excel của chúng ta như 1 mảng byte để trả về response
+            Response.BinaryWrite(buffer.ToArray());
+            // Send tất cả ouput bytes về phía clients
+            Response.Flush();
+            Response.End();
+            return Content("Success");
         }
     }
 }

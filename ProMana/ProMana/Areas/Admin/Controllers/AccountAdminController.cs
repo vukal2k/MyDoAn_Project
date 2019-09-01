@@ -227,7 +227,8 @@ namespace ProMana.Areas.Admin.Controllers
 
                 selectedRole = selectedRole ?? new string[] { };
 
-                var result = await UserManager.AddToRolesAsync(user.Id, selectedRole.Except(userRoles).ToArray<string>());
+                var result = await UserManager.UpdateAsync(user);
+                result = await UserManager.AddToRolesAsync(user.Id, selectedRole.Except(userRoles).ToArray<string>());
 
                 if (!result.Succeeded)
                 {

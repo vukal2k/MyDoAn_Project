@@ -1,4 +1,7 @@
 ﻿@model DTO.ProjectStatistical
+
+@using COMMON
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Statistic";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
@@ -168,53 +171,6 @@
         DTO.Module module_tmp = null;
     }
     <hr />
-    <h4><i>Project Logs</i></h4>
-    <button class="btn btn-success pull-left"><i class="fas fa-download"></i> Download Excel</button>
-    <br />
-    <br />
-    <table class="table table-bordered UseDataTables">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Full Name</th>
-                <th>Module</th>
-                <th>Full Name</th>
-                <th>Job Role</th>
-                <th>Content</th>
-                <th>Created Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ProjectLogs)
-            {
-                <tr>
-                    <td>
-                        @item.UserInfo.UserName
-                    </td>
-                    <td>
-                        @item.UserInfo.FullName
-                    </td>
-                    <td>
-                        @{
-                            module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
-                        }
-                        @module_tmp.Title
-                    </td>
-                    <td>
-                        @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
-                    </td>
-                    <td>
-                        @item.Content
-                    </td>
-                    <td>
-                        @item.CreatedDate
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <hr />
     <h4><i>Member Points</i></h4>
     <br />
     <table class="table table-bordered UseDataTables">
@@ -309,13 +265,112 @@
             }
         </tbody>
     </table>
+
     <hr />
+    <h4><i>Project Logs</i></h4>
+    <a href="@Url.Action("DownloadLog","Project", new { id = Model.Project.Id})" class="btn btn-success pull-left"><i class="fas fa-download"></i> Download Excel</a>
+    <br />
+    <br />
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Module</th>
+                <th>Job Role</th>
+                <th>Content</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProjectLogs)
+            {
+                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                if (module_tmp != null)
+                {
+                    <tr>
+                        <td>
+                            @item.UserInfo.UserName
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName
+                        </td>
+                        <td>
+                            @{
+                                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                            }
+                            @module_tmp.Title
+                        </td>
+                        <td>
+                            @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
+                        </td>
+                        <td>
+                            @item.Content
+                        </td>
+                        <td>
+                            @item.CreatedDate
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
 </div>
 
 @section Scripts{
     <script src="~/Scripts/piechart_jquery.js"></script>
     <script>
         $(document).ready(() => {
+            var roleCurrentUser = @Model.Project.GetRoleInModule(User.Identity.GetUserName());
+            if (@Model.Project.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
+                $("#sidebar4").addClass('active');
+                $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.Project.Id })')
+                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+
+                $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id })')
+                if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                    $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar22").remove();
+                }
+
+                $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Project.Id })')
+                if (roleCurrentUser !== @HardFixJobRole.PM) {
+                    $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar2-52").remove();
+                }
+
+
+                if (roleCurrentUser === @HardFixJobRole.PM) {
+                    $("#linkSidebar31").attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+                    $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Project.Id })')
+
+                    $("#linkSidebar32").attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+                    $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Project.Id })')
+
+                    $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.Project.Id })')
+                    $("#sidebar42").attr("href", '@Url.Action("Statistic", "Project", new { id = Model.Project.Id })')
+                }
+                else {
+                    $("#sidebar3").remove();
+                    $("#sidebar4").remove();
+                }
+            }
+            else {
+                $("#sidebar0").remove();
+                $("#sidebar1").remove();
+                $("#sidebar2").remove();
+                $("#sidebar3").remove();
+                $("#sidebar4").remove();
+                $("#sidebar2-5").remove();
+            }
+
+            //init pie chart
             InitPieChart('@Html.Raw(ViewBag.PieChartData)')
             InitPieChartRequest('@Html.Raw(ViewBag.PieChartRequestData)')
         });

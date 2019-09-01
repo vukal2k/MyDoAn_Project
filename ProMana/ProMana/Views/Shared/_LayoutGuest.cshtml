@@ -108,11 +108,10 @@ desired effect
         <!-- Main Header -->
         @*<header class="main-header">*@
         <header class="main-header" style="position:relative !important; background-color:#605ca8; margin-bottom:0px !important">
-            
+
             <!-- Header Navbar -->
             <nav class="navbar navbar-static-top" role="navigation">
-                <ul class="list-inline pull-left myNav">
-                </ul>
+                <ul class="list-inline pull-left myNav"></ul>
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     @Html.Partial("~/Views/Shared/_LoginPartial.cshtml")
@@ -191,5 +190,13 @@ desired effect
          Both of these plugins are recommended to enhance the
          user experience. -->
     @RenderSection("Scripts", required: false)
+    <script>
+        if ('@ViewBag.isSuccess' === "True") {
+            $.notify("Success!", "success");
+        }
+        else if (@ViewBag.isSuccess != null) {
+            $.notify("Failed!", "error");
+        }
+    </script>
 </body>
 </html>

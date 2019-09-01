@@ -11,7 +11,9 @@ namespace DTO
     {
         public int Id { get; set; }
 
-        public int Content { get; set; }
+        [StringLength(3000)]
+        [Column(TypeName = "nvarchar")]
+        public string Content { get; set; }
 
         public int? ProjectId { get; set; }
 

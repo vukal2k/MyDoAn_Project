@@ -50,3 +50,5 @@ D:\MyDoAn_Project\ProMana\BUS\obj\Debug\BUS.csproj.CoreCompileInputs.cache
 D:\MyDoAn_Project\ProMana\BUS\obj\Debug\BUS.csproj.CopyComplete
 D:\MyDoAn_Project\ProMana\BUS\obj\Debug\BUS.dll
 D:\MyDoAn_Project\ProMana\BUS\obj\Debug\BUS.pdb
+D:\MyDoAn_Project\ProMana\BUS\bin\Debug\EPPlus.dll
+D:\MyDoAn_Project\ProMana\BUS\bin\Debug\EPPlus.xml

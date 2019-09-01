@@ -2113,6 +2113,7 @@
     <Content Include="Views\Project\Details.cshtml" />
     <Content Include="Views\Shared\_LayoutGuest.cshtml" />
     <Content Include="Views\Project\Statistic.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

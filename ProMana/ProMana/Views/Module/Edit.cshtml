@@ -147,38 +147,49 @@
     <script>
         $(document).ready(() => {
             var roleCurrentUser = @Model.Project.GetRoleInModule(User.Identity.GetUserName());
-            $("#sidebar3").addClass('active');
-            $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.ProjectId })')
-            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
+            if (@Model.Project.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
+                $("#sidebar3").addClass('active');
+                $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.ProjectId })')
+                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
 
-            $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.ProjectId })')
-            if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
-                $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.ProjectId, createTask =true})')
+                $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.ProjectId })')
+                if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                    $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.ProjectId, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar22").remove();
+                }
+
+                $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.ProjectId })')
+                if (roleCurrentUser !== @HardFixJobRole.PM) {
+                    $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.ProjectId, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar2-52").remove();
+                }
+
+
+                if (roleCurrentUser === @HardFixJobRole.PM) {
+                    $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
+                    $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.ProjectId })')
+
+                    $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
+                    $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.ProjectId })')
+
+                    $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.ProjectId })')
+                    $("#sidebar42").attr("href", '@Url.Action("Statistic", "Project", new { id = Model.Id })')
+                }
+                else {
+                    $("#sidebar3").remove();
+                    $("#sidebar4").remove();
+                }
             }
             else {
-                $("#linkSidebar22").remove();
-            }
-
-            $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.ProjectId })')
-            if (roleCurrentUser !== @HardFixJobRole.PM) {
-                $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.ProjectId, createTask =true})')
-            }
-            else {
-                $("#linkSidebar2-52").remove();
-            }
-
-
-            if (roleCurrentUser === @HardFixJobRole.PM) {
-                $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
-                $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.ProjectId })')
-
-                $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = Model.ProjectId })')
-                $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.ProjectId })')
-
-                $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.ProjectId })')
-            }
-            else {
+                $("#sidebar0").remove();
+                $("#sidebar1").remove();
+                $("#sidebar2").remove();
                 $("#sidebar3").remove();
+                $("#sidebar2-5").remove();
                 $("#sidebar4").remove();
             }
 

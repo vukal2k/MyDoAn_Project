@@ -46,7 +46,7 @@ namespace DTO
         public string Code { get; set; }
 
         [StringLength(300)]
-        [Column(TypeName = "ntext")]
+        [Column(TypeName = "nvarchar")]
         public string Description { get; set; }
 
         public virtual LookupStatus LookupStatu { get; set; }

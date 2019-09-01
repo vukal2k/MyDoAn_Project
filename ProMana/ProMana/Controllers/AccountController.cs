@@ -242,6 +242,104 @@ namespace IdentitySample.Controllers
         }
 
         //
+        // GET: /Users/Edit/1
+        [HttpGet]
+        public async Task<ActionResult> UserProfile(List<string> errors = null)
+        {
+            var id = User.Identity.GetUserName();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //get account info
+            var user = await UserManager.FindByNameAsync(id);
+
+            //get user info
+            var userInfo = await _userBus.GetById(id);
+
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            var userRoles = await UserManager.GetRolesAsync(user.Id);
+            ViewBag.Errors = errors;
+            ViewBag.isSuccess = TempData["isSuccess"];
+            return View(new EditUserAccountViewModel()
+            {
+                Id = user.Id,
+                Company = userInfo.Company,
+                CountExperience = userInfo.CountExperience,
+                CurrentJob = userInfo.CurrentJob,
+                Email = user.Email,
+                FullName = userInfo.FullName,
+                TimeUnit = userInfo.TimeUnit,
+                Username = user.UserName,
+
+                RolesList = userRoles
+            });
+        }
+
+        //
+        // POST: /Users/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserProfile(EditUserAccountViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                List<string> listError = new List<string>();
+                EditUserViewModel editUser = new EditUserViewModel
+                {
+                    Id = viewModel.Id,
+                    Email = viewModel.Email
+                };
+                var user = await UserManager.FindByIdAsync(editUser.Id);
+                if (user == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var findWithEmail = await UserManager.FindByEmailAsync(viewModel.Email);
+                if (findWithEmail != null && !findWithEmail.UserName.Equals(user.UserName))
+                {
+                    listError.Add("Email is exists");
+                    return RedirectToAction("UserProfile", "Account", new {errors = listError.First() });
+                }
+
+                user.Email = editUser.Email;
+
+                var userRoles = await UserManager.GetRolesAsync(user.Id);
+
+                var result = await UserManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Errors.First());
+                    return RedirectToAction("UserProfile", "Account", new { errors = listError.First() });
+                }
+                else //update userinfor
+                {
+                    UserInfo userInfo = new UserInfo
+                    {
+                        Company = viewModel.Company,
+                        CountExperience = viewModel.CountExperience,
+                        CurrentJob = viewModel.CurrentJob,
+                        FullName = viewModel.FullName,
+                        TimeUnit = viewModel.TimeUnit,
+                        UserName = user.UserName,
+                        IsActive = true,
+                        Email = user.Email
+                    };
+                    var resultUserInfo = await _userBus.Update(userInfo, new List<string>());
+                }
+                TempData["isSuccess"] = true;
+                return RedirectToAction("UserProfile", "Account");
+            }
+            ModelState.AddModelError("", "Something failed.");
+            return View();
+        }
+
         // GET: /Account/ForgotPassword
         [HttpGet]
         [AllowAnonymous]

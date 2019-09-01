@@ -24,13 +24,13 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <div class="pull-left">
-                        @Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                        @Html.ActionLink("Profile", "UserProfile", "Account") | @Html.ActionLink("My Projects", "Index", "Project")
                     </div>
                     <div class="pull-right">
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                            <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a> 
                         }
                     </div>
                 </li>

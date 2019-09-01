@@ -88,9 +88,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         .mySideBar {
             z-index: 1 !important;
-            height:700px !important;
-            position:relative;
-            border-right:none !important;
+            height: 700px !important;
+            position: absolute;
+            margin-top: 10%;
+            border-right: 1px solid #d2d6de;
         }
 
         .myALink {
@@ -144,7 +145,7 @@ desired effect
             </div>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
-        <div class="main-sidebar mySideBar pull-left">
+        <div class="main-sidebar mySideBar">
 
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
@@ -183,6 +184,7 @@ desired effect
                         <a href="#" id=""><i class="fas fa-info"></i> <span>Project Setting</span></a>
                         <ul class="treeview-menu">
                             <li><a id="sidebar41" href="#"><i class="fas fa-tasks"></i> <span>Infomation</span></a></li>
+                            <li><a id="sidebar42" href="#"><i class="fas fa-chart-pie"></i> <span>Statistical</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -196,7 +198,7 @@ desired effect
             <!-- Content Header (Page header) -->
 
             <!-- Main content  class: container-fluid-->
-            <section class="content" style="border-left: 1px solid #d2d6de;">
+            <section class="content">
 
                 @RenderBody()
 

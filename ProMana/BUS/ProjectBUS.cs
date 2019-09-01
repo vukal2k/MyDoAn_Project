@@ -9,6 +9,11 @@ using Repository;
 using COMMON;
 using System.Data.SqlClient;
 using System.Data;
+using System.IO;
+using OfficeOpenXml;
+using System.Configuration;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace BUS
 {
@@ -445,9 +450,104 @@ namespace BUS
 
             return result;
         }
+        public async Task<Stream> DownloadLog(int projectId, List<string> error, Stream stream = null)
+        {
+            var today = DateTime.Today;
+            var list = await GetProjectLogData(projectId);
+            using (var excelPackage = new ExcelPackage(stream ?? new MemoryStream()))
+            {
+                try
+                {
+                    // Tạo author cho file Excel
+                    excelPackage.Workbook.Properties.Author = ConfigurationManager.AppSettings["author"];
+                    // Đổ data vào Excel file
+                    //workSheet.Cells[1, 1].LoadFromCollection(list, true);
+                    var monthGroup = list.GroupBy(m => new { m.CreatedDate.Month, m.CreatedDate.Year })
+                                         .Select(m2 => m2.Key);
+                    foreach (var item in monthGroup)
+                    {
+                        ExcelWorksheet ws1 = excelPackage.Workbook.Worksheets.Add($"{item.Month}-{item.Year}");
+                        BindingFormatForExcel(ws1, list.Where(l => l.CreatedDate.Month==item.Month && l.CreatedDate.Year == item.Year).ToList());
+                    }
+                    
+                    excelPackage.Save();
+                    return excelPackage.Stream;
+                }
+                catch (Exception ex)
+                {
+                    error.Add(ex.Message);
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region private method
+        private async Task<IEnumerable<ProjectLog>>GetProjectLogData(int projectId)
+        {
+            return await _unitOfWork.ProjectLogs.Get(l => l.ProjectId == projectId);
+        }
+        private void BindingFormatForExcel(ExcelWorksheet worksheet, List<ProjectLog> listItems)
+        {
+            worksheet.DefaultColWidth = 8.43;
+
+            worksheet.Cells[3, 1].Value = "Username";
+            worksheet.Column(1).Width = 15.57;
+
+            // Tạo header
+            worksheet.Cells[1, 1].Value = string.Format("Project Log for {0}/{1}", listItems.FirstOrDefault().CreatedDate.Month, listItems.FirstOrDefault().CreatedDate.Year);
+            worksheet.Cells[1, 1].Style.Font.Size = 16;
+            worksheet.Cells[1, 1].Style.WrapText = false;
+
+            worksheet.Cells[3, 2].Value = "Full Name";
+            worksheet.Column(2).Width = 15.57;
+
+            worksheet.Cells[3, 3].Value = "Module";
+            worksheet.Column(3).Width = 15.57;
+
+            worksheet.Cells[3, 4].Value = "Job Role";
+            worksheet.Column(4).Width = 15.57;
+
+            worksheet.Cells[3, 5].Value = "Content";
+            worksheet.Column(5).Width = 15.57;
+
+            worksheet.Cells[3, 6].Value = "Created Date";
+            worksheet.Column(6).Width = 30;
+
+
+            // Lấy range vào tạo format cho range đó ở đây là từ A1 tới D1
+            using (var range = worksheet.Cells["A3:F3"])
+            {
+                //    // Set PatternType
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                // Set Màu cho Background
+                range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(31, 78, 120));
+                // Canh giữa cho các text
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                // Set Font cho text  trong Range hiện tại
+                range.Style.Font.SetFromFont(new Font("Calibri", 11));
+                // Set Border
+                range.Style.Border.Bottom.Style = ExcelBorderStyle.Medium;
+                // Set màu ch Border
+                range.Style.Border.Bottom.Color.SetColor(Color.Blue);
+
+                range.Style.Font.Color.SetColor(Color.White);
+                range.Style.Font.Bold = true;
+            }
+            // Đỗ dữ liệu từ list vào 
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                var item = listItems[i];
+                worksheet.Cells[i + 4, 1].Value = item.UserInfo.UserName;
+                worksheet.Cells[i + 4, 2].Value = item.UserInfo.FullName;
+
+                var module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == item.ProjectId).FirstOrDefault();
+                worksheet.Cells[i + 4, 3].Value = module_tmp.Title ;
+                worksheet.Cells[i + 4, 4].Value = item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title;
+                worksheet.Cells[i + 4, 5].Value = item.Content;
+                worksheet.Cells[i + 4, 6].Value = item.CreatedDate.ToLongTimeString() + " "+ item.CreatedDate.ToString("dd/MM/yyyy");
+            }
+        }
         private async Task<bool> Validate (Project project, List<string> errors)
         {
             var projectCodeExist = await _unitOfWork.Projects.Get(p => p.Code.Equals(project.Code) && project.Id!=p.Id);

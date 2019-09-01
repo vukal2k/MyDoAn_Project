@@ -108,7 +108,7 @@
                 </div>
                 <div class="col-md-6" style="padding:15px; background-color:white;">
                     <h3>Register</h3>
-                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "formAccountAdmin" }))
                     {
                         @Html.AntiForgeryToken()
 
@@ -203,7 +203,54 @@
         </div>
     </div>
     @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(() => {
+            $('#formAccountAdmin').validate({
+                errorClass: 'errors',
+                rules: {
+                    Email: {
+                        required: true
+                    },
+                    FullName: {
+                        required: true,
+                        maxlength: 200
+                    }
+                },
+                messages: {
+                    Email: {
+                        required: "Email is required"
+                    },
+                    FullName: {
+                        required: "FullName is required",
+                        maxlength: "Max length is 200"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#btnSubmit").click(function () {
+                var valid = true;
+                if ($("#CountExperience").val() != "" && $("#TimeUnit").val() == "") {
+                    $("#TimeUnit").parent().addClass('has-error');
+                    $("#TimeUnitError").text("Time unit experience is required");
+                    valid = false;
+                }
+                if ($("#ConfirmPassword").val() != $("#Password").val()) {
+                    $("#ConfirmPassword").parent().addClass('has-error');
+                    $("#ConfirmPasswordError").text("Re-password is not match");
+                    valid = false;
+                }
+                return $("#formAccountAdmin").valid() && valid;
+            })
+
+            $("#sidebar1").addClass("active");
+        });
+    </script>
     }
 </body>
 </html>

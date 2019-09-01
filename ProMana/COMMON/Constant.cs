@@ -86,5 +86,17 @@ namespace COMMON
                                                                                               { "3.Normal","These are issues with normal money. With these issues, the assigner handles the proposed plan" },
                                                                                               { "4.High","There are high priority issues. With the issue of these issues, people who are assigned a handle should do it as soon as possible" },
                                                                                               { "5.Urgent","These are issues that have urgent priority, need urgent handling. When the issue has this priority, it should be handled during the session or at least 24 hours" } };
+        public static IEnumerable<Filter> TaskListFilter = new List<Filter> { new Filter { Title = "All", FilterType = "All"},
+                                                                              new Filter {Title = "Created By Me",FilterType="ByCreaatedBy" },
+                                                                              new Filter {Title = "Assigned To Me",FilterType="ByAssignedTo" }};
+        public static IEnumerable<Filter> RequestListFilter = new List<Filter> { new Filter { Title = "All", FilterType = "All"},
+                                                                                  new Filter {Title = "Created By Me",FilterType="ByCreaatedBy" },
+                                                                                  new Filter {Title = "Reported To Me",FilterType="ByAssignedTo" }};
+    }
+
+    public class Filter
+    {
+        public string Title { get; set; }
+        public string FilterType { get; set; }
     }
 }

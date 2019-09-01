@@ -206,3 +206,5 @@ D:\MyDoAn_Project\ProMana\ProMana\obj\Debug\ProMana.csproj.CoreCompileInputs.cac
 D:\MyDoAn_Project\ProMana\ProMana\obj\Debug\ProMana.csproj.CopyComplete
 D:\MyDoAn_Project\ProMana\ProMana\obj\Debug\ProMana.dll
 D:\MyDoAn_Project\ProMana\ProMana\obj\Debug\ProMana.pdb
+D:\MyDoAn_Project\ProMana\ProMana\bin\EPPlus.dll
+D:\MyDoAn_Project\ProMana\ProMana\bin\EPPlus.xml
