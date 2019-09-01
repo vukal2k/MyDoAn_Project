@@ -9,11 +9,11 @@
 }
 
 
-<h2>Infomation</h2>
+
 <link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
-<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
 
 <div class="container">
+    <h2>Infomation</h2>
     @using (Html.BeginForm("Infomation", "Project", FormMethod.Post, new { @id = "form" }))
     {
         @Html.AntiForgeryToken()
@@ -59,7 +59,7 @@
                             ownerValue = Model.CreatedBy;
                         }
                     }
-                    <select class="form-control" name="CreatedBy" id="CreatedBy">
+                    <select name="CreatedBy" id="CreatedBy" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                         <option value="0">-- Choose PM --</option>
                         @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.GetUserDoNotInProject)
                         {
@@ -152,13 +152,13 @@
                 @if (Model.StatusId == ProjectStatusKey.Opened)
                 {
                     <div col-md-6">
-                        <a href="@Url.Action("CloseOpen","Project", new {id = Model.Id,status = ProjectStatusKey.Closed})" onclick="return confirm('Are u sure? Close project '+@Model.Name)" class="btn btn-warning">Close Project</a>
+                        <a href="@Url.Action("CloseOpen","Project", new {id = Model.Id,status = ProjectStatusKey.Closed})" onclick="return confirm('Are u sure? Close project @Model.Name')" class="btn btn-danger">Close Project</a>
                     </div>
                 }
                 else
                 {
                     <div col-md-6">
-                        <a href="@Url.Action("CloseOpen","Project", new {id = Model.Id,status = ProjectStatusKey.Opened})" onclick="return confirm('Are u sure? Open project '+@Model.Name)" class="btn btn-default">Open Project</a>
+                        <a href="@Url.Action("CloseOpen","Project", new {id = Model.Id,status = ProjectStatusKey.Opened})" onclick="return confirm('Are u sure? Open project @Model.Name')" class="btn btn-default">Open Project</a>
                     </div>
                 }
             </div>
@@ -179,7 +179,7 @@
                         <label>User</label><span style="color:red">*</span>
                         <br />
                         <div class="form-inline">
-                            <select style="width:100%" type="text" id="user" class="form-control">
+                            <select style="width:100%" type="text" id="user" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                                 @{
                                     <option value="0"> -- Choose User --</option>
                                     var user = (IEnumerable
@@ -219,7 +219,6 @@
 </div>
 
 @section Scripts{
-    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
     <script src="~/Scripts/addMemberToProject.js"></script>

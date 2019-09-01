@@ -32,21 +32,21 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            <span>@Model.Reason</span>
+                            <div>@Html.Raw(Model.Reason)</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Solution</label>
                         <div class="col-md-10">
-                            <span>@Model.SolutionDescription</span>
+                            <div>@Html.Raw(Model.SolutionDescription)</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            <span>@Model.Description</span>
+                            <div>@Html.Raw(Model.Description)</div>
                         </div>
                     </div>
 

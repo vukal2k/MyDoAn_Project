@@ -22,7 +22,7 @@
 
     .card:hover {
         background-color: #dffff6;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     .cardActive {
@@ -37,8 +37,18 @@
 
 <div class="row">
     <div class="col-md-3">
-        <select class="pull-left">
-            <option selected>All</option>
+        <select class="pull-left" onchange="chooseFilter(this)">
+            @foreach (var item in CONSTANCT.TaskListFilter)
+            {
+                if (item.FilterType.Equals(ViewBag.Filter))
+                {
+                    <option selected value="@item.FilterType">@item.Title</option>
+                }
+                else
+                {
+                    <option value="@item.FilterType">@item.Title</option>
+                }
+            }
         </select>
         <hr />
         <div id="noiListTaskDungChan">
@@ -97,7 +107,7 @@
             if (@Model.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
                 $("#sidebar2").addClass('active');
                 $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.Id })')
-                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id })') 
+                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Id })')
 
                 $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Id })')
                 if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
@@ -147,6 +157,11 @@
                 var btn = document.getElementById("card" + choosedTask);
                 chooseTask(btn, parseInt(choosedTask));
                 $("#noiListTaskDungChan").scrollTop($('#card' + choosedTask).position().top);
+            }
+
+            var isCreateTask = "@ViewBag.IsCreateTask";
+            if (isCreateTask =="True") {
+                $("#modalCreateTask").modal("show");
             }
         });
 
@@ -213,10 +228,10 @@
                 }
             });
         }
-        var isCreateTask = "@ViewBag.IsCreateTask";
-        if (isCreateTask =="True") {
-            $("#modalCreateTask").modal("show");
+        function chooseFilter(select) {
+            window.location.href = '@Url.Action("TaskList","Project", new { id = Model.Id })' + '?filter=' + $(select).val();
         }
+
     </script>
 
     <script>

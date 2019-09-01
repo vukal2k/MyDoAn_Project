@@ -29,7 +29,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.TeamLead, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <select class="form-control" name="TeamLead" id="TeamLead">
+                    <select name="TeamLead" id="TeamLead" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                         <option value="0">-- Choose Team Lead --</option>
                         @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
                         {
@@ -88,7 +88,7 @@
                         <label>User</label><span style="color:red">*</span>
                         <br />
                         <div class="form-inline">
-                            <select style="width:100%" type="text" id="user" class="form-control">
+                            <select style="width:100%" type="text" id="user" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                                 <option value="0"> -- Choose User --</option>
                                 @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
                                 {

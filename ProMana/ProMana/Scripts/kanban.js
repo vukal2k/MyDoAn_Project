@@ -70,6 +70,7 @@ function draggableInit() {
                         $("#solutionModalDungChan").html(result);
                         settingValidateSolution();
                         submitSolution();
+                        initTextArea();
                     } else if (result === "1") {
                         appendTo.append(currentElement);
                     }
@@ -110,6 +111,7 @@ function startSolutionByButton(taskId, toStatus) {
                 $("#solutionModalDungChan").html(result);
                 settingValidateSolution();
                 submitSolution();
+                initTextArea();
             }
             else if (result == "1") {
                 var btn = document.getElementById("card" + taskId);

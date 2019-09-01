@@ -46,7 +46,7 @@ namespace ProMana.Controllers
         // GET: Task/Details/5
         public async Task<ActionResult> ChangeStatus(int taskId, int statusId)
         {
-            var result = await _taskBus.ChangeStatus(taskId, statusId);
+            var result = await _taskBus.ChangeStatus(taskId, statusId,User.Identity.GetUserName());
             if (result)
             {
                 return Content("1");
@@ -199,7 +199,7 @@ namespace ProMana.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await _taskBus.UpdateRequest(task, errors);
+                    var result = await _taskBus.UpdateRequest(task, errors,User.Identity.GetUserName());
                     if (result != null)
                     {
                         return PartialView("~/Views/Task/DetailsRequest.cshtml", result);

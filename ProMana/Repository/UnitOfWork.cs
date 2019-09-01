@@ -27,6 +27,7 @@ namespace Repository
             UserInfos = new Repository<UserInfo>(_dbContext);
             Solutions = new Repository<Solution>(_dbContext);
             ResolveTypes = new Repository<ResolveType>(_dbContext);
+            LookupStatuss = new Repository<LookupStatus>(_dbContext);
         }
 
         #region Propeties
@@ -42,6 +43,7 @@ namespace Repository
         public Repository<UserInfo> UserInfos { get; set; }
         public Repository<Solution> Solutions { get; set; }
         public Repository<ResolveType> ResolveTypes { get; set; }
+        public Repository<LookupStatus> LookupStatuss { get; set; }
         #endregion
 
         #region Methods

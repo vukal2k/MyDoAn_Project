@@ -25,7 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     <link href="~/Content/skins/skin-purple-light.min.css" rel="stylesheet" />
-
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -33,8 +33,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
     <style>
         .aHover {
             color: #337ab7;
@@ -65,7 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             padding-left: 14%;
             color: white;
             z-index: 100 !important;
-            position:relative;
+            position: relative;
         }
 
         .myNav {
@@ -120,109 +120,114 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-purple-light sidebar-mini sidebar-collapse" style="background-color: #f9fafc;">
-        <!-- Main Header -->
-        <header class="main-header" style="position:relative !important; background-color:#605ca8; margin-bottom:0px !important">
+    <!-- Main Header -->
+    <header class="main-header" style="position:relative !important; background-color:#605ca8; margin-bottom:0px !important">
 
-            <!-- Header Navbar -->
-            <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            @if (User.Identity.IsAuthenticated)
+            {
                 <ul class="list-inline pull-left myNav">
-                    <li><a style="color:white">Project</a></li>
-                    <li><a style="color:white">Request</a></li>
-                    <li><a style="color:white">Task assigned to me</a></li>
-                    <li><a style="color:white" href="@Url.Action("Index","JobRole",new { area="Admin"})">Administrator</a></li>
+                    <li><a style="color:white" href="@Url.Action("Index","Project")">Projects</a></li>
+                    <li><a style="color:white" href="@Url.Action("TaskToMe","Home")">Task assigned to me</a></li>
+                    <li><a style="color:white" href="@Url.Action("RequestToMe","Home")">Request assigned to me</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a style="color:white" href="@Url.Action("Index","JobRole",new { area="Admin"})">Administrator</a></li>
+                    }
                 </ul>
-                <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu">
-                    @Html.Partial("~/Views/Shared/_LoginPartialProject.cshtml")
-                </div>
-            </nav>
-        </header>
-        <header class="myHeader">
-            <div class="logo-lg">
-                <img style="height:80px; margin-left:-13%; vertical-align:bottom" src="~/img/PM-Logo.png" /> <span class="h1">Promana</span> <br />
-                <b><i class="fa fa-angle-right"></i>@ViewBag.Title</b>
-                <h1><a id="buttonAddProject" href="@Url.Action("Create","Project")"><span class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Project</span></a></h1>
+            }
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                @Html.Partial("~/Views/Shared/_LoginPartialProject.cshtml")
             </div>
-        </header>
-        <!-- Left side column. contains the logo and sidebar -->
-        <div class="main-sidebar mySideBar">
-
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-                <!-- Sidebar Menu -->
-                <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">HEADER</li>
-                    <!-- Optionally, you can add icons to the links -->
-                    <li id="sidebar0" class="myALink"><a href="@Url.Action("GanttChart","Project")"><i class="fas fa-stream"></i> <span>Gantt Chart</span></a></li>
-                    <li id="sidebar1" class="myALink"><a href="@Url.Action("KanbanBoard","Project")"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>
-
-                    <li class="treeview" id="sidebar2">
-                        <a><i class="fas fa-tasks"></i> <span>Task List</span></a>
-                        <ul class="treeview-menu">
-                            <li><a id="linkSidebar21" href="#"><i class="fas fa-tasks"></i> <span> Task List</span></a></li>
-                            <li><a id="linkSidebar22" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Task</span> </a></li>
-                        </ul>
-                    </li>
-
-                    <li class="treeview" id="sidebar2-5">
-                        <a><i class="fas fa-tram"></i> <span>Request List</span></a>
-                        <ul class="treeview-menu">
-                            <li><a id="linkSidebar2-51" href="#"><i class="fas fa-tasks"></i> <span>Request List</span></a></li>
-                            <li><a id="linkSidebar2-52" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Request</span> </a></li>
-                        </ul>
-                    </li>
-
-                    <li class="treeview" id="sidebar3">
-                        <a><i class="fas fa-sitemap"></i> <span>Modules</span></a>
-                        <ul class="treeview-menu">
-                            <li><a id="linkSidebar31" href="#"><i class="fas fa-tasks"></i> <span>Module List</span></a></li>
-                            <li><a id="linkSidebar32" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Module</span> </a></li>
-                        </ul>
-                    </li>
-
-                    <li class="treeview" id="sidebar4">
-                        <a href="#" id=""><i class="fas fa-info"></i> <span>Project Setting</span></a>
-                        <ul class="treeview-menu">
-                            <li><a id="sidebar41" href="#"><i class="fas fa-tasks"></i> <span>Infomation</span></a></li>
-                            <li><a id="sidebar42" href="#"><i class="fas fa-chart-pie"></i> <span>Statistical</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- /.sidebar-menu -->
-            </section>
-            <!-- /.sidebar -->
+        </nav>
+    </header>
+    <header class="myHeader">
+        <div class="logo-lg">
+            <a href="@Url.Action("Index","Home")"><img style="height:80px; margin-left:-13%; vertical-align:bottom" src="~/img/PM-Logo.png" /></a> <span class="h1">Promana</span> <br />
+            <b><i class="fa fa-angle-right"></i>@ViewBag.Title</b>
+            <h1><a id="buttonAddProject" href="@Url.Action("Create","Project")"><span class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Project</span></a></h1>
         </div>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <div class="main-sidebar mySideBar">
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper" style="background-color:white !important">
-            <!-- Content Header (Page header) -->
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">HEADER</li>
+                <!-- Optionally, you can add icons to the links -->
+                <li id="sidebar0" class="myALink"><a href="@Url.Action("GanttChart","Project")"><i class="fas fa-stream"></i> <span>Gantt Chart</span></a></li>
+                <li id="sidebar1" class="myALink"><a href="@Url.Action("KanbanBoard","Project")"><i class="fa fa-industry"></i> <span>Kanban Board</span></a></li>
 
-            <!-- Main content  class: container-fluid-->
-            <section class="content">
+                <li class="treeview" id="sidebar2">
+                    <a><i class="fas fa-tasks"></i> <span>Task List</span></a>
+                    <ul class="treeview-menu">
+                        <li><a id="linkSidebar21" href="#"><i class="fas fa-tasks"></i> <span> Task List</span></a></li>
+                        <li><a id="linkSidebar22" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Task</span> </a></li>
+                    </ul>
+                </li>
 
-                @RenderBody()
+                <li class="treeview" id="sidebar2-5">
+                    <a><i class="fas fa-tram"></i> <span>Request List</span></a>
+                    <ul class="treeview-menu">
+                        <li><a id="linkSidebar2-51" href="#"><i class="fas fa-tasks"></i> <span>Request List</span></a></li>
+                        <li><a id="linkSidebar2-52" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Request</span> </a></li>
+                    </ul>
+                </li>
 
-            </section>
-            <!-- /.content -->
+                <li class="treeview" id="sidebar3">
+                    <a><i class="fas fa-sitemap"></i> <span>Modules</span></a>
+                    <ul class="treeview-menu">
+                        <li><a id="linkSidebar31" href="#"><i class="fas fa-tasks"></i> <span>Module List</span></a></li>
+                        <li><a id="linkSidebar32" class="aHover" onclick="$('#')"><i class="fas fa-plus-circle"></i> <span> Create Module</span> </a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview" id="sidebar4">
+                    <a href="#" id=""><i class="fas fa-info"></i> <span>Project Setting</span></a>
+                    <ul class="treeview-menu">
+                        <li><a id="sidebar41" href="#"><i class="fas fa-tasks"></i> <span>Infomation</span></a></li>
+                        <li><a id="sidebar42" href="#"><i class="fas fa-chart-pie"></i> <span>Statistical</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+    </div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="background-color:white !important">
+        <!-- Content Header (Page header) -->
+        <!-- Main content  class: container-fluid-->
+        <section class="content">
+
+            @RenderBody()
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    <div class="myFooter">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            <h4>Trần Lương Ngọc Trâm (66DCHT21324)</h4>
+            <div>Đồ án tốt nghiệp khóa 66</div>
+            <div>Trường Đại học Công Nghệ Giao Thông Vận Tải</div>
+            <div>Giảng viên hướng dẫn: TS. Lê Chí Luận</div>
         </div>
-        <!-- /.content-wrapper -->
-        <!-- Main Footer -->
-        <div class="myFooter">
-            <!-- To the right -->
-            <div class="pull-right hidden-xs">
-                <h4>Trần Lương Ngọc Trâm (66DCHT21324)</h4>
-                <div>Đồ án tốt nghiệp khóa 66</div>
-                <div>Trường Đại học Công Nghệ Giao Thông Vận Tải</div>
-                <div>Giảng viên hướng dẫn: TS. Lê Chí Luận</div>
-            </div>
-            <!-- Default to the left -->
-            <div class="pull-left">
-                Contact - <i class="fab fa-phone-square"></i>  <br />
-                <h4><a style="color:white !important" href="https://www.facebook.com/srimsleeping"><i class="fab fa-facebook-square"></i>: /srimsleeping</a></h4>
-                <h4><i class="fas fa-phone-square"></i>: 078 715 7455</h4>
-                <h4><i class="fas fa-envelope"></i>: vuanlbv@gmail.com</h4>
-            </div>
+        <!-- Default to the left -->
+        <div class="pull-left">
+            Contact - <i class="fab fa-phone-square"></i>  <br />
+            <h4><a style="color:white !important" href="https://www.facebook.com/srimsleeping"><i class="fab fa-facebook-square"></i>: /srimsleeping</a></h4>
+            <h4><i class="fas fa-phone-square"></i>: 078 715 7455</h4>
+            <h4><i class="fas fa-envelope"></i>: vuanlbv@gmail.com</h4>
         </div>
+    </div>
     <!-- ./wrapper -->
     <!-- REQUIRED JS SCRIPTS -->
     <!-- jQuery 3 -->
@@ -235,6 +240,7 @@ desired effect
         var table;
         $(document).ready(function () {
             table = $(".UseDataTables").DataTable();
+            initTextArea()
         })
 
         function SetDataTable() {
@@ -244,11 +250,20 @@ desired effect
     </script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
     <script src="~/DataTables/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
 
     <!-- AdminLTE App -->
     <script src="~/Scripts/adminlte.min.js"></script>
     <script src="~/fontawesome-free-5.10.0-web/js/all.min.js"></script>
-
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script>
+        function initTextArea() {
+            $(".mytextarea").tinymce().remove();
+            tinymce.init({
+                selector: '.mytextarea'
+            });
+        }
+    </script>
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. -->

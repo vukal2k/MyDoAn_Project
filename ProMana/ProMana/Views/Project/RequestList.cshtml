@@ -35,6 +35,20 @@
 
 <div class="row">
     <div class="col-md-3">
+        <select class="pull-left" onchange="chooseFilter(this)">
+            @foreach (var item in CONSTANCT.TaskListFilter)
+            {
+                if (item.FilterType.Equals(ViewBag.Filter))
+                {
+                    <option selected value="@item.FilterType">@item.Title</option>
+                }
+                else
+                {
+                    <option value="@item.FilterType">@item.Title</option>
+                }
+            }
+        </select>
+        <hr />
         <div id="noiListTaskDungChan">
             @foreach (var item in Model.Modules)
             {
@@ -479,6 +493,9 @@
 
         function closeModalSolutionDetail(solutionId) {
             $("#solutionModal" + solutionId).modal('hide')
+        }
+        function chooseFilter(select) {
+            window.location.href = '@Url.Action("RequestList","Project", new { id = Model.Id })' + '?filter=' + $(select).val();
         }
     </script>
 }

@@ -12,6 +12,7 @@ namespace BUS
     public class ModuleBUS
     {
         private UnitOfWork _unitOfWork = new UnitOfWork();
+        private ProjectLogBUS _projectLog=new ProjectLogBUS();
 
         public async Task<IEnumerable<Module>>GetByProject(int projectId, List<string>errors)
         {
@@ -36,7 +37,18 @@ namespace BUS
                 module.RoleInProjects = listMember;
 
                 _unitOfWork.Modules.Insert(module);
-                return await _unitOfWork.CommitAsync() > 0;
+                var resultCommit = await _unitOfWork.CommitAsync() > 0;
+                if (resultCommit)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create module {module.Title}",
+                        CreatedBy = module.Project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = module.ProjectId
+                    }, new List<string>());
+                }
+                return resultCommit;
             }
             catch (Exception ex)
             {
@@ -74,7 +86,19 @@ namespace BUS
                 //update module
                 module.IsActive = true;
                 _unitOfWork.Modules.Update(module);
-                return await _unitOfWork.CommitAsync() > 0;
+
+                var resultCommit = await _unitOfWork.CommitAsync() > 0;
+                if (resultCommit)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Update module {module.Title}",
+                        CreatedBy = module.Project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = module.ProjectId
+                    }, new List<string>());
+                }
+                return resultCommit;
             }
             catch (Exception ex)
             {
@@ -99,6 +123,18 @@ namespace BUS
                 module.IsActive = false;
                 _unitOfWork.Modules.Update(module);
                 var result = await _unitOfWork.CommitAsync()>0;
+
+                var resultCommit = await _unitOfWork.CommitAsync() > 0;
+                if (resultCommit)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Delete module {module.Title}",
+                        CreatedBy = module.Project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = module.ProjectId
+                    }, new List<string>());
+                }
 
                 return result? module:null;
             }

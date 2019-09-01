@@ -41,7 +41,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                <textarea name="Reason" id="solution.Reason" class="form-control"></textarea>
+                                <textarea name="Reason" id="solution.Reason" class="form-control mytextarea"></textarea>
                                 @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                <textarea name="Description" id="solution.Description" class="form-control"></textarea>
+                                <textarea name="Description" id="solution.Description" class="form-control mytextarea"></textarea>
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>

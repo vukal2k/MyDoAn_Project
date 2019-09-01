@@ -12,10 +12,12 @@ namespace BUS
     public class TaskBUS
     {
         private UnitOfWork _unitOfWork;
+        private ProjectLogBUS _projectLog;
 
         public TaskBUS()
         {
             _unitOfWork = new UnitOfWork();
+            _projectLog = new ProjectLogBUS();
         }
 
         public async Task<DTO.Task> GetById(int taskId, List<string>errors)
@@ -37,7 +39,7 @@ namespace BUS
             try
             {
                 var result = await _unitOfWork.Tasks.GetById(taskId);
-
+                var statusFrom = result.LookupStatus.Name;
                 switch (statusId)
                 {
                     case TaskStatusKey.InProgress:
@@ -47,6 +49,18 @@ namespace BUS
                             _unitOfWork.Tasks.Update(result);
 
                             var success = await _unitOfWork.CommitAsync() > 0;
+
+                            if (success)
+                            {
+                                var statusTo = await _unitOfWork.LookupStatuss.GetById(result.StatusId);
+                                await _projectLog.AddLog(new ProjectLog
+                                {
+                                    Content = $"Change status task {result.Title} from {statusFrom} to {statusTo.Name}",
+                                    CreatedBy = userName,
+                                    CreatedDate = DateTime.Now,
+                                    ProjectId = result.Module.ProjectId
+                                }, new List<string>());
+                            }
                             if (success)
                             {
                                 return result;
@@ -67,6 +81,17 @@ namespace BUS
                             _unitOfWork.Tasks.Update(result);
 
                             var success2 = await _unitOfWork.CommitAsync() > 0;
+                            if (success2)
+                            {
+                                var statusTo = await _unitOfWork.LookupStatuss.GetById(result.StatusId);
+                                await _projectLog.AddLog(new ProjectLog
+                                {
+                                    Content = $"Change status task {result.Title} from {statusFrom} to {statusTo.Name}",
+                                    CreatedBy = userName,
+                                    CreatedDate = DateTime.Now,
+                                    ProjectId = result.Module.ProjectId
+                                }, new List<string>());
+                            }
                             if (success2)
                             {
                                 return result;
@@ -99,12 +124,50 @@ namespace BUS
                 task.IsActive = true;
                 task.IsTask = true;
                 _unitOfWork.Tasks.Insert(task);
-                return await _unitOfWork.CommitAsync() > 0;
+                var result = await _unitOfWork.CommitAsync() > 0;
+                if (result)
+                {
+                    var project = await _unitOfWork.Modules.GetById(task.ModuleId);
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create task {task.Title}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = project.Id
+                    }, new List<string>());
+                }
+                return result;
             }
             catch (Exception ex)
             {
                 errors.Add(ex.Message);
                 return false;
+            }
+        }
+
+        public async Task<IEnumerable<DTO.Task>> TaskToMe(string username)
+        {
+            try
+            {
+                var result = await _unitOfWork.Tasks.Get(t => t.IsActive && t.IsTask && t.AssignedTo.Equals(username));
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<DTO.Task>();
+            }
+        }
+
+        public async Task<IEnumerable<DTO.Task>> RequestToMe(string username)
+        {
+            try
+            {
+                var result = await _unitOfWork.Tasks.Get(t => t.IsActive && !t.IsTask && t.AssignedTo.Equals(username));
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<DTO.Task>();
             }
         }
 
@@ -126,7 +189,20 @@ namespace BUS
                 task.IsActive = true;
                 task.IsTask = false;
                 _unitOfWork.Tasks.Insert(task);
-                return await _unitOfWork.CommitAsync() > 0;
+
+                var result = await _unitOfWork.CommitAsync() > 0;
+                if (result)
+                {
+                    var project = await _unitOfWork.Modules.GetById(task.ModuleId);
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create request {task.Title}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = project.Id
+                    }, new List<string>());
+                }
+                return result;
             }
             catch (Exception ex)
             {
@@ -156,6 +232,16 @@ namespace BUS
 
                 _unitOfWork.Tasks.Update(updateTask);
                 var result = await _unitOfWork.CommitAsync() > 0;
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Update task {task.Title}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = updateTask.Module.ProjectId
+                    }, new List<string>());
+                }
 
                 return updateTask;
             }
@@ -166,7 +252,7 @@ namespace BUS
             }
         }
 
-        public async Task<DTO.Task> ConvertToTask(DTO.Task task, List<string> errors, string userName = null)
+        public async Task<DTO.Task> ConvertToTask(DTO.Task task, List<string> errors,string userNameApprove = null)
         {
             try
             {
@@ -188,13 +274,26 @@ namespace BUS
                 createNewTask.IsTask = true;
                 createNewTask.IsActive = false;
                 createNewTask.StatusId = TaskStatusKey.Opened;
-                if (userName != null)
+                if (userNameApprove != null)
                 {
-                    createNewTask.CreatedBy = userName;
+                    createNewTask.CreatedBy = userNameApprove;
                 }
                 _unitOfWork.Tasks.Insert(createNewTask);
 
                 var result = await _unitOfWork.CommitAsync() > 0;
+                if (result)
+                {
+                    if (userNameApprove != null)
+                    {
+                        await _projectLog.AddLog(new ProjectLog
+                        {
+                            Content = $"Approve request {updateRequest.Title}",
+                            CreatedBy = userNameApprove,
+                            CreatedDate = DateTime.Now,
+                            ProjectId = updateRequest.Module.ProjectId
+                        }, new List<string>());
+                    }
+                }
 
                 return createNewTask;
             }
@@ -205,15 +304,28 @@ namespace BUS
             }
         }
 
-        public async Task<bool> ChangeStatus(int taskId, int statusKey)
+        public async Task<bool> ChangeStatus(int taskId, int statusKey,string userName)
         {
             try
             {
                 var updateRequest = await _unitOfWork.Tasks.GetById(taskId);
+                var statusFrom = updateRequest.LookupStatus.Name;
                 updateRequest.StatusId = statusKey;
                 _unitOfWork.Tasks.Update(updateRequest);
 
                 var result = await _unitOfWork.CommitAsync() > 0;
+
+                if (result)
+                {
+                    var statusTo = await _unitOfWork.LookupStatuss.GetById(statusKey);
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Change status task/request {updateRequest.Title} from {statusFrom} to {statusTo.Name}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = updateRequest.Module.ProjectId
+                    }, new List<string>());
+                }
 
                 return result;
             }
@@ -223,7 +335,7 @@ namespace BUS
             }
         }
 
-        public async Task<DTO.Task> UpdateRequest(DTO.Task task, List<string> errors)
+        public async Task<DTO.Task> UpdateRequest(DTO.Task task, List<string> errors, string userName)
         {
             try
             {
@@ -249,6 +361,17 @@ namespace BUS
 
                 _unitOfWork.Tasks.Update(updateTask);
                 var result = await _unitOfWork.CommitAsync() > 0;
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Update request {task.Title}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = updateTask.Module.ProjectId
+                    }, new List<string>());
+                }
+
 
                 return updateTask;
             }

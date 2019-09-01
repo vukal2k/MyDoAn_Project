@@ -20,10 +20,12 @@ namespace BUS
     public class ProjectBUS
     {
         private UnitOfWork _unitOfWork;
+        private ProjectLogBUS _projectLog;
 
         public ProjectBUS()
         {
             _unitOfWork = new UnitOfWork();
+            _projectLog = new ProjectLogBUS();
         }
 
         #region Admin
@@ -60,7 +62,20 @@ namespace BUS
                     }
                 };
 
-                return await _unitOfWork.CommitAsync() > 0;
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create project. Code: {project.Code}",
+                        CreatedBy = project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = project.Id
+                    }, errors);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -90,7 +105,20 @@ namespace BUS
                 }
                 _unitOfWork.Projects.Update(project);
 
-                return await _unitOfWork.CommitAsync() > 0;
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create project. Code: {project.Code}",
+                        CreatedBy = project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = project.Id
+                    }, errors);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -107,7 +135,9 @@ namespace BUS
                 project.IsActive = false;
                 _unitOfWork.Projects.Update(project);
 
-                return await _unitOfWork.CommitAsync() > 0;
+                var result = await _unitOfWork.CommitAsync() > 0;
+                
+                return result;
             }
             catch (Exception ex)
             {
@@ -164,6 +194,16 @@ namespace BUS
                 //commit
                 _unitOfWork.Projects.Insert(project);
                 var result = await _unitOfWork.CommitAsync() > 0;
+
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog {
+                            Content = $"Create project. Code: {project.Code}",
+                            CreatedBy=userCreate,
+                            CreatedDate=DateTime.Now,
+                            ProjectId=project.Id
+                        },errors);
+                }
                 
                 return result;
             }
@@ -205,6 +245,17 @@ namespace BUS
                 project.IsActive = true;
                 var result = await _unitOfWork.CommitAsync() > 0;
 
+                if (result)
+                {
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Create project. Code: {project.Code}",
+                        CreatedBy = project.CreatedBy,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = project.Id
+                    }, errors);
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -217,6 +268,33 @@ namespace BUS
         public async Task<Project> GetById (int projectId)
         {
             var project = await _unitOfWork.Projects.GetById(projectId);
+            return project;
+        }
+
+        public async Task<Project> GetTaskList(int projectId, string filter, string username)
+        {
+            var project = await _unitOfWork.Projects.GetById(projectId);
+            foreach (var item in project.Modules)
+            {
+                var tasks = item.Tasks;
+                switch (filter)
+                {
+                    case "All":
+                        break;
+                    case "ByCreaatedBy":
+                        tasks = tasks.Where(t => t.CreatedBy.Equals(username)).ToList();
+                        break;
+                    case "ByAssignedTo":
+                        tasks = tasks.Where(t => t.AssignedTo.Equals(username)).ToList();
+                        break;
+                    default:
+                        tasks = new List<DTO.Task>();
+                        break;
+                }
+                tasks = tasks.OrderByDescending(t => t.Priority).ThenByDescending(t => t.Severity).ToList();
+                item.Tasks=tasks;
+            }
+            
             return project;
         }
 

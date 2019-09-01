@@ -19,6 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
     <link href="~/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -63,11 +64,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             padding-left: 14%;
             color: white;
         }
+
         .myNav {
             position: absolute !important;
             color: white;
-            margin-left:10%;
-            margin-top:2.5%;
+            margin-left: 10%;
+            margin-top: 2.5%;
         }
 
         #buttonAddProject {
@@ -111,6 +113,18 @@ desired effect
 
             <!-- Header Navbar -->
             <nav class="navbar navbar-static-top" role="navigation">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="list-inline pull-left myNav">
+                        <li><a style="color:white" href="@Url.Action("Index","Project")">Projects</a></li>
+                        <li><a style="color:white" href="@Url.Action("TaskToMe","Home")">Task assigned to me</a></li>
+                        <li><a style="color:white" href="@Url.Action("RequestToMe","Home")">Request assigned to me</a></li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a style="color:white" href="@Url.Action("Index","JobRole",new { area="Admin"})">Administrator</a></li>
+                        }
+                    </ul>
+                }
                 <ul class="list-inline pull-left myNav"></ul>
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
@@ -120,7 +134,7 @@ desired effect
         </header>
         <header class="myHeader">
             <div class="logo-lg">
-                <img style="height:80px; margin-left:-12%; vertical-align:bottom" src="~/img/PM-Logo.png" /> <span class="h1">Promana</span> <br />
+                <a href="@Url.Action("Index","Home")"><img style="height:80px; margin-left:-12%; vertical-align:bottom" src="~/img/PM-Logo.png" /></a> <span class="h1">Promana</span> <br />
                 <b><i class="fa fa-angle-right"></i>@ViewBag.Title</b>
                 <h1><a id="buttonAddProject" href="@Url.Action("Create","Project")"><span class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Project</span></a></h1>
             </div>
@@ -181,7 +195,7 @@ desired effect
     </script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
     <script src="~/DataTables/js/dataTables.bootstrap.min.js"></script>
-
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Scripts/adminlte.min.js"></script>
     <script src="~/fontawesome-free-5.10.0-web/js/all.min.js"></script>

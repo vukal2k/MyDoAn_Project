@@ -30,7 +30,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Module</label>
             <div class="col-md-10">
-                <select name="ModuleId" id="createModuleId" onchange="changeModule(this,'createAssignedTo')" class="form-control">
+                <select name="ModuleId" id="createModuleId" onchange="changeModule(this,'createAssignedTo')" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                     <option value="0">-- Choose module --</option>
                     @foreach (var item in Model.GetOwnModule(User.Identity.GetUserName()))
                     {
@@ -43,7 +43,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Assigned To</label>
             <div class="col-md-10">
-                <select name="AssignedTo" id="createAssignedTo" class="form-control">
+                <select name="AssignedTo" id="createAssignedTo" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                     <option value="0">-- Choose member --</option>
                 </select>
             </div>
@@ -113,7 +113,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Description</label>
             <div class="col-md-10">
-                <textarea name="Description" id="createDescription" class="form-control"></textarea>
+                <textarea name="Description" id="createDescription" class="form-control mytextarea"></textarea>
             </div>
         </div>
         <hr />

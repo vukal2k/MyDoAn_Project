@@ -1,51 +1,37 @@
 ﻿using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNet.Identity;
+using BUS;
+using System.Threading.Tasks;
 
 namespace IdentitySample.Controllers
 {
     public class HomeController : Controller
     {
+        private TaskBUS _taskBus = new TaskBUS();
         [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
         [Authorize]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your app description page.";
-
-            return View();
-        }
-
         [HttpGet]
-        public ActionResult UpdateOrganisation()
+        public async Task<ActionResult> TaskToMe()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-        public ActionResult ListPremises()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-        public ActionResult CreatePremises()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            var userName = User.Identity.GetUserName();
+            var result = await _taskBus.TaskToMe(userName);
+            return View(result);
         }
 
-        public ActionResult UpdatePremises()
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> RequestToMe()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            var userName = User.Identity.GetUserName();
+            var result = await _taskBus.RequestToMe(userName);
+            return View(result);
         }
     }
 }

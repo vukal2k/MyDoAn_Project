@@ -61,7 +61,7 @@
                         nameValue = Model.CreatedBy;
                     }
                 }
-                <select class="form-control" name="CreatedBy" id="CreatedBy">
+                <select name="CreatedBy" id="CreatedBy" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
                     <option value="0">-- Choose Owner --</option>
                     @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
                     {
