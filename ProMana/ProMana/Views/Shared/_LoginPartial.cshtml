@@ -1,72 +1,50 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-<div class="navbar-custom-menu">
-    <ul class="nav navbar-nav">
-        <!-- Messages: style can be found in dropdown.less-->
-        <!-- Notifications Menu -->
-        <!-- Tasks Menu -->
-        <!-- User Account Menu -->
-        <li class="dropdown user user-menu">
-            <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">@User.Identity.GetUserName()</span>
-            </a>
-            <ul class="dropdown-menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                    <p>
-                        @User.Identity.GetUserName() - Web Developer
-                        <small>Member since Nov. 2012</small>
-                    </p>
-                </li>
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                    <div class="pull-left">
-                        @Html.ActionLink("Profile", "UserProfile", "Account") | @Html.ActionLink("My Projects", "Index", "Project")
-                    </div>
-                    <div class="pull-right">
-                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a> 
-                        }
-                    </div>
-                </li>
-            </ul>
+    <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+            <!-- Notifications Menu -->
+            <!-- Tasks Menu -->
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                    <span class="hidden-xs">@User.Identity.GetUserName()</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- The user image in the menu -->
+                    <li class="user-header">
+                        <p>
+                            @User.Identity.GetUserName() - Web Developer
+                            <small>Member since Nov. 2012</small>
+                        </p>
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            @*@Html.ActionLink("Profile", "UserProfile", "Account") | @Html.ActionLink("My Projects", "Index", "Project")*@
+                            <a href="@Url.Action("UserProfile","Account").Replace("/Admin","")">Profile</a> | <a href="@Url.Action("Index","Project").Replace("/Admin","")">My Projects</a>
+                        </div>
+                        <div class="pull-right">
+                            @*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                                }*@
+                            <form action="@Url.Action("LogOff","Account").Replace("/Admin","")" method="post" id="logoutForm">
+                                @Html.AntiForgeryToken()
+                                <a href="javascript:document.getElementById('logoutForm').submit()">Log out</a>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
 
-        </li>
-       
-    </ul>
-</div>
-}
-else
-{
-<div class="navbar-custom-menu">
-    <ul class="nav navbar-nav">
-        <!-- Messages: style can be found in dropdown.less-->
-        <!-- Notifications Menu -->
-        <!-- Tasks Menu -->
-        <!-- User Account Menu -->
-        <li class="dropdown user user-menu">
-            @{
-                var loginLink = Url.Action("Login", "Account") + "?returnUrl=" + Url.Action("Index", "Project");
-            }
-            <a class="pull-right" id="loginLink" href="@loginLink">Login</a>
-        </li>
-        <li class="dropdown user user-menu">
-            <!-- hidden-xs hides the username on small devices so only the image appears. -->
-            @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-        </li>
+            </li>
 
-    </ul>
-</div>
-
-@*<ul class="nav navbar-nav navbar-right">
-    <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-    <li> <a id="loginLink" href="@loginLink">Login</a> </li>
-</ul>*@
+        </ul>
+    </div>
 }
 
 

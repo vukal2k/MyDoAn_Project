@@ -11,6 +11,10 @@ namespace BUS
     public class ProjectLogBUS
     {
         private UnitOfWork _unitOfWork;
+        public ProjectLogBUS()
+        {
+            _unitOfWork = new UnitOfWork();
+        }
         public async Task<bool> AddLog(ProjectLog projectLog, List<string> errors)
         {
             try

@@ -168,7 +168,7 @@
     </ul>
 
     @{
-        DTO.Module module_tmp = null;
+        DTO.RoleInProject module_tmp = null;
     }
     <hr />
     <h4><i>Member Points</i></h4>
@@ -189,7 +189,7 @@
         <tbody>
             @foreach (var item in Model.MemberPoints)
             {
-                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
                 if (module_tmp != null)
                 {
                     <tr>
@@ -200,13 +200,10 @@
                             @item.UserInfo.FullName
                         </td>
                         <td>
-                            @{
-                                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
-                            }
-                            @module_tmp.Title
+                            @module_tmp.Module.Title
                         </td>
                         <td>
-                            @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
+                            @module_tmp.JobRole.Title
                         </td>
                         <td>
                             <div class="tooltip " style="opacity: 100 !important; width:100% !important">
@@ -285,32 +282,41 @@
         <tbody>
             @foreach (var item in Model.ProjectLogs)
             {
-                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
+                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault() ;
                 if (module_tmp != null)
                 {
-                    <tr>
+            <tr>
+                <td>
+                    @item.UserInfo.UserName
+                </td>
+                <td>
+                    @item.UserInfo.FullName
+                </td>
+                @{
+                    if (module_tmp.RoleId == HardFixJobRole.PM)
+                    {
                         <td>
-                            @item.UserInfo.UserName
+                            PM
                         </td>
+                    }
+                    else
+                    {
                         <td>
-                            @item.UserInfo.FullName
+                            @module_tmp.Module.Title
                         </td>
-                        <td>
-                            @{
-                                module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == Model.Project.Id).FirstOrDefault();
-                            }
-                            @module_tmp.Title
-                        </td>
-                        <td>
-                            @item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title
-                        </td>
-                        <td>
-                            @item.Content
-                        </td>
-                        <td>
-                            @item.CreatedDate
-                        </td>
-                    </tr>
+                    }
+                }
+
+                <td>
+                    @module_tmp.JobRole.Title
+                </td>
+                <td>
+                    @item.Content
+                </td>
+                <td>
+                    @item.CreatedDate
+                </td>
+            </tr>
                 }
             }
         </tbody>

@@ -112,11 +112,11 @@
                     {
                         if (Model.RolesList.ToList().Contains(item.Value))
                         {
-                            <input type="checkbox" checked name="selectedRole" value="@item.Value" class="checkbox-inline" />
+                            <input type="radio" checked name="selectedRole" value="@item.Value" class="checkbox-inline" />
                         }
                         else
                         {
-                            <input type="checkbox" name="selectedRole" value="@item.Value" class="checkbox-inline" />
+                            <input type="radio" name="selectedRole" value="@item.Value" class="checkbox-inline" />
                         }
                         @Html.Label(item.Value, new { @class = "control-label" })
                         <span> | </span>

@@ -6,7 +6,6 @@
     Layout = null;
     var project = (DTO.Project)ViewBag.Project;
 }
-
 <h2>Assign task</h2>
 <hr />
 
@@ -33,7 +32,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Module</label>
             <div class="col-md-10">
-                <select name="ModuleId" onchange="changeModule(this,'editAssignedTo')" id="editModuleId" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                <select name="ModuleId" onchange="changeModule(this,'editAssignedTo')" id="editModuleId" class="form-control">
                     <option value="0">-- Choose module --</option>
                     @foreach (var item in project.GetOwnModule(User.Identity.GetUserName()))
                     {
@@ -53,7 +52,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Assigned To</label>
             <div class="col-md-10">
-                <select name="AssignedTo" id="editAssignedTo" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                <select name="AssignedTo" id="editAssignedTo" class="form-control">
                     <option value="0">-- Choose member --</option>
                     @foreach (var item in (IEnumerable<DTO.UserInfo>)project.GetMemberByModule((int)Model.ModuleId))
                     {

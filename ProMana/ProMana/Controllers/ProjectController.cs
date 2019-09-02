@@ -89,25 +89,27 @@ namespace ProMana.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> TaskList(int id, bool createTask = false,int chooseTaskId = 0, string filter= "All")
+        public async Task<ActionResult> TaskList(int id, bool createTask = false,int chooseTaskId = 0, string filter= "All", int status = 0)
         {
-            var project = await _projectBus.GetTaskList(id,filter,User.Identity.GetUserName());
+            var project = await _projectBus.GetTaskList(id,filter,User.Identity.GetUserName(),status);
             ViewBag.IsCreateTask = createTask;
             ViewBag.TaskTypes = await _taskTypeBUS.GetAll();
             ViewBag.ChoosedTask = chooseTaskId;
             ViewBag.Filter = filter;
+            ViewBag.FilterStatus = status;
             return View(project);
         }
         
 
         [HttpGet]
-        public async Task<ActionResult> RequestList(int id, bool createTask = false, int chooseTaskId = 0,string filter = "All")
+        public async Task<ActionResult> RequestList(int id, bool createTask = false, int chooseTaskId = 0,string filter = "All", int status = 0)
         {
-            var project = await _projectBus.GetTaskList(id, filter, User.Identity.GetUserName());
+            var project = await _projectBus.GetTaskList(id, filter, User.Identity.GetUserName(), status);
             ViewBag.IsCreateTask = createTask;
             ViewBag.TaskTypes = await _taskTypeBUS.GetAll();
             ViewBag.ChoosedTask = chooseTaskId;
             ViewBag.Filter = filter;
+            ViewBag.FilterStatus = status;
             return View(project);
         }
 
@@ -134,7 +136,7 @@ namespace ProMana.Controllers
                 if (ModelState.IsValid)
                 {
                     var listMembers = JsonConvert.DeserializeObject<List<MemberParamsViewModel>>(members);
-                    result = await _projectBus.Update(project, listMembers, errors);
+                    result = await _projectBus.Update(project, listMembers, errors,User.Identity.GetUserName());
                 }
 
                 ViewBag.GetUserDoNotInProject = await _projectBus.GetUserDoNotInProject(0);

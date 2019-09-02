@@ -68,7 +68,7 @@ namespace BUS
                 {
                     await _projectLog.AddLog(new ProjectLog
                     {
-                        Content = $"Create project. Code: {project.Code}",
+                        Content = $"Created project. Code: {project.Code}",
                         CreatedBy = project.CreatedBy,
                         CreatedDate = DateTime.Now,
                         ProjectId = project.Id
@@ -111,7 +111,7 @@ namespace BUS
                 {
                     await _projectLog.AddLog(new ProjectLog
                     {
-                        Content = $"Create project. Code: {project.Code}",
+                        Content = $"Updated project. Code: {project.Code}",
                         CreatedBy = project.CreatedBy,
                         CreatedDate = DateTime.Now,
                         ProjectId = project.Id
@@ -198,7 +198,7 @@ namespace BUS
                 if (result)
                 {
                     await _projectLog.AddLog(new ProjectLog {
-                            Content = $"Create project. Code: {project.Code}",
+                            Content = $"Created project. Code: {project.Code}",
                             CreatedBy=userCreate,
                             CreatedDate=DateTime.Now,
                             ProjectId=project.Id
@@ -214,7 +214,7 @@ namespace BUS
             }
         }
 
-        public async Task<bool> Update(Project project, IEnumerable<MemberParamsViewModel> members, List<string> errors)
+        public async Task<bool> Update(Project project, IEnumerable<MemberParamsViewModel> members, List<string> errors,string username)
         {
             try
             {
@@ -230,7 +230,7 @@ namespace BUS
                 {
                     await _unitOfWork.RoleInProjects.Delete(item);
                 }
-                
+
                 //insert new member
                 var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username, ModuleId = module.Id }).ToList();
                 foreach (var item in listMember)
@@ -249,7 +249,7 @@ namespace BUS
                 {
                     await _projectLog.AddLog(new ProjectLog
                     {
-                        Content = $"Create project. Code: {project.Code}",
+                        Content = $"Updated project. Code: {project.Code}",
                         CreatedBy = project.CreatedBy,
                         CreatedDate = DateTime.Now,
                         ProjectId = project.Id
@@ -271,7 +271,7 @@ namespace BUS
             return project;
         }
 
-        public async Task<Project> GetTaskList(int projectId, string filter, string username)
+        public async Task<Project> GetTaskList(int projectId, string filter, string username, int status)
         {
             var project = await _unitOfWork.Projects.GetById(projectId);
             foreach (var item in project.Modules)
@@ -291,7 +291,14 @@ namespace BUS
                         tasks = new List<DTO.Task>();
                         break;
                 }
-                tasks = tasks.OrderByDescending(t => t.Priority).ThenByDescending(t => t.Severity).ToList();
+                if (status == 0)
+                {
+                    tasks = tasks.OrderByDescending(t => t.Priority).ThenByDescending(t => t.Severity).ToList();
+                }
+                else
+                {
+                    tasks = tasks.Where(t => t.StatusId==status).OrderByDescending(t => t.Priority).ThenByDescending(t => t.Severity).ToList();
+                }
                 item.Tasks=tasks;
             }
             

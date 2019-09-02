@@ -89,9 +89,22 @@ namespace COMMON
         public static IEnumerable<Filter> TaskListFilter = new List<Filter> { new Filter { Title = "All", FilterType = "All"},
                                                                               new Filter {Title = "Created By Me",FilterType="ByCreaatedBy" },
                                                                               new Filter {Title = "Assigned To Me",FilterType="ByAssignedTo" }};
+
         public static IEnumerable<Filter> RequestListFilter = new List<Filter> { new Filter { Title = "All", FilterType = "All"},
                                                                                   new Filter {Title = "Created By Me",FilterType="ByCreaatedBy" },
                                                                                   new Filter {Title = "Reported To Me",FilterType="ByAssignedTo" }};
+
+        public static IEnumerable<Filter> TaskStatusFilter = new List<Filter> { new Filter { Title = "All", FilterType = "0"},
+                                                                                new Filter {Title = "Opened",FilterType=TaskStatusKey.Opened.ToString() },
+                                                                                new Filter {Title = "In Progress",FilterType=TaskStatusKey.InProgress.ToString() },
+                                                                                new Filter {Title = "Resolved",FilterType=TaskStatusKey.Resolved.ToString() },
+                                                                                new Filter {Title = "Closed",FilterType=TaskStatusKey.Closed.ToString() }};
+
+        public static IEnumerable<Filter> RequestStatusFilter = new List<Filter> { new Filter { Title = "All", FilterType = "0"},
+                                                                                new Filter {Title = "Pending Approve",FilterType=RequestStatusKey.PendingApproval.ToString() },
+                                                                                new Filter {Title = "Approved",FilterType=RequestStatusKey.Approved.ToString() },
+                                                                                new Filter {Title = "Rejected",FilterType=RequestStatusKey.Rejected.ToString()},
+                                                                                new Filter {Title = "Cancelled",FilterType=RequestStatusKey.Cancelled.ToString()}};
     }
 
     public class Filter

@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Your Project List";
-    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    Layout = "~/Views/Shared/_LayoutGuest.cshtml";
 }
 <style>
     .myShadow {
@@ -12,6 +12,12 @@
         height:270px !important;
     }
 </style>
+@if (!Model.Any())
+{
+    <div style="height:700px">
+        <h2><i>You do not have any project!</i></h2>
+    </div>
+}
 <div style="margin-top:100px;margin-bottom:200px">
     <div class="row">
         @foreach (var item in Model)

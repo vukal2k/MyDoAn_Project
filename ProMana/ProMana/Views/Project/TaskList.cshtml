@@ -37,19 +37,40 @@
 
 <div class="row">
     <div class="col-md-3">
-        <select class="pull-left" onchange="chooseFilter(this)">
-            @foreach (var item in CONSTANCT.TaskListFilter)
-            {
-                if (item.FilterType.Equals(ViewBag.Filter))
-                {
-                    <option selected value="@item.FilterType">@item.Title</option>
-                }
-                else
-                {
-                    <option value="@item.FilterType">@item.Title</option>
-                }
-            }
-        </select>
+        <div class="row">
+            <div class="col-md-6">
+                <div><b class="text-info">Fillter</b></div>
+                <select onchange="chooseFilter()" id="filter" class="form-control">
+                    @foreach (var item in CONSTANCT.TaskListFilter)
+                    {
+                        if (item.FilterType.Equals(ViewBag.Filter))
+                        {
+                            <option selected value="@item.FilterType">@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.FilterType">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-6">
+                <div><b class="text-info">Status</b></div>
+                <select onchange="chooseFilter()" id="filterStatus" class="form-control">
+                    @foreach (var item in CONSTANCT.TaskStatusFilter)
+                    {
+                        if (item.FilterType.Equals(ViewBag.FilterStatus.ToString()))
+                        {
+                            <option selected value="@item.FilterType">@item.Title</option>
+                        }
+                        else
+                        {
+                            <option value="@item.FilterType">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
         <hr />
         <div id="noiListTaskDungChan">
             @foreach (var item in Model.Modules)
@@ -70,7 +91,7 @@
         </div>
     </div>
     <div class="col-md-9" id="noiDetailDungChan">
-        Task detail
+        <h2><i>Task detail</i></h2>
     </div>
 </div>
 
@@ -228,8 +249,8 @@
                 }
             });
         }
-        function chooseFilter(select) {
-            window.location.href = '@Url.Action("TaskList","Project", new { id = Model.Id })' + '?filter=' + $(select).val();
+        function chooseFilter() {
+            window.location.href = '@Url.Action("TaskList","Project", new { id = Model.Id })' + '?filter=' + $("#filter").val() + '&status=' + $("#filterStatus").val();
         }
 
     </script>
@@ -244,6 +265,11 @@
                 timepicker: true,
                 format: 'm/d/Y h:m'
             });
+            if (mode == "edit") {
+                $('#editModuleId').addClass('selectpicker');
+                $('#editModuleId').attr('data-live-search', 'true');
+                $('#editModuleId').selectpicker('refresh');
+            }
 
             $('#' + mode + 'FormTask').validate({
                 errorClass: 'errors',
@@ -286,7 +312,7 @@
             $("#" + mode + "Submit").click(function () {
                 var result = true;
                 if ($("#" + mode + "AssignedTo").val() === "0") {
-                    $("#createAssignedTo").parent().addClass('has-error');
+                    $("#createAssignedTo").parent().parent().addClass('has-error');
                     result = false;
                 }
                 if ($("#" + mode + "TaskTypeId").val() === "0") {
@@ -294,7 +320,7 @@
                     result = false;
                 }
                 if ($("#" + mode + "ModuleId").val() === "0") {
-                    $("#" + mode + "ModuleId").parent().addClass('has-error');
+                    $("#" + mode + "ModuleId").parent().parent().addClass('has-error');
                     result = false;
                 }
                 if ($("#" + mode + "Severity").val() === "0") {

@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" form="formSolution" value="0" name="Id" />
-                <div class="form-horizontal">
+                @*<div class="form-horizontal">
                     <div class="form-group">
                         <label class="control-label col-md-2">Task name</label>
                         <div class="col-md-10">
@@ -55,7 +55,33 @@
                             <input type="button" value="Close" class="btn btn-default pull-right" onclick="closeModalSolutionDetail(@Model.Id)"/>
                         </div>
                     </div>
-                </div>
+                </div>*@
+                <table class="table table-condensed table-striped">
+                    <tr>
+                        <td class="text-info"><b>Task Name</b></td>
+                        <td><h4><i>@Model.Task.Title</i></h4></td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Resolve Type</b></td>
+                        <td>@Model.ResolveType1.Title</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Reason</b></td>
+                        <td>@Html.Raw(Model.Reason)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Solution</b></td>
+                        <td>@Html.Raw(Model.SolutionDescription)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Created By</b></td>
+                        <td>@string.Format("{0} ({1})", Model.UserInfo.FullName, Model.CreatedBy)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Description</b></td>
+                        <td>@Html.Raw(Model.Description)</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
