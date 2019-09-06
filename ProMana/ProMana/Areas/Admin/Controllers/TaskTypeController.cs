@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ProMana.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TaskTypeController : Controller
     {
         private TaskTypeBUS _taskTytpeBus = new TaskTypeBUS();

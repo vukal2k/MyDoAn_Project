@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ProMana.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class JobRoleController : Controller
     {
         private JobRoleBUS _jobRoleBUS = new JobRoleBUS();

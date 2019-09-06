@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ProMana.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProjectAdminController : Controller
     {
         private ProjectBUS _projectBus = new ProjectBUS();

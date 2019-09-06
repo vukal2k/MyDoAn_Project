@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace ProMana.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ResolveTypeController : Controller
     {
         private ResolveTypeBUS _resolveType = new ResolveTypeBUS();

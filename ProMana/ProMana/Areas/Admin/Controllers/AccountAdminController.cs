@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace ProMana.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AccountAdminController : Controller
     {
         private UserInfoBUS _userBus = new UserInfoBUS();
