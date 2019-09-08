@@ -12,6 +12,7 @@
     {
         @Html.AntiForgeryToken()
 
+
         if (ViewBag.Errors != null)
         {
             <ul>
@@ -79,9 +80,9 @@
                 @Html.LabelFor(model => model.TimeUnit, htmlAttributes: new { @class = "control-label col-md-2" })
                 @{
                     var listTimeUnit = new List<string>
-                            {
-                                "Week","Month","Year"
-                            };
+                                {
+                                    "Week","Month","Year"
+                                };
                 }
                 <div class="col-md-10">
                     <select name="TimeUnit" id="TimeUnit" class="form-control">
@@ -104,7 +105,8 @@
             </div>
 
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
+                <div class="col-lg-offset-2 col-md-10">
+                    <a class="btn btn-warning" onclick="$('#modalChangePassword').modal('show')">Change Password</a>
                     <input type="submit" value="Save" id="btnSubmit" class="btn btn-success" />
                 </div>
             </div>
@@ -114,6 +116,26 @@
 
 <div>
     @Html.ActionLink("Back to List", "Index")
+</div>
+
+<!-- Modal -->
+<div id="modalChangePassword" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Change password</h4>
+            </div>
+            <div class="modal-body" id="divContentChangePw">
+                <div class="form-horizontal">
+                    @Html.Action("ChangePassword", "Manage")
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 @section Scripts

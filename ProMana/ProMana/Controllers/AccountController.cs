@@ -457,6 +457,8 @@ namespace IdentitySample.Controllers
             return View();
         }
 
+       
+
         //
         // GET: /Account/ResetPasswordConfirmation
         [HttpGet]

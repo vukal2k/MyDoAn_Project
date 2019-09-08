@@ -208,7 +208,7 @@ desired effect
         if ('@ViewBag.isSuccess' === "True") {
             $.notify("Success!", "success");
         }
-        else if (@ViewBag.isSuccess != null) {
+        else if ('@ViewBag.isSuccess' != '') {
             $.notify("Failed!", "error");
         }
     </script>

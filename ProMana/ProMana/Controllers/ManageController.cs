@@ -259,13 +259,10 @@ namespace IdentitySample.Controllers
             var result = await UserManager.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(userId);
-                if (user != null)
-                {
-                    await SignInAsync(user, isPersistent: false);
-                }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                ViewBag.isSuccess = true;
+                return View(model);
             }
+            ViewBag.isSuccess = false;
             AddErrors(result);
             return View(model);
         }
