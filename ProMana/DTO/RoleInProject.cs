@@ -21,6 +21,8 @@ namespace DTO
 
         public bool IsActive { get; set; }
 
+        public DateTime JoinDate { get; set; }
+
         public virtual JobRole JobRole { get; set; }
 
         public virtual Module Module { get; set; }

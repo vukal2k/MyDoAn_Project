@@ -136,7 +136,10 @@ desired effect
             <div class="logo-lg">
                 <a href="@Url.Action("Index","Home")"><img style="height:80px; margin-left:-12%; vertical-align:bottom" src="~/img/PM-Logo.png" /></a> <span class="h1">Promana</span> <br />
                 <b><i class="fa fa-angle-right"></i>@ViewBag.Title</b>
-                <h1><a id="buttonAddProject" href="@Url.Action("Create","Project")"><span class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Project</span></a></h1>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <h1><a id="buttonAddProject" href="@Url.Action("Create","Project")"><span class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Project</span></a></h1>
+                }
             </div>
         </header>
         <!-- Content Wrapper. Contains page content -->

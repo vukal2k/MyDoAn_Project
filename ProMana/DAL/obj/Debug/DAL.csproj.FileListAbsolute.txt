@@ -68,3 +68,4 @@ D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav18.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav19.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav20.resources
 D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav21.resources
+D:\MyDoAn_Project\ProMana\DAL\obj\Debug\DAL.Migrations.promanav22.resources

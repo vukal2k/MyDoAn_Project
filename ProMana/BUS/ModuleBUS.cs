@@ -33,7 +33,11 @@ namespace BUS
             {
                 module.IsActive = true;
                 var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username }).ToList();
-                listMember.Add(new RoleInProject { IsActive=true,RoleId=HardFixJobRole.TeamLead,UserName=module.TeamLead});
+                listMember.Add(new RoleInProject { IsActive=true,RoleId=HardFixJobRole.TeamLead,UserName=module.TeamLead, JoinDate=DateTime.Now});
+                for (int i = 0; i < listMember.Count; i++)
+                {
+                    listMember[i].JoinDate = DateTime.Now;
+                }
                 module.RoleInProjects = listMember;
 
                 _unitOfWork.Modules.Insert(module);
@@ -80,6 +84,15 @@ namespace BUS
                 listMember.Add(new RoleInProject { IsActive = true, RoleId = HardFixJobRole.TeamLead, UserName = module.TeamLead , ModuleId = module.Id });
                 foreach (var item in listMember)
                 {
+                    if(!oldMembers.Any(m => m.UserName.Equals(item.UserName)))
+                    {
+                        item.JoinDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        item.JoinDate = oldMembers.Where(m => m.UserName.Equals(item.UserName)).FirstOrDefault().JoinDate;
+                    }
+                    item.IsActive = true;
                     _unitOfWork.RoleInProjects.Insert(item);
                 }
 
