@@ -68,7 +68,7 @@
             <div class="col-md-4">
                 <div id="@string.Format("pieChart{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
                 <div style="margin-top:-63%">
-                    <b>@item.Module.Title</b>
+                    <a class="aHover"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -115,7 +115,7 @@
             <div class="col-md-4">
                 <div id="@string.Format("pieChartRequest{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
                 <div style="margin-top:-63%">
-                    <b>@item.Module.Title</b>
+                    <a class="aHover"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -162,7 +162,7 @@
             <li>
                 <div style="text-align:center;width:100%"><i>Total: @item.Total</i></div>
                 <span style="height:@string.Format("{0}%", item.Percent); text-align:center" title="@item.TaskType"></span>
-                <div style="text-align:center;width:100%"><b class="text-info">@item.TaskType</b></div>
+                <div style="text-align:center;width:100%"><a class="aHover">@item.TaskType <i class="fas fa-list"></i></a></div>
             </li>
         }
     </ul>
@@ -184,6 +184,7 @@
                 <th>Total Assigned Task</th>
                 <th>Total Created Request</th>
                 <th>Total Assign Request</th>
+                <th>Show List</th>
             </tr>
         </thead>
         <tbody>
@@ -256,6 +257,9 @@
                                     </ul>
                                 </div>
                             </div>
+                        </td>
+                        <td>
+                            <span><i style="z-index:10 !important" class="fas fa-list aHover"></i></span>
                         </td>
                     </tr>
                 }

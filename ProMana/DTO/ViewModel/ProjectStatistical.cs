@@ -32,6 +32,7 @@ namespace DTO
         public int TotalByInProgress { get; set; }
         public int TotalByResolve { get; set; }
         public int TotalByClosed { get; set; }
+        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class MemberRequestByStatus
@@ -41,6 +42,7 @@ namespace DTO
         public int TotalApproved { get; set; }
         public int TotalRejected { get; set; }
         public int TotalCancelled { get; set; }
+        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class TaskStatisticByModule
@@ -50,12 +52,15 @@ namespace DTO
         public TaskByStatus TaskByInProgress { get; set; }
         public TaskByStatus TaskByResolve { get; set; }
         public TaskByStatus TaskByClosed { get; set; }
+        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class TaskByStatus
     {
         public float Percent { get; set; }
         public int Total { get; set; }
+
+        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class RequestStatisticByModule
@@ -71,6 +76,8 @@ namespace DTO
     {
         public float Percent { get; set; }
         public int Total { get; set; }
+
+        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class TaskByTaskType
@@ -78,5 +85,6 @@ namespace DTO
         public string TaskType { get; set; }
         public int Total { get; set; }
         public float Percent { get; set; }
+        public IEnumerable<Task> Tasks { get; set; }
     }
 }

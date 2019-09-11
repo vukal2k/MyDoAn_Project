@@ -328,15 +328,17 @@ namespace BUS
                         TotalApproved= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId==RequestStatusKey.Approved).Count(),
                         TotalCancelled= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.Cancelled).Count(),
                         TotalPendingApproved= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.PendingApproval).Count(),
-                        TotalRejected= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.Rejected).Count()
+                        TotalRejected= listRequest.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == RequestStatusKey.Rejected).Count(),
+                        Tasks= listRequest.Where(t => t.AssignedTo.Equals(item.UserName))
                     },
                     TotalCreatedRequest = new MemberRequestByStatus
                     {
-                        Total = listRequest.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        Total = listRequest.Where(t => t.CreatedBy.Equals(item.UserName)).Count(),
                         TotalApproved = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Approved).Count(),
                         TotalCancelled = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Cancelled).Count(),
                         TotalPendingApproved = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.PendingApproval).Count(),
                         TotalRejected = listRequest.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == RequestStatusKey.Rejected).Count()
+                        ,Tasks= listRequest.Where(t => t.CreatedBy.Equals(item.UserName))
                     },
                     TotalAssignTask = new MemberTaskByStatus
                     {
@@ -345,14 +347,16 @@ namespace BUS
                         TotalByInProgress = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.InProgress).Count(),
                         TotalByOpen = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.Opened).Count(),
                         TotalByResolve = listTask.Where(t => t.AssignedTo.Equals(item.UserName) && t.StatusId == TaskStatusKey.Resolved).Count()
+                        ,Tasks= listTask.Where(t => t.AssignedTo.Equals(item.UserName))
                     },
                     TotalCreatedTask = new MemberTaskByStatus
                     {
-                        Total = listTask.Where(t => t.AssignedTo.Equals(item.UserName)).Count(),
+                        Total = listTask.Where(t => t.CreatedBy.Equals(item.UserName)).Count(),
                         TotalByClosed = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Closed).Count(),
                         TotalByInProgress = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.InProgress).Count(),
                         TotalByOpen = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Opened).Count(),
                         TotalByResolve = listTask.Where(t => t.CreatedBy.Equals(item.UserName) && t.StatusId == TaskStatusKey.Resolved).Count()
+                        ,Tasks= listTask.Where(t => t.CreatedBy.Equals(item.UserName))
                     }
                 });
             }
@@ -378,22 +382,82 @@ namespace BUS
                         TaskByClosed = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count() / (float)tasks.Count()) * 100,
-                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count()
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count(),
+                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Closed).Select(t2 => new DTO.Task
+                            {
+                                Id = t2.Id,
+                                AssignedTo = t2.AssignedTo,
+                                CreatedBy = t2.CreatedBy,
+                                From = t2.From,
+                                To = t2.To,
+                                StatusId = t2.StatusId,
+                                IsTask = t2.IsTask,
+                                Priority = t2.Priority,
+                                Severity = t2.Severity,
+                                ModuleId = t2.ModuleId,
+                                Title = t2.Title,
+                                TaskType = t2.TaskType
+                            })
                         },
                         TaskByInProgress = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count() / (float)tasks.Count()) * 100,
-                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count()
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count(),
+                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.InProgress).Select(t2 => new DTO.Task
+                            {
+                                Id = t2.Id,
+                                AssignedTo = t2.AssignedTo,
+                                CreatedBy = t2.CreatedBy,
+                                From = t2.From,
+                                To = t2.To,
+                                StatusId = t2.StatusId,
+                                IsTask = t2.IsTask,
+                                Priority = t2.Priority,
+                                Severity = t2.Severity,
+                                ModuleId = t2.ModuleId,
+                                Title = t2.Title,
+                                TaskType = t2.TaskType
+                            })
                         },
                         TaskByOpen = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count() / (float)tasks.Count()) * 100,
-                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count()
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count(),
+                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Opened).Select(t2 => new DTO.Task
+                            {
+                                Id = t2.Id,
+                                AssignedTo = t2.AssignedTo,
+                                CreatedBy = t2.CreatedBy,
+                                From = t2.From,
+                                To = t2.To,
+                                StatusId = t2.StatusId,
+                                IsTask = t2.IsTask,
+                                Priority = t2.Priority,
+                                Severity = t2.Severity,
+                                ModuleId = t2.ModuleId,
+                                Title = t2.Title,
+                                TaskType = t2.TaskType
+                            })
                         },
                         TaskByResolve = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count() / (float)tasks.Count()) * 100,
-                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count()
+                            Total = tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count(),
+                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Resolved).Select(t2 => new DTO.Task
+                            {
+                                Id = t2.Id,
+                                AssignedTo = t2.AssignedTo,
+                                CreatedBy = t2.CreatedBy,
+                                From = t2.From,
+                                To = t2.To,
+                                StatusId = t2.StatusId,
+                                IsTask = t2.IsTask,
+                                Priority = t2.Priority,
+                                Severity = t2.Severity,
+                                ModuleId = t2.ModuleId,
+                                Title = t2.Title,
+                                TaskType = t2.TaskType
+                            })
                         }
                     });
                 }
@@ -407,34 +471,96 @@ namespace BUS
                     RequestByApproved = new RequestByStatus
                     {
                         Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.Approved).Count() / (float)requests.Count()) * 100,
-                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Approved).Count()
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Approved).Count(),
+                        Tasks= requests.Where(t => t.StatusId == RequestStatusKey.Approved).Select(t2 => new DTO.Task
+                        {
+                            Id = t2.Id,
+                            AssignedTo = t2.AssignedTo,
+                            CreatedBy = t2.CreatedBy,
+                            From = t2.From,
+                            To = t2.To,
+                            StatusId = t2.StatusId,
+                            IsTask = t2.IsTask,
+                            Priority = t2.Priority,
+                            Severity = t2.Severity,
+                            ModuleId = t2.ModuleId,
+                            Title = t2.Title,
+                            TaskType = t2.TaskType
+                        })
                     },
                     RequestByCancelled = new RequestByStatus
                     {
                         Percent = requests.Count() == 0 ? 0 : (float)(requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Count() / (float)requests.Count()) * 100,
-                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Count()
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Count(),
+                        Tasks = requests.Where(t => t.StatusId == RequestStatusKey.Cancelled).Select(t2 => new DTO.Task
+                        {
+                            Id = t2.Id,
+                            AssignedTo = t2.AssignedTo,
+                            CreatedBy = t2.CreatedBy,
+                            From = t2.From,
+                            To = t2.To,
+                            StatusId = t2.StatusId,
+                            IsTask = t2.IsTask,
+                            Priority = t2.Priority,
+                            Severity = t2.Severity,
+                            ModuleId = t2.ModuleId,
+                            Title = t2.Title,
+                            TaskType = t2.TaskType
+                        })
                     },
                     RequestByPendingApproved = new RequestByStatus
                     {
                         Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Count() / (float)requests.Count()) * 100,
-                        Total = requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Count()
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Count(),
+                        Tasks = requests.Where(t => t.StatusId == RequestStatusKey.PendingApproval).Select(t2 => new DTO.Task
+                        {
+                            Id = t2.Id,
+                            AssignedTo = t2.AssignedTo,
+                            CreatedBy = t2.CreatedBy,
+                            From = t2.From,
+                            To = t2.To,
+                            StatusId = t2.StatusId,
+                            IsTask = t2.IsTask,
+                            Priority = t2.Priority,
+                            Severity = t2.Severity,
+                            ModuleId = t2.ModuleId,
+                            Title = t2.Title,
+                            TaskType = t2.TaskType
+                        })
                     },
                     RequestByRejected = new RequestByStatus
                     {
                         Percent = requests.Count() == 0 ? 0 : ((float)requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Count() / (float)requests.Count()) * 100,
-                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Count()
+                        Total = requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Count(),
+                        Tasks = requests.Where(t => t.StatusId == RequestStatusKey.Rejected).Select(t2 => new DTO.Task
+                        {
+                            Id = t2.Id,
+                            AssignedTo = t2.AssignedTo,
+                            CreatedBy = t2.CreatedBy,
+                            From = t2.From,
+                            To = t2.To,
+                            StatusId = t2.StatusId,
+                            IsTask = t2.IsTask,
+                            Priority = t2.Priority,
+                            Severity = t2.Severity,
+                            ModuleId = t2.ModuleId,
+                            Title = t2.Title,
+                            TaskType = t2.TaskType
+                        })
                     }
                 });
             }
             //insert task by task type
             var totalTask = project.Modules.SelectMany(m => m.Tasks).Where(t => t.IsActive && t.IsTask).ToList();
             float totalTaskCount = totalTask.Count();
-            taskByTaskTypes= totalTask.GroupBy(t => t.TaskType)
+            taskByTaskTypes = totalTask.GroupBy(t => t.TaskType)
                                           .Select(t => new TaskByTaskType
                                           {
                                               TaskType = t.Key,
                                               Total = totalTask.Where(ta => ta.TaskType.Equals(t.Key)).Count(),
                                               Percent = totalTaskCount == 0 ? 0 : ((float)totalTask.Where(ta => ta.TaskType.Equals(t.Key)).Count() / totalTaskCount) * 100f
+                                              ,
+                                              Tasks = totalTask.Where(ta => ta.TaskType.Equals(t.Key))
                                           }).ToList();
             result.TaskStatisticByModules = taskStatisticByModules;
             result.RequestStatisticByModules = requestStatisticByModules;
