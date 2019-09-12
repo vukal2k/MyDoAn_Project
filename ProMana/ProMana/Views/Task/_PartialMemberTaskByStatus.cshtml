@@ -1,0 +1,246 @@
+﻿@model IEnumerable<DTO.MemberPoint>
+@{int index = 0; }
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="@string.Format("MemberTaskByStatus{0}",index)" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Member Point Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active" role="presentation"><a class="nav-link active" data-toggle="tab" href="#@string.Format("CreatedTask{0}",index)">Created Task</a></li>
+                        <li role="presentation"><a data-toggle="tab" class="nav-link" href="#@string.Format("AssignedTask{0}",index)">Assigned Task</a></li>
+                        <li role="presentation"><a data-toggle="tab" class="nav-link" href="#@string.Format("CreatedRequest{0}",index)">Created Request</a></li>
+                        <li role="presentation"><a data-toggle="tab" class="nav-link" href="#@string.Format("AssignedRequest{0}",index)">Assigned Request</a></li>
+                    </ul>
+                    @*tab content*@
+                    <div class="tab-content">
+                        <div role="tabpanel" id="@string.Format("CreatedTask{0}",index)" class="tab-pane fade container in active" style="width:100% !important">
+                            <h3>Created Task</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TotalCreatedTask.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @switch (task.StatusId)
+                                                {
+                                                    case COMMON.TaskStatusKey.Opened:
+                                                        <label class="label label-default">@COMMON.TaskStatus.Opened</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.InProgress:
+                                                        <label class="label label-warning">@COMMON.TaskStatus.InProgress</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.Resolved:
+                                                        <label class="label label-danger">@COMMON.TaskStatus.Resolved</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.Closed:
+                                                        <label class="label label-success">@COMMON.TaskStatus.Closed</label>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("AssignedRequest{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>Assigned Request</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Request Name</th>
+                                        <th>Created By</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TotalAssignRequest.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @switch (task.StatusId)
+                                                {
+                                                    case COMMON.RequestStatusKey.PendingApproval:
+                                                        <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Rejected:
+                                                        <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Approved:
+                                                        <label class="label label-success">@COMMON.RequestStatus.Approved</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Cancelled:
+                                                        <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("AssignedTask{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>Assigned Task</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Created By</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TotalCreatedTask.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @switch (task.StatusId)
+                                                {
+                                                    case COMMON.TaskStatusKey.Opened:
+                                                        <label class="label label-default">@COMMON.TaskStatus.Opened</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.InProgress:
+                                                        <label class="label label-warning">@COMMON.TaskStatus.InProgress</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.Resolved:
+                                                        <label class="label label-danger">@COMMON.TaskStatus.Resolved</label>
+                                                        break;
+                                                    case COMMON.TaskStatusKey.Closed:
+                                                        <label class="label label-success">@COMMON.TaskStatus.Closed</label>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("CreatedRequest{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>Created Request</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Request Name</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TotalCreatedRequest.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @switch (task.StatusId)
+                                                {
+                                                    case COMMON.RequestStatusKey.PendingApproval:
+                                                        <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Rejected:
+                                                        <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Approved:
+                                                        <label class="label label-success">@COMMON.RequestStatus.Approved</label>
+                                                        break;
+                                                    case COMMON.RequestStatusKey.Cancelled:
+                                                        <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    index++;
+}
+
+

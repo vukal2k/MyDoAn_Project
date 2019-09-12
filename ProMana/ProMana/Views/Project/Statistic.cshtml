@@ -4,6 +4,7 @@
 @using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Statistic";
+    ViewBag.ProjectId = Model.Project.Id;
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 <link href="~/Content/piechart.css" rel="stylesheet" />
@@ -183,11 +184,12 @@
                 <th>Total Created Task</th>
                 <th>Total Assigned Task</th>
                 <th>Total Created Request</th>
-                <th>Total Assign Request</th>
+                <th>Total Assigned Request</th>
                 <th>Show List</th>
             </tr>
         </thead>
         <tbody>
+            @{ var index = 0;}
             @foreach (var item in Model.MemberPoints)
             {
                 module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
@@ -207,9 +209,9 @@
                             @module_tmp.JobRole.Title
                         </td>
                         <td>
-                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important ; width:13% !important">
                                 @item.TotalCreatedTask.Total
-                                <div class="tooltiptext">
+                                <div class="tooltiptext" style="z-index:9 !important">
                                     <ul>
                                         <li>Open: @item.TotalCreatedTask.TotalByOpen</li>
                                         <li>In Progress: @item.TotalCreatedTask.TotalByInProgress</li>
@@ -220,9 +222,9 @@
                             </div>
                         </td>
                         <td>
-                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                            <div class="tooltip " style="opacity: 100 !important; z-index:8 !important; width:13% !important">
                                 @item.TotalAssignTask.Total
-                                <div class="tooltiptext">
+                                <div class="tooltiptext" style="z-index:9 !important">
                                     <ul>
                                         <li>Open: @item.TotalAssignTask.TotalByOpen</li>
                                         <li>In Progress: @item.TotalAssignTask.TotalByInProgress</li>
@@ -233,9 +235,9 @@
                             </div>
                         </td>
                         <td>
-                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important; width:13% !important">
                                 @item.TotalCreatedRequest.Total
-                                <div class="tooltiptext">
+                                <div class="tooltiptext" style="z-index:9 !important">
                                     <ul>
                                         <li>Pending Approved: @item.TotalCreatedRequest.TotalPendingApproved</li>
                                         <li>Approved: @item.TotalCreatedRequest.TotalApproved</li>
@@ -246,9 +248,9 @@
                             </div>
                         </td>
                         <td>
-                            <div class="tooltip " style="opacity: 100 !important; width:100% !important">
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important; width:13% !important">
                                 @item.TotalAssignRequest.Total
-                                <div class="tooltiptext">
+                                <div class="tooltiptext" style="z-index:9 !important">
                                     <ul>
                                         <li>Pending Approved: @item.TotalAssignRequest.TotalPendingApproved</li>
                                         <li>Approved: @item.TotalAssignRequest.TotalApproved</li>
@@ -259,10 +261,12 @@
                             </div>
                         </td>
                         <td>
-                            <span><i style="z-index:10 !important" class="fas fa-list aHover"></i></span>
+                            <span><i style="z-index:10 !important" class="fas fa-list aHover" onclick="$('@string.Format("#MemberTaskByStatus{0}",index)').modal('show');"></i></span>
                         </td>
                     </tr>
                 }
+
+                index++;
             }
         </tbody>
     </table>
@@ -328,6 +332,8 @@
 
 
 </div>
+
+@Html.Partial("~/Views/Task/_PartialMemberTaskByStatus.cshtml",Model.MemberPoints)
 
 @section Scripts{
     <script src="~/Scripts/piechart_jquery.js"></script>
