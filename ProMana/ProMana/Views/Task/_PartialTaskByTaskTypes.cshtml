@@ -1,0 +1,88 @@
+﻿@model IEnumerable<DTO.TaskByTaskType>
+
+@{var index = 0;}
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="@string.Format("TaskByTaskType{0}",index)" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Task with type: @item.TaskType</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered UseDataTables">
+                        <thead>
+                            <tr>
+                                <th>Task Name</th>
+                                <th>Created By</th>
+                                <th>Assigned To</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Severity</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var task in item.Tasks)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                    </td>
+                                    <td>
+                                        @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                    </td>
+                                    <td>
+                                        @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                    </td>
+                                    <td>
+                                        @task.From
+                                    </td>
+                                    <td>
+                                        @task.To
+                                    </td>
+                                    <td>
+                                        @task.Severity
+                                    </td>
+                                    <td>
+                                        @task.Priority
+                                    </td>
+                                    <td>
+                                        @switch (task.StatusId)
+                                        {
+                                            case COMMON.RequestStatusKey.PendingApproval:
+                                                <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
+                                                break;
+                                            case COMMON.RequestStatusKey.Rejected:
+                                                <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
+                                                break;
+                                            case COMMON.RequestStatusKey.Approved:
+                                                <label class="label label-success">@COMMON.RequestStatus.Approved</label>
+                                                break;
+                                            case COMMON.RequestStatusKey.Cancelled:
+                                                <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    index++;
+}
+

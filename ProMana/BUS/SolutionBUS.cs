@@ -12,10 +12,12 @@ namespace BUS
     public class SolutionBUS
     {
         private UnitOfWork _unitOfWork;
+        private ProjectLogBUS _projectLog;
 
         public SolutionBUS()
         {
             _unitOfWork = new UnitOfWork();
+            _projectLog = new ProjectLogBUS();
         }
 
         #region Public method
@@ -24,6 +26,7 @@ namespace BUS
             try
             {
                 var task = await _unitOfWork.Tasks.GetById(solution.TaskId);
+                var statusFrom = task.LookupStatus.Name;
                 task.StatusId = statusId;
                 _unitOfWork.Tasks.Update(task);
 
@@ -32,7 +35,20 @@ namespace BUS
 
                 _unitOfWork.Solutions.Insert(solution);
 
-                return await _unitOfWork.CommitAsync() > 0;
+                var result = await _unitOfWork.CommitAsync() > 0;
+
+                if (result)
+                {
+                    var statusTo = await _unitOfWork.LookupStatuss.GetById(statusId);
+                    await _projectLog.AddLog(new ProjectLog
+                    {
+                        Content = $"Change status task {task.Title} from {statusFrom} to {statusTo.Name}",
+                        CreatedBy = userName,
+                        CreatedDate = DateTime.Now,
+                        ProjectId = task.Module.ProjectId
+                    }, new List<string>());
+                }
+                return result;
             }
             catch (Exception ex)
             {

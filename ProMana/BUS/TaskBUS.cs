@@ -74,7 +74,6 @@ namespace BUS
                         }
                         return null;
                     case TaskStatusKey.Closed:
-                    case TaskStatusKey.ReOpened:
                         if (result.CreatedBy == userName)
                         {
                             result.StatusId = statusId;
@@ -97,6 +96,15 @@ namespace BUS
                                 return result;
                             }
                             return null;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    case TaskStatusKey.ReOpened:
+                        if (result.CreatedBy == userName)
+                        {
+                            return result;
                         }
                         else
                         {
@@ -127,13 +135,13 @@ namespace BUS
                 var result = await _unitOfWork.CommitAsync() > 0;
                 if (result)
                 {
-                    var project = await _unitOfWork.Modules.GetById(task.ModuleId);
+                    var tmpModule = await _unitOfWork.Modules.GetById(task.ModuleId);
                     await _projectLog.AddLog(new ProjectLog
                     {
                         Content = $"Create task {task.Title}",
                         CreatedBy = userName,
                         CreatedDate = DateTime.Now,
-                        ProjectId = project.Id
+                        ProjectId = tmpModule.ProjectId
                     }, new List<string>());
                 }
                 return result;
@@ -193,13 +201,14 @@ namespace BUS
                 var result = await _unitOfWork.CommitAsync() > 0;
                 if (result)
                 {
-                    var project = await _unitOfWork.Modules.GetById(task.ModuleId);
+                    var tmpModule = await _unitOfWork.Modules.GetById(task.ModuleId);
+                    var project = tmpModule.ProjectId;
                     await _projectLog.AddLog(new ProjectLog
                     {
                         Content = $"Create request {task.Title}",
                         CreatedBy = userName,
                         CreatedDate = DateTime.Now,
-                        ProjectId = project.Id
+                        ProjectId = project
                     }, new List<string>());
                 }
                 return result;

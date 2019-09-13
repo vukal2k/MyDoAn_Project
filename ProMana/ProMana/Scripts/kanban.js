@@ -167,9 +167,9 @@ function submitSolution() {
         var dataParam = {
             "TaskId": taskId,
             "ResolveType": document.getElementById("solution.ResolveType").value,
-            "Reason": document.getElementById("solution.Reason").value,
-            "SolutionDescription": document.getElementById("solution.Solution").value,
-            "Description": document.getElementById("solution.Description").value
+            "Reason": tinymce.get('solution.Reason').getContent(),
+            "SolutionDescription": tinymce.get('solution.Solution').getContent(),
+            "Description": tinymce.get('solution.Description').getContent()
         }
         var returnValue = false;
         var resolveType = document.getElementById("solution.ResolveType");

@@ -84,8 +84,9 @@
                         <td class="text-success"><i class="fas fa-star"></i> Status</td>
                         <td>
                             @switch (Model.StatusId)
-                            {
-                                case COMMON.TaskStatusKey.Opened:
+                                {
+                                    case COMMON.TaskStatusKey.Opened:
+                                    case COMMON.TaskStatusKey.ReOpened:
                                     <label class="label label-default">@Model.LookupStatus.Name</label>
                                     break;
                                 case COMMON.TaskStatusKey.InProgress:

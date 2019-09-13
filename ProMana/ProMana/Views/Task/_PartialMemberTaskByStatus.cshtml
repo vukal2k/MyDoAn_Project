@@ -6,7 +6,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Member Point Detail</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Member Point Detail for @item.UserInfo.UserName</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -29,6 +29,8 @@
                                         <th>Assigned To</th>
                                         <th>From</th>
                                         <th>To</th>
+                                        <th>Severity</th>
+                                        <th>Priority</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -47,6 +49,12 @@
                                             </td>
                                             <td>
                                                 @task.To
+                                            </td>
+                                            <td>
+                                                @task.Severity
+                                            </td>
+                                            <td>
+                                                @task.Priority
                                             </td>
                                             <td>
                                                 @switch (task.StatusId)
@@ -82,45 +90,57 @@
                                         <th>Created By</th>
                                         <th>From</th>
                                         <th>To</th>
+                                        <th>
+                                            Severity
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var task in item.TotalAssignRequest.Tasks)
                                     {
-                                        <tr>
-                                            <td>
-                                                <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
-                                            </td>
-                                            <td>
-                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
-                                            </td>
-                                            <td>
-                                                @task.From
-                                            </td>
-                                            <td>
-                                                @task.To
-                                            </td>
-                                            <td>
-                                                @switch (task.StatusId)
-                                                {
-                                                    case COMMON.RequestStatusKey.PendingApproval:
-                                                        <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Rejected:
-                                                        <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Approved:
-                                                        <label class="label label-success">@COMMON.RequestStatus.Approved</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Cancelled:
-                                                        <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                        </td>
+                                        <td>
+                                            @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                        </td>
+                                        <td>
+                                            @task.From
+                                        </td>
+                                        <td>
+                                            @task.To
+                                        </td>
+                                        <td>
+                                            @task.Severity
+                                        </td>
+                                        <td>
+                                            @task.Priority
+                                        </td>
+                                        <td>
+                                            @switch (task.StatusId)
+                                            {
+                                                case COMMON.RequestStatusKey.PendingApproval:
+                                                    <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Rejected:
+                                                    <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Approved:
+                                                    <label class="label label-success">@COMMON.RequestStatus.Approved</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Cancelled:
+                                                    <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -135,45 +155,57 @@
                                         <th>Created By</th>
                                         <th>From</th>
                                         <th>To</th>
+                                        <th>
+                                            Severity
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var task in item.TotalCreatedTask.Tasks)
+                                    @foreach (var task in item.TotalAssignTask.Tasks)
                                     {
-                                        <tr>
-                                            <td>
-                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
-                                            </td>
-                                            <td>
-                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
-                                            </td>
-                                            <td>
-                                                @task.From
-                                            </td>
-                                            <td>
-                                                @task.To
-                                            </td>
-                                            <td>
-                                                @switch (task.StatusId)
-                                                {
-                                                    case COMMON.TaskStatusKey.Opened:
-                                                        <label class="label label-default">@COMMON.TaskStatus.Opened</label>
-                                                        break;
-                                                    case COMMON.TaskStatusKey.InProgress:
-                                                        <label class="label label-warning">@COMMON.TaskStatus.InProgress</label>
-                                                        break;
-                                                    case COMMON.TaskStatusKey.Resolved:
-                                                        <label class="label label-danger">@COMMON.TaskStatus.Resolved</label>
-                                                        break;
-                                                    case COMMON.TaskStatusKey.Closed:
-                                                        <label class="label label-success">@COMMON.TaskStatus.Closed</label>
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                        </td>
+                                        <td>
+                                            @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                        </td>
+                                        <td>
+                                            @task.From
+                                        </td>
+                                        <td>
+                                            @task.To
+                                        </td>
+                                        <td>
+                                            @task.Severity
+                                        </td>
+                                        <td>
+                                            @task.Priority
+                                        </td>
+                                        <td>
+                                            @switch (task.StatusId)
+                                            {
+                                                case COMMON.TaskStatusKey.Opened:
+                                                    <label class="label label-default">@COMMON.TaskStatus.Opened</label>
+                                                    break;
+                                                case COMMON.TaskStatusKey.InProgress:
+                                                    <label class="label label-warning">@COMMON.TaskStatus.InProgress</label>
+                                                    break;
+                                                case COMMON.TaskStatusKey.Resolved:
+                                                    <label class="label label-danger">@COMMON.TaskStatus.Resolved</label>
+                                                    break;
+                                                case COMMON.TaskStatusKey.Closed:
+                                                    <label class="label label-success">@COMMON.TaskStatus.Closed</label>
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -188,45 +220,53 @@
                                         <th>Assigned To</th>
                                         <th>From</th>
                                         <th>To</th>
+                                        <th>Severity</th>
+                                        <th>Priority</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var task in item.TotalCreatedRequest.Tasks)
                                     {
-                                        <tr>
-                                            <td>
-                                                <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
-                                            </td>
-                                            <td>
-                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
-                                            </td>
-                                            <td>
-                                                @task.From
-                                            </td>
-                                            <td>
-                                                @task.To
-                                            </td>
-                                            <td>
-                                                @switch (task.StatusId)
-                                                {
-                                                    case COMMON.RequestStatusKey.PendingApproval:
-                                                        <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Rejected:
-                                                        <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Approved:
-                                                        <label class="label label-success">@COMMON.RequestStatus.Approved</label>
-                                                        break;
-                                                    case COMMON.RequestStatusKey.Cancelled:
-                                                        <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("RequestList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                        </td>
+                                        <td>
+                                            @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                        </td>
+                                        <td>
+                                            @task.From
+                                        </td>
+                                        <td>
+                                            @task.To
+                                        </td>
+                                        <td>
+                                            @task.Severity
+                                        </td>
+                                        <td>
+                                            @task.Priority
+                                        </td>
+                                        <td>
+                                            @switch (task.StatusId)
+                                            {
+                                                case COMMON.RequestStatusKey.PendingApproval:
+                                                    <label class="label label-default">@COMMON.RequestStatus.PendingApproval</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Rejected:
+                                                    <label class="label label-danger">@COMMON.RequestStatus.Rejected</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Approved:
+                                                    <label class="label label-success">@COMMON.RequestStatus.Approved</label>
+                                                    break;
+                                                case COMMON.RequestStatusKey.Cancelled:
+                                                    <label class="label label-warning">@COMMON.RequestStatus.Cancelled</label>
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>

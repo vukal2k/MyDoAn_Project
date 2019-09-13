@@ -6,6 +6,7 @@
     ViewBag.Title = "Statistic";
     ViewBag.ProjectId = Model.Project.Id;
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
+    var index = 0;
 }
 <link href="~/Content/piechart.css" rel="stylesheet" />
 <link href="~/Content/columnchart.min.css" rel="stylesheet" />
@@ -64,12 +65,13 @@
     <h4><i>Task Statistic By Modules</i></h4>
     <br />
     <div class="row">
+        @{ index = 0;}
         @foreach (var item in Model.TaskStatisticByModules)
         {
             <div class="col-md-4">
                 <div id="@string.Format("pieChart{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
                 <div style="margin-top:-63%">
-                    <a class="aHover"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
+                    <a class="aHover" onclick="$('@string.Format("#TaskStatisticByModule{0}",index)').modal('show');"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -104,6 +106,8 @@
                     </table>
                 </div>
             </div>
+
+            index++;
         }
     </div>
 
@@ -111,12 +115,22 @@
     <h4><i>Request Statistic By Modules</i></h4>
     <br />
     <div class="row">
+        @{ index = 0;}
         @foreach (var item in Model.RequestStatisticByModules)
         {
             <div class="col-md-4">
                 <div id="@string.Format("pieChartRequest{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
                 <div style="margin-top:-63%">
-                    <a class="aHover"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
+                    <a class="aHover" onclick="$('@string.Format("#RequestStatisticByModule{0}",index)').modal('show');"><b class="pull-right">
+                        @if (item.Module.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher))
+                        {
+                            <span>Reporing To PM / Watcher</span>
+                        }
+                        else
+                        {
+                            <span>Reporing to @item.Module.Title </span>
+                        }
+                     <i class="fas fa-list"></i> </b></a>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -151,20 +165,25 @@
                     </table>
                 </div>
             </div>
+
+            index++;
         }
     </div>
 
     <hr />
     <h4><i>Task Statistic By Task Type</i></h4>
     <br />
+    @{ index = 0;}
     <ul class="chart">
         @foreach (var item in Model.TaskByTaskTypes)
         {
             <li>
                 <div style="text-align:center;width:100%"><i>Total: @item.Total</i></div>
                 <span style="height:@string.Format("{0}%", item.Percent); text-align:center" title="@item.TaskType"></span>
-                <div style="text-align:center;width:100%"><a class="aHover">@item.TaskType <i class="fas fa-list"></i></a></div>
+                <div style="text-align:center;width:100%"><a class="aHover"  onclick="$('@string.Format("#TaskByTaskType{0}",index)').modal('show');">@item.TaskType <i class="fas fa-list"></i></a></div>
             </li>
+
+            index++;
         }
     </ul>
 
@@ -189,7 +208,7 @@
             </tr>
         </thead>
         <tbody>
-            @{ var index = 0;}
+            @{ index = 0;}
             @foreach (var item in Model.MemberPoints)
             {
                 module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
@@ -290,41 +309,41 @@
         <tbody>
             @foreach (var item in Model.ProjectLogs)
             {
-                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault() ;
+                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
                 if (module_tmp != null)
                 {
-            <tr>
-                <td>
-                    @item.UserInfo.UserName
-                </td>
-                <td>
-                    @item.UserInfo.FullName
-                </td>
-                @{
-                    if (module_tmp.RoleId == HardFixJobRole.PM)
-                    {
+                    <tr>
                         <td>
-                            PM
+                            @item.UserInfo.UserName
                         </td>
-                    }
-                    else
-                    {
                         <td>
-                            @module_tmp.Module.Title
+                            @item.UserInfo.FullName
                         </td>
-                    }
-                }
+                        @{
+                            if (module_tmp.RoleId == HardFixJobRole.PM)
+                            {
+                                <td>
+                                    PM
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @module_tmp.Module.Title
+                                </td>
+                            }
+                        }
 
-                <td>
-                    @module_tmp.JobRole.Title
-                </td>
-                <td>
-                    @item.Content
-                </td>
-                <td>
-                    @item.CreatedDate
-                </td>
-            </tr>
+                        <td>
+                            @module_tmp.JobRole.Title
+                        </td>
+                        <td>
+                            @item.Content
+                        </td>
+                        <td>
+                            @item.CreatedDate
+                        </td>
+                    </tr>
                 }
             }
         </tbody>
@@ -333,7 +352,10 @@
 
 </div>
 
-@Html.Partial("~/Views/Task/_PartialMemberTaskByStatus.cshtml",Model.MemberPoints)
+@Html.Partial("~/Views/Task/_PartialMemberTaskByStatus.cshtml", Model.MemberPoints)
+@Html.Partial("~/Views/Task/_PartialTaskStatisticByModule.cshtml", Model.TaskStatisticByModules)
+@Html.Partial("~/Views/Task/_PartialRequestStatisticByModules.cshtml", Model.RequestStatisticByModules)
+@Html.Partial("~/Views/Task/_PartialTaskByTaskTypes.cshtml",Model.TaskByTaskTypes)
 
 @section Scripts{
     <script src="~/Scripts/piechart_jquery.js"></script>

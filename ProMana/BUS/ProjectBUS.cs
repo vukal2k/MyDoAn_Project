@@ -383,7 +383,7 @@ namespace BUS
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count() / (float)tasks.Count()) * 100,
                             Total = tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Count(),
-                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Closed).Select(t2 => new DTO.Task
+                            Tasks = tasks.Where(t => t.StatusId == TaskStatusKey.Closed).Select(t2 => new DTO.Task
                             {
                                 Id = t2.Id,
                                 AssignedTo = t2.AssignedTo,
@@ -396,14 +396,24 @@ namespace BUS
                                 Severity = t2.Severity,
                                 ModuleId = t2.ModuleId,
                                 Title = t2.Title,
-                                TaskType = t2.TaskType
+                                TaskType = t2.TaskType,
+                                UserInfo = new UserInfo
+                                {
+                                    UserName = t2.UserInfo.UserName,
+                                    FullName = t2.UserInfo.FullName
+                                },
+                                UserInfo1 = new UserInfo
+                                {
+                                    UserName = t2.UserInfo1.UserName,
+                                    FullName = t2.UserInfo1.FullName
+                                }
                             })
                         },
                         TaskByInProgress = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count() / (float)tasks.Count()) * 100,
                             Total = tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Count(),
-                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.InProgress).Select(t2 => new DTO.Task
+                            Tasks = tasks.Where(t => t.StatusId == TaskStatusKey.InProgress).Select(t2 => new DTO.Task
                             {
                                 Id = t2.Id,
                                 AssignedTo = t2.AssignedTo,
@@ -416,14 +426,16 @@ namespace BUS
                                 Severity = t2.Severity,
                                 ModuleId = t2.ModuleId,
                                 Title = t2.Title,
-                                TaskType = t2.TaskType
+                                TaskType = t2.TaskType,
+                                UserInfo = t2.UserInfo,
+                                UserInfo1 = t2.UserInfo1
                             })
                         },
                         TaskByOpen = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count() / (float)tasks.Count()) * 100,
                             Total = tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Count(),
-                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Opened).Select(t2 => new DTO.Task
+                            Tasks = tasks.Where(t => t.StatusId == TaskStatusKey.Opened).Select(t2 => new DTO.Task
                             {
                                 Id = t2.Id,
                                 AssignedTo = t2.AssignedTo,
@@ -436,14 +448,24 @@ namespace BUS
                                 Severity = t2.Severity,
                                 ModuleId = t2.ModuleId,
                                 Title = t2.Title,
-                                TaskType = t2.TaskType
+                                TaskType = t2.TaskType,
+                                UserInfo = new UserInfo
+                                {
+                                    UserName = t2.UserInfo.UserName,
+                                    FullName = t2.UserInfo.FullName
+                                },
+                                UserInfo1 = new UserInfo
+                                {
+                                    UserName = t2.UserInfo1.UserName,
+                                    FullName = t2.UserInfo1.FullName
+                                }
                             })
                         },
                         TaskByResolve = new TaskByStatus
                         {
                             Percent = tasks.Count() == 0 ? 0 : ((float)tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count() / (float)tasks.Count()) * 100,
                             Total = tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Count(),
-                            Tasks = requests.Where(t => t.StatusId == TaskStatusKey.Resolved).Select(t2 => new DTO.Task
+                            Tasks = tasks.Where(t => t.StatusId == TaskStatusKey.Resolved).Select(t2 => new DTO.Task
                             {
                                 Id = t2.Id,
                                 AssignedTo = t2.AssignedTo,
@@ -456,7 +478,17 @@ namespace BUS
                                 Severity = t2.Severity,
                                 ModuleId = t2.ModuleId,
                                 Title = t2.Title,
-                                TaskType = t2.TaskType
+                                TaskType = t2.TaskType,
+                                UserInfo = new UserInfo
+                                {
+                                    UserName = t2.UserInfo.UserName,
+                                    FullName = t2.UserInfo.FullName
+                                },
+                                UserInfo1 = new UserInfo
+                                {
+                                    UserName = t2.UserInfo1.UserName,
+                                    FullName = t2.UserInfo1.FullName
+                                }
                             })
                         }
                     });
@@ -485,7 +517,17 @@ namespace BUS
                             Severity = t2.Severity,
                             ModuleId = t2.ModuleId,
                             Title = t2.Title,
-                            TaskType = t2.TaskType
+                            TaskType = t2.TaskType,
+                            UserInfo = new UserInfo
+                            {
+                                UserName = t2.UserInfo.UserName,
+                                FullName = t2.UserInfo.FullName
+                            },
+                            UserInfo1 = new UserInfo
+                            {
+                                UserName = t2.UserInfo1.UserName,
+                                FullName = t2.UserInfo1.FullName
+                            }
                         })
                     },
                     RequestByCancelled = new RequestByStatus
@@ -505,7 +547,17 @@ namespace BUS
                             Severity = t2.Severity,
                             ModuleId = t2.ModuleId,
                             Title = t2.Title,
-                            TaskType = t2.TaskType
+                            TaskType = t2.TaskType,
+                            UserInfo = new UserInfo
+                            {
+                                UserName = t2.UserInfo.UserName,
+                                FullName = t2.UserInfo.FullName
+                            },
+                            UserInfo1 = new UserInfo
+                            {
+                                UserName = t2.UserInfo1.UserName,
+                                FullName = t2.UserInfo1.FullName
+                            }
                         })
                     },
                     RequestByPendingApproved = new RequestByStatus
@@ -525,7 +577,17 @@ namespace BUS
                             Severity = t2.Severity,
                             ModuleId = t2.ModuleId,
                             Title = t2.Title,
-                            TaskType = t2.TaskType
+                            TaskType = t2.TaskType,
+                            UserInfo = new UserInfo
+                            {
+                                UserName = t2.UserInfo.UserName,
+                                FullName = t2.UserInfo.FullName
+                            },
+                            UserInfo1 = new UserInfo
+                            {
+                                UserName = t2.UserInfo1.UserName,
+                                FullName = t2.UserInfo1.FullName
+                            }
                         })
                     },
                     RequestByRejected = new RequestByStatus
@@ -545,7 +607,17 @@ namespace BUS
                             Severity = t2.Severity,
                             ModuleId = t2.ModuleId,
                             Title = t2.Title,
-                            TaskType = t2.TaskType
+                            TaskType = t2.TaskType,
+                            UserInfo = new UserInfo
+                            {
+                                UserName=t2.UserInfo.UserName,
+                                FullName=t2.UserInfo.FullName
+                            },
+                            UserInfo1 = new UserInfo
+                            {
+                                UserName = t2.UserInfo1.UserName,
+                                FullName = t2.UserInfo1.FullName
+                            }
                         })
                     }
                 });

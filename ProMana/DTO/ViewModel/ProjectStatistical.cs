@@ -52,7 +52,6 @@ namespace DTO
         public TaskByStatus TaskByInProgress { get; set; }
         public TaskByStatus TaskByResolve { get; set; }
         public TaskByStatus TaskByClosed { get; set; }
-        public IEnumerable<Task> Tasks { get; set; }
     }
 
     public class TaskByStatus
