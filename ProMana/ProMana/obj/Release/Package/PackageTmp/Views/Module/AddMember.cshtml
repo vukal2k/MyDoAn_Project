@@ -1,0 +1,11 @@
+﻿@model DTO.UserInfo
+@{ 
+    var jobRole = (DTO.JobRole)ViewBag.JobRole;
+}
+<tr id="@string.Format("row{0}",Model.UserName)">
+    <td>@Model.UserName</td>
+    <td>@Model.FullName</td>
+    <td>@jobRole.Title</td>
+    <td>@Model.Company</td>
+    <td><a class="aHover" onclick="RemoveMember('@Model.UserName','@jobRole.Id')">Remove</a></td>
+</tr>

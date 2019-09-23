@@ -1,0 +1,1516 @@
+﻿@model DTO.Premise
+
+@{
+    /**/
+
+    ViewBag.Title = "CreateOrganisation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+
+<h2>Premises Details</h2>
+<style>
+    .scrollCheckbox {
+        height: 100px;
+        background-color: #ede9e9;
+        padding: 2%;
+        overflow-y: scroll;
+    }
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "formPremises" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="OpenDay" id="OpenDay" value='[{"day":"Tuesday","startTime":"09:00:00","endTime":"17:00:00"},{"day":"Wednesday","startTime":"10:15:00","endTime":"17:30:00"}]' />
+    <div class="pull-right">
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a href="" class="btn btn-default">Cancel</a>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#details1">Details 1</a></li>
+        <li><a data-toggle="tab" href="#details2">Details 2</a></li>
+        <li><a data-toggle="tab" href="#details3">Details 3</a></li>
+        <li id="menuDetails4" style="display:none"><a data-toggle="tab" href="#details4">Details 4</a></li>
+        <li id="menuFacilities"><a data-toggle="tab" href="#facilities">Facilities</a></li>
+        <li id="menuVolunteering"><a data-toggle="tab" href="#volunteering">Volunteering</a></li>
+        <li id="menuMinorWorks"><a data-toggle="tab" href="#minorWorks">Minor Works</a></li>
+        <li id="menuServices"><a data-toggle="tab" href="#services">Services</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active container" id="details1">
+            <h4>Details1</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="LocationName">Location Name</label><span style="color:red">*</span>
+                        <input type="text" name="LocationName" id="LocationName" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.LocationName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="KnownAs">Known As</label>
+                        <input type="text" name="KnownAs" id="KnownAs" class="form-control" />
+                    </div>
+
+
+                    <div class="form-inline">
+                        <label for="LocationOrganisation">Location OrganisationName</label><br />
+                        <input type="text" name="LocationOrganisationName" readonly id="LocationOrganisationName" class="form-control" style="width:80% !important" />
+                        <a class="aHover pull-right" id="LocationOrganisation" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="LocationStatus">Location Status</label><span style="color:red">*</span>
+                        <select id="LocationStatus" name="LocationStatus" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.LocationStatus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationStatusDate">Location Status Date</label><span style="color:red">*</span>
+                        <input type="text" name="LocationStatusDate" autocomplete="off" value="" class="form-control" id="LocationStatusDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address1">Address Line1</label>
+                        <input type="text" name="Address1" id="Address1" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address2">Address Line2</label>
+                        <input type="text" name="Address2" id="Address2" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address3">Address Line3</label>
+                        <input type="text" name="Address3" id="AddressLine3" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="PostCode">PostCode</label><span style="color:red">*</span><br />
+                        <input type="text" name="PostCode" id="PostCode" class="form-control" style="width:80% !important" />
+                        <a class="aHover pull-right" id="PostCode" style="margin-top:5px">Lookup</a>
+                        @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="City">City/Town</label>
+                        <input type="text" name="City" id="Town" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="County">County</label>
+                        <input type="text" name="County" id="County" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Country">Country</label>
+                        <select id="Country" name="Country" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                    </div>
+
+                    <a class="aHover" data-toggle="modal" data-target="#locationOpeningTimesModal">Location Opening Times</a>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <div class="form-group" style="margin-top:-15px">
+                        <label for="PrimaryLocation">Primary Location <input type="checkbox" id="PrimaryLocation" name="PrimaryLocation" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationManaged" class="">Location Managed<input type="checkbox" id="LocationManaged" onchange="" name="LocationManaged" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="STNetworkConnectivity" class="">ST Network Connectivity<input type="checkbox" id="STNetworkConnectivity" onchange="" name="STNetworkConnectivity" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationType">Location Type</label><span style="color:red">*</span>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocationType" value="Venue" onchange="showDetail4('menuDetails4')" /> Venue</label><br />
+                            <label><input type="checkbox" name="LocationType" value="Hotel" onchange="showDetail4('menuDetails4')" /> Hotel</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocationType" value="1" /> 1</label><br />
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LocationType, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocationDescription">Location Description</label>
+                        <textarea style="height:110px" name="LocationDescription" id="LocationDescription" class="form-control"></textarea>
+                        @Html.ValidationMessageFor(model => model.LocationDescription, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PhoneNumber">Phone Number</label>
+                        <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GeneralFaxNumber">General Fax Number</label>
+                        <input type="text" name="GeneralFaxNumber" id="GeneralFaxNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.GeneralFaxNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MinicommNumber">Minicomm Number</label>
+                        <input type="text" name="MinicommNumber" id="MinicommNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.MinicommNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="IsNewShop">Is New Shop?<input type="checkbox" onchange="enableWhenCheck(this,'ShopFlagDate')" id="IsNewShop" name="IsNewShop" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ShopFlagDate">Shop Flag Date</label>
+                        <input type="text" disabled name="ShopFlagDate" autocomplete="off" value="" class="form-control" id="ShopFlagDate" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SpecialistShop">Specialist Shop</label>
+                        <input type="text" name="SpecialistShop" autocomplete="off" value="" class="form-control" id="SpecialistShop" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="details2" class="tab-pane fade container">
+            <h4>Details2</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="Acreditations" class="col-md-6">Acreditations</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="Acreditations" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="MediaContact" onchange="showWhenCheck(this,'MediaContactLookUp')" class="">Media Contact<input type="checkbox" id="MediaContact" onchange="" name="MediaContact" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="MediaContactName">Media Contact Name</label><br />
+                        <input type="text" readonly name="MediaContactName" id="MediaContactName" class="form-control" style="width:80% !important" />
+                        <a class="aHover pull-right" id="MediaContactLookUp" style="display:none; margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="LocalDemographicIssue" class="col-md-6">Local Demographic Issue</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalDemographicIssue" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="LocalDemographicNotes">Local Demographic Notes</label>
+                        <textarea style="height:110px" name="LocalDemographicNotes" id="LocalDemographicNotes" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="JCPOffices" class="col-md-6">JCP Offices</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="JCPOffices" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="CateringFacilities" oncancel="showWhenCheck(this,'CateringContactLookup')" class="">Catering Facilities<input type="checkbox" id="CateringFacilities" onchange="" name="CateringFacilities" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="CateringContact">Catering Contact</label><br />
+                        <input type="text" name="CateringContact" id="CateringContact" class="form-control" style="width:80% !important" />
+                        <a class="aHover pull-right" id="CateringContactLookup" style="display:none;margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="CateringType">Catering Type</label><span style="color:red">*</span>
+                        <select id="CateringType" name="CateringType" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.CateringType, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Network">IS/Network</label><span style="color:red">*</span>
+                        <select id="Network" name="Network" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Network, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientITFacilities" class="">Client IT Facilities<input type="checkbox" id="ClientITFacilities" onchange="enableWhenCheck(this,'ClientITFacilitiesDetails')" name="ClientITFacilities" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientITFacilitiesDetails">Client IT Facilities Details</label>
+                        <textarea disabled style="height:110px" name="ClientITFacilitiesDetails" id="ClientITFacilitiesDetails" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RoomAvailability" class="">Room Availability<input type="checkbox" id="RoomAvailability" onchange="" name="RoomAvailability" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VolunteerOpportunity" class="">Volunteer Opportunity<input type="checkbox" id="VolunteerOpportunity" onchange="" name="VolunteerOpportunity" value="true" /></label>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="details3" class="tab-pane fade container">
+            <h4>Details3</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="OutreachLocation" class="col-md-6">Outreach Location</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="OutreachLocation" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="TravelDetails">Travel Details</label>
+                        <input type="text" name="TravelDetails" id="TravelDetails" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelDetails, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Bus">Travel Nearest Bus</label>
+                        <input type="text" name="TravelNearest_Bus" id="TravelNearest_Bus" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Bus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Rail">Travel Nearest Rail</label>
+                        <input type="text" name="TravelNearest_Rail" id="TravelNearest_Rail" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Rail, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TravelNearest_Airport">Travel Nearest Airport</label>
+                        <input type="text" name="TravelNearest_Airport" id="TravelNearest_Airport" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TravelNearest_Airport, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="HostVisits" onchange="showWhenCheck(this,'HostingContact')" class="">Host Visits<input type="checkbox" id="HostVisits" onchange="" name="HostVisits" value="true" /></label>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="HostingContact">Hosting Contact</label><br />
+                        <input type="text" name="HostingContact" id="HostingContact" class="form-control" style="width:80% !important" />
+                        <a class="aHover pull-right" id="HostingContactLookup" style="display:none; margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="LocalHotels" class="col-md-6">Outreach Location</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                            <label><input type="checkbox" name="LocalHotels" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="VisitorParkingOnsite" class="">Visitor Parking Onsite<input type="checkbox" id="VisitorParkingOnsite" onchange="" name="VisitorParkingOnsite" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VisitorParkingSpaces">Visitor Parking Spaces</label>
+                        <input type="number" name="VisitorParkingSpaces" id="VisitorParkingSpaces" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.VisitorParkingSpaces, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="VisitorParkingAlternative">Visitor Parking Alternative</label>
+                        <textarea style="height:110px" name="VisitorParkingAlternative" id="VisitorParkingAlternative" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="details4" class="tab-pane fade container">
+            <h4>Details 4</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="RoomOnlyRate">Room Only Rate</label>
+                        <input type="number" name="RoomOnlyRate" id="RoomOnlyRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.RoomOnlyRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BAndBRate">B&B Rate</label>
+                        <input type="number" name="BAndBRate" id="BAndBRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.BAndBRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DBBRate">DBB Rate</label>
+                        <input type="number" name="DBBRate" id="DBBRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.DBBRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DDRate">DD Rate</label>
+                        <input type="number" name="DDRate" id="DDRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.DDRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TwentyFourhrRate">24hr Rate</label>
+                        <input type="number" name="TwentyFourhrRate" id="TwentyFourhrRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TwentyFourhrRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TeaAndCoffee">Tea And Coffee</label>
+                        <input type="number" name="TeaAndCoffee" id="TeaAndCoffee" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.TeaAndCoffee, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Lunch" class="">Lunch<input type="checkbox" id="Lunch" onchange="" name="Lunch" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NumberOfMeetingRoom">No Of Meeting Room</label>
+                        <input type="number" name="NumberOfMeetingRoom" id="NumberOfMeetingRoom" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.NumberOfMeetingRoom, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MeetingRoomRatePerDay">Meeting Room Rate Per Day</label>
+                        <input type="number" name="MeetingRoomRatePerDay" id="MeetingRoomRatePerDay" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.MeetingRoomRatePerDay, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Codings">Codings</label>
+                        <select id="Codings" name="Codings" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Codings, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="NegotiatedRoomOnlyRate">Negotiated Room Only Rate</label>
+                        <input type="number" name="NegotiatedRoomOnlyRate" id="NegotiatedRoomOnlyRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.NegotiatedRoomOnlyRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BAndBNegotiatedRate">B&B Negotiated Rate</label>
+                        <input type="number" name="BAndBNegotiatedRate" id="BAndBNegotiatedRate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.BAndBNegotiatedRate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LastNegotiatedDate">Last Negotiated Date</label>
+                        <input type="text" name="LastNegotiatedDate" id="LastNegotiatedDate" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.LastNegotiatedDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Re_negotiateOn">Re-negotiate On</label>
+                        <input type="text" name="Re_negotiateOn" id="Re_negotiateOn" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Re_negotiateOn, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PreferredStatus">Preferred Status</label>
+                        <select id="PreferredStatus" name="PreferredStatus" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.PreferredStatus, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Comments">Comments</label>
+                        <textarea style="height:110px" name="Comments" id="Comments" class="form-control"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="facilities" class="tab-pane fade container">
+            <h4>Facilities</h4>
+            <hr />
+            <a class="aHover">All |</a>
+            <a class="aHover"><b>0 - 9 |</b></a>
+            <a class="aHover"><b>A B C D E |</b></a>
+            <a class="aHover"><b>F G H I J |</b></a>
+            <a class="aHover"><b>K L M N |</b></a>
+            <a class="aHover"><b>O P Q R |</b></a>
+            <a class="aHover"><b>S T U V |</b></a>
+            <a class="aHover"><b>W X Y Z </b></a>
+            <div class="pull-right">
+                <input type="button" class="btn btn-success" data-toggle="modal" data-target="#facilitiesModal" value="Create" />
+            </div>
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Facilities Type
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Lead Contact
+                        </th>
+                        <th>
+                            Room Host
+                        </th>
+                        <th>
+                            Is Active
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-toggle="modal" data-target="#facilitiesUpdateModal">
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="volunteering" class="tab-pane fade container">
+            <h4>Volunteering</h4>
+            <hr />
+            <a class="aHover">All |</a>
+            <a class="aHover"><b>0 - 9 |</b></a>
+            <a class="aHover"><b>A B C D E |</b></a>
+            <a class="aHover"><b>F G H I J |</b></a>
+            <a class="aHover"><b>K L M N |</b></a>
+            <a class="aHover"><b>O P Q R |</b></a>
+            <a class="aHover"><b>S T U V |</b></a>
+            <a class="aHover"><b>W X Y Z </b></a>
+            <div class="pull-right">
+                <input type="button" class="btn btn-success" data-toggle="modal" data-target="#volunteeringModal" value="Create" />
+            </div>
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Contact
+                        </th>
+                        <th>
+                            Purpose
+                        </th>
+                        <th>
+                            Number
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            End Date
+                        </th>
+                        <th>
+                            Is Active?
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-toggle="modal" data-target="#updateVolunteeringModal">
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="minorWorks" class="tab-pane fade container">
+            <h4>Minor Works</h4>
+            <hr />
+            <a class="aHover">All |</a>
+            <a class="aHover"><b>0 - 9 |</b></a>
+            <a class="aHover"><b>A B C D E |</b></a>
+            <a class="aHover"><b>F G H I J |</b></a>
+            <a class="aHover"><b>K L M N |</b></a>
+            <a class="aHover"><b>O P Q R |</b></a>
+            <a class="aHover"><b>S T U V |</b></a>
+            <a class="aHover"><b>W X Y Z </b></a>
+            <div class="pull-right">
+                <input type="button" class="btn btn-success" data-toggle="modal" data-target="#minorWorksModal" value="Create" />
+            </div>
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Enq Received Date
+                        </th>
+                        <th>
+                            Notes Action
+                        </th>
+                        <th>
+                            Directorate
+                        </th>
+                        <th>
+                            Contact
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Is Active?
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-toggle="modal" data-target="#updateVolunteeringModal">
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="services" class="tab-pane fade container">
+            <h4>Services</h4>
+            <hr />
+            <table class="UseDataTables table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Services Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Service Type
+                        </th>
+                        <th>
+                            Contact
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a class="aHover">1</a>
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <a class="aHover">Remove</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <input type="button" data-toggle="modal" data-target="#setPremisesToServiceModal" class="btn btn-success" value="Associate new Service" />
+            </div>
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+}
+<form id="formFacilities" action='@Url.Action(" "," ")' method="post"></form>
+<form id="formVolunteering" action='@Url.Action(" "," ")' method="post"></form>
+<form id="formMinorWorks" action='@Url.Action(" "," ")' method="post"></form>
+<div id="facilitiesModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#facilitiesModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Facilities Details</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-default" onclick="$('#facilitiesModal').modal('hide')">Cancel</button>
+                </div>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="FacilityType">Facility Type</label><span style="color:red">*</span>
+                        <select form="formFacilities" id="FacilityType" onchange="SelectFacilityType(this)" name="FacilityType" class="form-control">
+                            <option value="Room">
+                                Room
+                            </option>
+                            <option value="lala">
+                                2
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="FacilityDescription">Facility Description</label><span style="color:red">*</span>
+                        <textarea form="formFacilities" style="height:110px" name="FacilityDescription" id="FacilityDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="RoomCapacity">Room Capacity</label>
+                        <input form="formFacilities" type="number" disabled name="RoomCapacity" id="RoomCapacity" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="RoomSize">Room Size</label>
+                        <input form="formFacilities" type="number" disabled name="RoomSize" id="RoomSize" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roomConnectivity">Room Connectivity<input type="checkbox" disabled onchange="enableWhenCheck(this,'ConnectivityType')" id="RoomConnectivity" name="RoomConnectivity" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ConnectivityType">Connectivity Type</label><span style="color:red">*</span>
+                        <select id="ConnectivityType" disabled name="ConnectivityType" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="WirelessAccessInformation">Wireless Access Information</label>
+                        <input form="formFacilities" type="text" disabled name="WirelessAccessInformation" id="WirelessAccessInformation" class="form-control" />
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="LeadContact">Lead Contact</label><br />
+                        <input type="text" name="LeadContactName" readonly id="LeadContactName" class="form-control" style="width:80% !important" />
+                        <input form="formFacilities" type="hidden" name="LeadContact" value="" />
+                        <a class="aHover pull-right" id="LeadContactLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="RoomHost">Room Host</label><br />
+                        <input type="text" name="RoomHostName" readonly id="RoomHostName" class="form-control" style="width:80% !important" />
+                        <input form="formFacilities" type="hidden" name="RoomHost" value="" />
+                        <a class="aHover pull-right" id="RoomHostLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="EquipmentAvailable">Equipment Available<input type="checkbox" disabled id="EquipmentAvailable" name="EquipmentAvailable" value="true" /></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="EquipmentNotes">Equipment Notes</label>
+                        <textarea form="formFacilities" disabled style="height:110px" name="EquipmentNotes" id="FacilityDescription" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="volunteeringModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#facilitiesModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Volunteering Details</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-default" onclick="$('#facilitiesModal').modal('hide')">Cancel</button>
+                </div>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="VolunteerContact">Volunteer Contact</label><span style="color:red">*</span><br />
+                        <input type="text" readonly name="VolunteerContactName" id="VolunteerContactName" class="form-control" style="width:80% !important" />
+                        <input form="formVolunteering" type="hidden" name="VolunteerContact" id="VolunteerContact" />
+                        <a class="aHover pull-right" id="VolunteerContactLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="VolunteerPurpose">Volunteer Purpose</label>
+                        <textarea form="formVolunteering" style="height:110px" name="VolunteerPurpose" id="VolunteerPurpose" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="Details">Volunteer Oppotunity Details</label>
+                        <textarea form="formVolunteering" style="height:110px" name="Details" id="Details" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="StartDate">Start Date</label>
+                        <input form="formVolunteering" type="text" name="StartDate" id="volunteeringStartDate" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">End Date</label>
+                        <input form="formVolunteering" type="text" name="EndDate" id="volunteeringEndDate" class="form-control" />
+                        <span style="color:red" id="volunteeringEndDateError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="VolunteerNumber">Volunteer Nos</label>
+                        <input form="formVolunteering" type="number" name="VolunteerNumber" id="VolunteerNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="minorWorksModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#minorWorksModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Project / Minor Works Details</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-default" onclick="$('#minorWorksModal').modal('hide')">Cancel</button>
+                </div>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="MinorWorksDescription">P/MW Description</label>
+                        <textarea form="formMinorWorks" style="height:110px" name="MinorWorksDescription" id="MinorWorksDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-inline">
+                        <label>
+                            <input type="radio" name="ProjectOrMinorWorks" value="Project" checked />Project
+                            <input type="radio" name="ProjectOrMinorWorks" value="Minor Works" />Minor Works
+                        </label>
+                    </div>
+                    <br />
+                    <br />
+
+                    <div class="form-group">
+                        <label for="IsTBA">Is TBA?<input type="checkbox" id="IsTBA" onchange="disableAndEnableWhenCheck(this, 'NoteActions', 'EstimatedCost')" name="IsTBA" value="true" /></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NoteActions">Note Actions</label>
+                        <textarea form="formMinorWorks" style="height:110px" name="NoteActions" disabled id="NoteActions" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="EstimatedCost">Estimated Cost</label>
+                        <input form="formMinorWorks" type="number" name="EstimatedCost" id="EstimatedCost" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ActualCost">Actual Cost</label>
+                        <input form="formMinorWorks" type="number" name="ActualCost" id="ActualCost" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Diractorate">Diractorate</label>
+                        <select id="Diractorate" form="formMinorWorks" name="Diractorate" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <labe for="Contact">Contact</labe><br />
+                        <input type="text" readonly name="ContactName" id="ContactName" class="form-control" style="width:80% !important" />
+                        <input form="formMinorWorks" type="hidden" name="Contact" id="Contact" />
+                        <a class="aHover pull-right" id="ContactLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <div class="form-inline">
+                        <label for="AuthorisedbyName">Authorised by Name</label><br />
+                        <input type="text" readonly name="Authorisedby" id="Authorisedby" class="form-control" style="width:80% !important" />
+                        <input form="formMinorWorks" type="hidden" name="AuthorisedbyName" id="AuthorisedbyName" />
+                        <a class="aHover pull-right" id="ContactLookup" style="margin-top:5px">Lookup</a>
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="MWStatus">Status</label><br />
+                        <input type="text" readonly name="MWStatus" id="MWStatus" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="EnquiryReceiveDate">Enquiry Receive Date</label><span style="color:red">*</span>
+                        <input form="formMinorWorks" type="text" name="ActualCost" id="EnquiryReceiveDate" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AuthorisedDate">Authorised Date</label>
+                        <input form="formMinorWorks" type="text" name="AuthorisedDate" id="AuthorisedDate" class="form-control" />
+                        <span style="color:red" id="AuthorisedDateError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ActualStartDate">Actual Start Date</label>
+                        <input form="formMinorWorks" onchange="LoadMinorWorkStatus()" type="text" name="ActualStartDate" id="ActualStartDate" class="form-control" />
+                        <span style="color:red" id="ActualStartDateError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AnticipatedCompletion">Anticipated Completion</label>
+                        <input form="formMinorWorks" onchange="LoadMinorWorkStatus()" type="text" name="AnticipatedCompletion" id="AnticipatedCompletion" class="form-control" />
+                        <span style="color:red" id="AnticipatedCompletionError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ActualCompletionDate">Actual Completion Date</label>
+                        <input form="formMinorWorks" onchange="LoadMinorWorkStatus()" type="text" name="ActualCompletionDate" id="ActualCompletionDate" class="form-control" />
+                        <span style="color:red" id="ActualCompletionDateError"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="locationOpeningTimesModal" data-backdrop="true" class="modal fade" role="dialog" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="LoadLocationOpenDays()">&times;</button>
+                <h4 class="modal-title">Location Opening Times</h4>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default" onclick="LoadLocationOpenDays()">Back</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <td></td>
+                        <td>
+                            Weekend Day
+                        </td>
+                        <td>
+                            Start Time
+                        </td>
+                        <td>
+                            End Time
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="mondayCheck" />
+                        </td>
+                        <td>
+                            Monday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="mondayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="mondayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="tuesdayCheck" />
+                        </td>
+                        <td>
+                            Tuesday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="tuesdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="tuesdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="wednesdayCheck" />
+                        </td>
+                        <td>
+                            Wednesday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="wednesdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="wednesdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="thursdayCheck" />
+                        </td>
+                        <td>
+                            Thursday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="thursdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="thursdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="fridayCheck" />
+                        </td>
+                        <td>
+                            Friday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="fridayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="fridayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="saturdayCheck" />
+                        </td>
+                        <td>
+                            Saturday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="saturdayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="saturdayEndTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="sundayCheck" />
+                        </td>
+                        <td>
+                            Sunday
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="sundayStartTime" />
+                        </td>
+                        <td>
+                            <input type="text" name="openTimeSpan" id="sundayEndTime" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*foreach những thg facility thuộc premise*@
+@Html.Partial("~/Views/Shared/_UpdateFacilities.cshtml")
+@*foreach những thg volunteering thuộc premise*@
+@Html.Partial("~/Views/Shared/_UpdateVolunteering.cshtml")
+@*foreach những thg minor works thuộc premise*@
+@Html.Partial("~/Views/Shared/_UpdateMinorWorks.cshtml")
+
+@Html.Partial("~/Views/Shared/_ServiceNotInPremise.cshtml");
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.js"></script>
+    <script>
+        function SelectFacilityType(option, id = "") {
+            if (option.value == "Room") {
+                $('#RoomSize' + id).prop('disabled', false);
+                $('#RoomCapacity' + id).prop('disabled', false);
+                $('#RoomConnectivity' + id).prop('disabled', false);
+                $('#EquipmentAvailable' + id).prop('disabled', false);
+            }
+            else {
+                $('#RoomSize' + id).prop('disabled', true);
+                $('#RoomCapacity' + id).prop('disabled', true);
+                $('#RoomConnectivity' + id).prop('disabled', true);
+                $('#EquipmentAvailable' + id).prop('disabled', true);
+            }
+            if (option.value == "Internet Access") {
+                $('#WirelessAccessInformation' + id).prop('disabled', false);
+            }
+            else {
+                $('#WirelessAccessInformation' + id).prop('disabled', true);
+            }
+        }
+        function LocationOpenDay(_day, _startTime, _endTime) {
+            this.day = _day;
+            this.startTime = _startTime;
+            this.endTime = _endTime;
+
+            return this;
+        }
+
+        $(document).ready(function () {
+            var openDays = JSON.parse($("#OpenDay").val());
+            for (var i = 0; i < openDays.length; i++) {
+                if (openDays[i].day == 'Monday') {
+                    $('#mondayCheck').prop('checked', true);
+                    $('#mondayStartTime').val(openDays[i].startTime)
+                    $('#mondayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Tuesday') {
+                    $('#tuesdayCheck').prop('checked', true);
+                    $('#tuesdayStartTime').val(openDays[i].startTime)
+                    $('#tuesdayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Wednesday') {
+                    $('#wednesdayCheck').prop('checked', true);
+                    $('#wednesdayStartTime').val(openDays[i].startTime)
+                    $('#wednesdayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Thursday') {
+                    $('#thursdayCheck').prop('checked', true);
+                    $('#thursdayStartTime').val(openDays[i].startTime)
+                    $('#thursdayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Friday') {
+                    $('#fridayCheck').prop('checked', true);
+                    $('#fridayStartTime').val(openDays[i].startTime)
+                    $('#fridayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Saturday') {
+                    $('#saturdayCheck').prop('checked', true);
+                    $('#saturdayStartTime').val(openDays[i].startTime)
+                    $('#saturdayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+
+                if (openDays[i].day == 'Sunday') {
+                    $('#sundayCheck').prop('checked', true);
+                    $('#sundayStartTime').val(openDays[i].startTime)
+                    $('#sundayEndTime').val(openDays[i].endTime)
+                    continue;
+                }
+            }
+        });
+        function LoadMinorWorkStatus() {
+            var ActualStartDatePart = $("#ActualStartDate").val().split("/");
+            var ActualCompletionDatePart = $("#ActualCompletionDate").val().split("/");
+            if (new Date(ActualStartDatePart[2], ActualStartDatePart[1] - 1, ActualStartDatePart[0]) > new Date()) {
+                $("#MWStatus").val("Work Not Started")
+                return;
+            }
+            if (new Date(ActualStartDatePart[2], ActualStartDatePart[1] - 1, ActualStartDatePart[0]) <= new Date() && ActualCompletionDatePart.length != 3) {
+                $("#MWStatus").val("Work in Progress")
+                return;
+            }
+            if (new Date(ActualCompletionDatePart[2], ActualCompletionDatePart[1] - 1, ActualCompletionDatePart[0]) < new Date()) {
+                $("#MWStatus").val("Work Completed")
+                return;
+            }
+            $("#MWStatus").val("")
+        }
+        function ValidateMinorWork(id = "") {
+            var valid = true;
+            var ActualStartDatePart = $("#ActualStartDate" + id).val().split("/");
+            var ActualStartDate = new Date(ActualStartDatePart[2], ActualStartDatePart[1] - 1, ActualStartDatePart[0]);
+
+            var ActualCompletionDatePart = $("#ActualCompletionDate" + id).val().split("/");
+            var ActualCompletionDate = new Date(ActualCompletionDatePart[2], ActualCompletionDatePart[1] - 1, ActualCompletionDatePart[0]);
+
+            var EnquiryReceiveDatePart = $("#EnquiryReceiveDate" + id).val().split("/");
+            var EnquiryReceiveDate = new Date(EnquiryReceiveDatePart[2], EnquiryReceiveDatePart[1] - 1, EnquiryReceiveDatePart[0]);
+
+            var AnticipatedCompletionPart = $("#AnticipatedCompletion" + id).val().split("/");
+            var AnticipatedCompletion = new Date(AnticipatedCompletionPart[2], AnticipatedCompletionPart[1] - 1, AnticipatedCompletionPart[0]);
+
+            var AuthorisedDatePart = $("#AuthorisedDate" + id).val().split("/");
+            var AuthorisedDate = new Date(AuthorisedDatePart[2], AuthorisedDatePart[1] - 1, AuthorisedDatePart[0]);
+
+            if (AuthorisedDate < EnquiryReceiveDate) {
+                $("#AuthorisedDateError" + id).val("Authorised Date must be >= Enquiry Received Date")
+                valid = false;
+            }
+            if (ActualStartDate < AuthorisedDate) {
+                $("#ActualStartDateError" + id).val("Actual Start Date must be >= Authorised Date")
+                valid = false;
+            }
+            if (AnticipatedCompletion < EnquiryReceiveDate) {
+                $("#AnticipatedCompletionError" + id).val("Anticipated Completion Date must be >= Enquiry Received Date ")
+                valid = false;
+            }
+            if (ActualCompletionDate < ActualStartDate) {
+                $("#ActualCompletionDateError" + id).val("Actual Complete Date must be >= Actual Start Date ")
+                valid = false;
+            }
+            return valid;
+        }
+        function ValidateVolunteering(id = "") {
+            var valid = true;
+            var StartDatePart = $("#volunteeringStartDate" + id).val().split("/");
+            var StartDate = new Date(StartDatePart[2], StartDatePart[1] - 1, StartDatePart[0]);
+
+            var EndDatePart = $("#volunteeringEndDate" + id).val().split("/");
+            var EndDate = new Date(EndDatePart[2], EndDatePart[1] - 1, EndDatePart[0]);
+
+            if (EndDate > StartDate) {
+                $("#volunteeringStartError").val("End Date must not be before Start Date")
+            }
+
+            return valid;
+        }
+        function LoadLocationOpenDays() {
+            $('#locationOpeningTimesModal').modal('hide')
+            var openDays = []
+            var day;
+            if ($('#mondayCheck').prop('checked')) {
+                day = new LocationOpenDay('Monday', $('#mondayStartTime').val(), $('#mondayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#tuesdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Tuesday', $('#tuesdayStartTime').val(), $('#tuesdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#wednesdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Wednesday', $('#wednesdayStartTime').val(), $('#wednesdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#thursdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Thursday', $('#thursdayStartTime').val(), $('#thursdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#fridayCheck').prop('checked')) {
+                day = new LocationOpenDay('Friday', $('#fridayStartTime').val(), $('#fridayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#saturdayCheck').prop('checked')) {
+                day = new LocationOpenDay('Saturday', $('#saturdayStartTime').val(), $('#saturdayEndTime').val())
+                openDays.push(day);
+            }
+
+            if ($('#sundayCheck').prop('checked')) {
+                day = new LocationOpenDay('Sunday', $('#sundayStartTime').val(), $('#sundayEndTime').val())
+                openDays.push(day);
+            }
+
+            $("#OpenDay").val(JSON.stringify(openDays))
+        }
+    </script>
+    <script>
+        function disableAndEnableWhenCheck(checkox, showId, hideId) {
+            if (checkbox.checked) {
+                $("#" + showId).prop('disabled', false);
+                $("#" + hideId).prop('disabled', true);
+            }
+            else {
+                $("#" + showId).prop('disabled', true);
+                $("#" + hideId).prop('disabled', false);
+            }
+        }
+        function showWhenCheck(checkbox, showId) {
+            if (checkbox.checked) {
+                $("#" + showId).show();
+            }
+            else {
+                $("#" + showId).hide();
+            }
+        };
+
+        function showDetail4(showId) {
+            if ($("input[value='Venue']").prop('checked') || $("input[value='Hotel']").prop('checked')) {
+                $("#" + showId).show();
+            }
+            else {
+                $("#" + showId).hide();
+            }
+        };
+
+        function enableWhenCheck(checkbox, showId) {
+            if (checkbox.checked) {
+                $("#" + showId).prop('disabled', false);
+            }
+            else {
+                $("#" + showId).prop('disabled', true);
+            }
+        };
+        //validate
+
+        $(document).ready(function () {
+            $("#formMinorWorks").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "MinorWorksDescription": {
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#formVolunteering").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "VolunteerContact": {
+                        required: true
+                    },
+                    "VolunteerNumber": {
+                        min: 0,
+                        max: 9999
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+            $("#formFacilities").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "FacilityType": {
+                        required: true
+                    },
+                    "FacilityDescription": {
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#formPremises").validate({
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                rules: {
+                    "LocationName": {
+                        required: true
+                    },
+                    "LocationStatus": {
+                        required: true
+                    },
+                    "LocationType": {
+                        required: true
+                    },
+                    "PhoneNumber": {
+                        required: true
+                    },
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $('#LastNegotiatedDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#Re_negotiateOn').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#LocationStatusDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#ShopFlagDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#ActualStartDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#AnticipatedCompletion').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#ActualCompletionDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#AuthorisedDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#EnquiryReceiveDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#EnquiryReceiveDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            $('#EnquiryReceiveDate').datetimepicker({
+                timepicker: false,
+                format: 'd/m/Y'
+            });
+            var openTimeSpan = $("input[name='openTimeSpan']");
+            openTimeSpan.each(function () {
+                $(this).datetimepicker({
+                    datepicker: false,
+                    format: 'H:i:s',
+                    sideBySide: true,
+                    step: 15
+                });
+            })
+            $("#volunteeringStartDate").datetimepicker({
+                datepicker: false,
+                format: 'H:i:s',
+                sideBySide: true,
+                step: 15
+            });
+            $("#volunteeringEndDate").datetimepicker({
+                datepicker: false,
+                format: 'H:i:s',
+                sideBySide: true,
+                step: 15
+            });
+        })
+    </script>
+}

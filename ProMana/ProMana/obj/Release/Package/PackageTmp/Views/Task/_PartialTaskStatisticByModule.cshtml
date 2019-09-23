@@ -1,0 +1,226 @@
+﻿@model IEnumerable<DTO.TaskStatisticByModule>
+
+@{var index = 0;}
+@foreach (var item in Model)
+{
+    <div class="modal fade" id="@string.Format("TaskStatisticByModule{0}",index)" role="dialog" data-backdrop="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Task in @item.Module.Title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active" role="presentation"><a class="nav-link active" data-toggle="tab" href="#@string.Format("TaskByOpen{0}",index)">Open</a></li>
+                        <li role="presentation"><a class="nav-link active" data-toggle="tab" href="#@string.Format("TaskByInProgress{0}",index)">In Progress</a></li>
+                        <li role="presentation"><a class="nav-link active" data-toggle="tab" href="#@string.Format("TaskByResolve{0}",index)">Resolve</a></li>
+                        <li role="presentation"><a class="nav-link active" data-toggle="tab" href="#@string.Format("TaskByClosed{0}",index)">Closed</a></li>
+                    </ul>
+                    @*tab content*@
+                    <div class="tab-content">
+                        <div role="tabpanel" id="@string.Format("TaskByOpen{0}",index)" class="tab-pane fade container in active" style="width:100% !important">
+                            <h3>Open</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Created By</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Severity</th>
+                                        <th>Priority</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TaskByOpen.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @task.Severity
+                                            </td>
+                                            <td>
+                                                @task.Priority
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("TaskByInProgress{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>In Progress</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Created By</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>
+                                            Severity
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TaskByInProgress.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @task.Severity
+                                            </td>
+                                            <td>
+                                                @task.Priority
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("TaskByResolve{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>Resolved</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Created By</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>
+                                            Severity
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TaskByResolve.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @task.Severity
+                                            </td>
+                                            <td>
+                                                @task.Priority
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div role="tabpanel" id="@string.Format("TaskByClosed{0}",index)" class="tab-pane fade container" style="width:100% !important">
+                            <h3>Closed</h3>
+                            <table class="table table-bordered UseDataTables">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Created By</th>
+                                        <th>Assigned To</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>
+                                            Severity
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var task in item.TaskByClosed.Tasks)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("TaskList","Project", new { id = ViewBag.ProjectId,chooseTaskId=task.Id})">@task.Title</a>
+                                            </td>
+                                            <td>
+                                                @task.UserInfo1.FullName (@task.UserInfo1.UserName)
+                                            </td>
+                                            <td>
+                                                @task.UserInfo.FullName (@task.UserInfo.UserName)
+                                            </td>
+                                            <td>
+                                                @task.From
+                                            </td>
+                                            <td>
+                                                @task.To
+                                            </td>
+                                            <td>
+                                                @task.Severity
+                                            </td>
+                                            <td>
+                                                @task.Priority
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    index++;
+}

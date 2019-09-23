@@ -1,0 +1,78 @@
+﻿@model IEnumerable<DTO.Project>
+
+@{
+    ViewBag.Title = "Project | Promana";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string toValue = "";
+}
+
+<h2>List Of Project</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="container">
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Owner
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                @{
+                    toValue = "";
+                    if (item.To != null)
+                    {
+                        var dateTo = (DateTime)item.To;
+                        toValue = " - " + dateTo.ToLongDateString();
+                    }
+                }
+                <td>
+                    @item.From.ToLongDateString() @toValue
+                </td>
+                <td>
+                    @item.CreatedBy
+                </td>
+                <td>
+                    @item.LookupStatu.Name
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    <a href="@Url.Action("Delete","Project",new { area="Admin",id=item.Id})" onclick="return confirm('Are u sure? Delete @item.Name?')">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            $("#sidebar4").addClass("active");
+        })
+    </script>
+}

@@ -123,7 +123,8 @@ namespace ProMana.Controllers
 
             var module = project.Modules.Where(m => m.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher)).FirstOrDefault();
             ViewBag.WatchersJson = JsonConvert.SerializeObject(module.GetMemberParams());
-           
+            ViewBag.isSuccess = TempData["isSuccess"];
+
             return View(project);
         }
 
@@ -143,7 +144,7 @@ namespace ProMana.Controllers
                 ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
                 ViewBag.GetAllRole = await _jobRoleBUS.GetAll();
                 ViewBag.Errors = errors;
-                ViewBag.isSuccess = !errors.Any();
+                TempData["isSuccess"] = !errors.Any();
                 return RedirectToAction("Infomation", "Project", new { Id = project.Id });
             }
             catch

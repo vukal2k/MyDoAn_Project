@@ -1,0 +1,88 @@
+﻿@model DTO.Solution
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+<div id="@string.Format("solutionModal{0}",Model.Id)" class="modal fade" role="dialog" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="closeModalSolutionDetail(@Model.Id)">&times;</button>
+                <h4 class="modal-title">Solution detail</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" form="formSolution" value="0" name="Id" />
+                @*<div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Task name</label>
+                        <div class="col-md-10">
+                            <h4>@Model.Task.Title</h4>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Resolve Type</label>
+                        <div class="col-md-10">
+                            <div class="form-inline">
+                                <span name="ResolveType" style="width:100%" type="text">
+                                    @Model.ResolveType1.Title
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div>@Html.Raw(Model.Reason)</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Solution</label>
+                        <div class="col-md-10">
+                            <div>@Html.Raw(Model.SolutionDescription)</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div>@Html.Raw(Model.Description)</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="button" value="Close" class="btn btn-default pull-right" onclick="closeModalSolutionDetail(@Model.Id)"/>
+                        </div>
+                    </div>
+                </div>*@
+                <table class="table table-condensed table-striped">
+                    <tr>
+                        <td class="text-info"><b>Task Name</b></td>
+                        <td><h4><i>@Model.Task.Title</i></h4></td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Resolve Type</b></td>
+                        <td>@Model.ResolveType1.Title</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Reason</b></td>
+                        <td>@Html.Raw(Model.Reason)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Solution</b></td>
+                        <td>@Html.Raw(Model.SolutionDescription)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Created By</b></td>
+                        <td>@string.Format("{0} ({1})", Model.UserInfo.FullName, Model.CreatedBy)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-info"><b>Description</b></td>
+                        <td>@Html.Raw(Model.Description)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

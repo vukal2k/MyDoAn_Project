@@ -1,0 +1,416 @@
+﻿@model DTO.ProjectStatistical
+
+@using COMMON
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Statistic";
+    ViewBag.ProjectId = Model.Project.Id;
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+    var index = 0;
+}
+<link href="~/Content/piechart.css" rel="stylesheet" />
+<link href="~/Content/columnchart.min.css" rel="stylesheet" />
+<link href="~/Content/piechart_jquery.css" rel="stylesheet" />
+<style>
+    .tooltip {
+        /*position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;*/
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(0, 0, 0, 0.77);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+</style>
+
+<div class="container">
+    <h2>Statistic: @Model.Project.Name</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="text-success"><i class="fa fa-calendar"></i> Date</td>
+                @{
+                    var toValue = "";
+                    if (Model.Project.To != null)
+                    {
+                        var dateTo = (DateTime)Model.Project.To;
+                        toValue = " - " + dateTo.ToLongDateString();
+                    }
+                }
+                <td>
+                    @Model.Project.From.ToLongDateString() @toValue
+                </td>
+            </tr>
+            <tr>
+                <td class="text-success"><i class="fas fa-star"></i> Status</td>
+                <td><label class="label label-success">@Model.Project.LookupStatu.Name</label></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+
+    <h4><i>Task Statistic By Modules</i></h4>
+    <br />
+    <div class="row">
+        @{ index = 0;}
+        @foreach (var item in Model.TaskStatisticByModules)
+        {
+            <div class="col-md-4">
+                <div id="@string.Format("pieChart{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
+                <div style="margin-top:-63%">
+                    <a class="aHover" onclick="$('@string.Format("#TaskStatisticByModule{0}",index)').modal('show');"><b class="pull-right">@item.Module.Title <i class="fas fa-list"></i> </b></a>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>Status</th>
+                                <th>Total Task</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background-color:#2C3E50"></td>
+                                <td>Open</td>
+                                <td>@item.TaskByOpen.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fe4400"></td>
+                                <td>In Progress</td>
+                                <td>@item.TaskByInProgress.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#018ab6"></td>
+                                <td>Resolved</td>
+                                <td>@item.TaskByResolve.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fff100"></td>
+                                <td>Closed</td>
+                                <td>@item.TaskByClosed.Total</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            index++;
+        }
+    </div>
+
+    <hr />
+    <h4><i>Request Statistic By Modules</i></h4>
+    <br />
+    <div class="row">
+        @{ index = 0;}
+        @foreach (var item in Model.RequestStatisticByModules)
+        {
+            <div class="col-md-4">
+                <div id="@string.Format("pieChartRequest{0}",item.Module.Id)" class="chart" style="width: 85%!important"></div>
+                <div style="margin-top:-63%">
+                    <a class="aHover" onclick="$('@string.Format("#RequestStatisticByModule{0}",index)').modal('show');"><b class="pull-right">
+                        @if (item.Module.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher))
+                        {
+                            <span>Reporing To PM / Watcher</span>
+                        }
+                        else
+                        {
+                            <span>Reporing to @item.Module.Title </span>
+                        }
+                     <i class="fas fa-list"></i> </b></a>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>Status</th>
+                                <th>Total Request</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background-color:#2C3E50"></td>
+                                <td>Pending Approve</td>
+                                <td>@item.RequestByPendingApproved.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fe4400"></td>
+                                <td>Approved</td>
+                                <td>@item.RequestByApproved.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#018ab6"></td>
+                                <td>Rejected</td>
+                                <td>@item.RequestByRejected.Total</td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#fff100"></td>
+                                <td>Cancelled</td>
+                                <td>@item.RequestByCancelled.Total</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            index++;
+        }
+    </div>
+
+    <hr />
+    <h4><i>Task Statistic By Task Type</i></h4>
+    <br />
+    @{ index = 0;}
+    <ul class="chart">
+        @foreach (var item in Model.TaskByTaskTypes)
+        {
+            <li>
+                <div style="text-align:center;width:100%"><i>Total: @item.Total</i></div>
+                <span style="height:@string.Format("{0}%", item.Percent); text-align:center" title="@item.TaskType"></span>
+                <div style="text-align:center;width:100%"><a class="aHover"  onclick="$('@string.Format("#TaskByTaskType{0}",index)').modal('show');">@item.TaskType <i class="fas fa-list"></i></a></div>
+            </li>
+
+            index++;
+        }
+    </ul>
+
+    @{
+        DTO.RoleInProject module_tmp = null;
+    }
+    <hr />
+    <h4><i>Member Points</i></h4>
+    <br />
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Module</th>
+                <th>Job Role</th>
+                <th>Total Created Task</th>
+                <th>Total Assigned Task</th>
+                <th>Total Created Request</th>
+                <th>Total Assigned Request</th>
+                <th>Show List</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ index = 0;}
+            @foreach (var item in Model.MemberPoints)
+            {
+                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
+                if (module_tmp != null)
+                {
+                    <tr>
+                        <td>
+                            @item.UserInfo.UserName
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName
+                        </td>
+                        <td>
+                            @module_tmp.Module.Title
+                        </td>
+                        <td>
+                            @module_tmp.JobRole.Title
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important ; width:13% !important">
+                                @item.TotalCreatedTask.Total
+                                <div class="tooltiptext" style="z-index:9 !important">
+                                    <ul>
+                                        <li>Open: @item.TotalCreatedTask.TotalByOpen</li>
+                                        <li>In Progress: @item.TotalCreatedTask.TotalByInProgress</li>
+                                        <li>Resolved: @item.TotalCreatedTask.TotalByResolve</li>
+                                        <li>Closed: @item.TotalCreatedTask.TotalByClosed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important; z-index:8 !important; width:13% !important">
+                                @item.TotalAssignTask.Total
+                                <div class="tooltiptext" style="z-index:9 !important">
+                                    <ul>
+                                        <li>Open: @item.TotalAssignTask.TotalByOpen</li>
+                                        <li>In Progress: @item.TotalAssignTask.TotalByInProgress</li>
+                                        <li>Resolved: @item.TotalAssignTask.TotalByResolve</li>
+                                        <li>Closed: @item.TotalAssignTask.TotalByClosed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important; width:13% !important">
+                                @item.TotalCreatedRequest.Total
+                                <div class="tooltiptext" style="z-index:9 !important">
+                                    <ul>
+                                        <li>Pending Approved: @item.TotalCreatedRequest.TotalPendingApproved</li>
+                                        <li>Approved: @item.TotalCreatedRequest.TotalApproved</li>
+                                        <li>Rejected: @item.TotalCreatedRequest.TotalRejected</li>
+                                        <li>Cancelled: @item.TotalCreatedRequest.TotalCancelled</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tooltip " style="opacity: 100 !important;z-index:8 !important; width:13% !important">
+                                @item.TotalAssignRequest.Total
+                                <div class="tooltiptext" style="z-index:9 !important">
+                                    <ul>
+                                        <li>Pending Approved: @item.TotalAssignRequest.TotalPendingApproved</li>
+                                        <li>Approved: @item.TotalAssignRequest.TotalApproved</li>
+                                        <li>Rejected: @item.TotalAssignRequest.TotalRejected</li>
+                                        <li>Cancelled: @item.TotalAssignRequest.TotalCancelled</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span><i style="z-index:10 !important" class="fas fa-list aHover" onclick="$('@string.Format("#MemberTaskByStatus{0}",index)').modal('show');"></i></span>
+                        </td>
+                    </tr>
+                }
+
+                index++;
+            }
+        </tbody>
+    </table>
+
+    <hr />
+    <h4><i>Project Logs</i></h4>
+    <a href="@Url.Action("DownloadLog","Project", new { id = Model.Project.Id})" class="btn btn-success pull-left"><i class="fas fa-download"></i> Download Excel</a>
+    <br />
+    <br />
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Module</th>
+                <th>Job Role</th>
+                <th>Content</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProjectLogs)
+            {
+                module_tmp = item.UserInfo.RoleInProjects.FirstOrDefault();
+                if (module_tmp != null)
+                {
+                    <tr>
+                        <td>
+                            @item.UserInfo.UserName
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName
+                        </td>
+                        @{
+                            if (module_tmp.RoleId == HardFixJobRole.PM)
+                            {
+                                <td>
+                                    PM
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @module_tmp.Module.Title
+                                </td>
+                            }
+                        }
+
+                        <td>
+                            @module_tmp.JobRole.Title
+                        </td>
+                        <td>
+                            @item.Content
+                        </td>
+                        <td>
+                            @item.CreatedDate
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+@Html.Partial("~/Views/Task/_PartialMemberTaskByStatus.cshtml", Model.MemberPoints)
+@Html.Partial("~/Views/Task/_PartialTaskStatisticByModule.cshtml", Model.TaskStatisticByModules)
+@Html.Partial("~/Views/Task/_PartialRequestStatisticByModules.cshtml", Model.RequestStatisticByModules)
+@Html.Partial("~/Views/Task/_PartialTaskByTaskTypes.cshtml",Model.TaskByTaskTypes)
+
+@section Scripts{
+    <script src="~/Scripts/piechart_jquery.js"></script>
+    <script>
+        $(document).ready(() => {
+            var roleCurrentUser = @Model.Project.GetRoleInModule(User.Identity.GetUserName());
+            if (@Model.Project.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
+                $("#sidebar4").addClass('active');
+                $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = Model.Project.Id })')
+                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+
+                $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id })')
+                if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                    $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = Model.Project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar22").remove();
+                }
+
+                $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Project.Id })')
+                if (roleCurrentUser !== @HardFixJobRole.PM) {
+                    $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = Model.Project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar2-52").remove();
+                }
+
+
+                if (roleCurrentUser === @HardFixJobRole.PM) {
+                    $("#linkSidebar31").attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+                    $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = Model.Project.Id })')
+
+                    $("#linkSidebar32").attr("href", '@Url.Action("KanbanBoard", "Project", new { id = Model.Project.Id })')
+                    $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = Model.Project.Id })')
+
+                    $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = Model.Project.Id })')
+                    $("#sidebar42").attr("href", '@Url.Action("Statistic", "Project", new { id = Model.Project.Id })')
+                }
+                else {
+                    $("#sidebar3").remove();
+                    $("#sidebar4").remove();
+                }
+            }
+            else {
+                $("#sidebar0").remove();
+                $("#sidebar1").remove();
+                $("#sidebar2").remove();
+                $("#sidebar3").remove();
+                $("#sidebar4").remove();
+                $("#sidebar2-5").remove();
+            }
+
+            //init pie chart
+            InitPieChart('@Html.Raw(ViewBag.PieChartData)')
+            InitPieChartRequest('@Html.Raw(ViewBag.PieChartRequestData)')
+        });
+    </script>
+}

@@ -174,11 +174,12 @@ namespace BUS
 
 
                 //insert watcher
-                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = HardFixJobRole.Watcher, UserName = m.Username }).ToList();
+                var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = HardFixJobRole.Watcher, UserName = m.Username, JoinDate=DateTime.Now }).ToList();
                 listMember.Add(new RoleInProject {
                     IsActive = true,
                     RoleId = HardFixJobRole.PM,
-                    UserName = userCreate
+                    UserName = userCreate,
+                    JoinDate=DateTime.Now
                 });
                 project.Modules = new List<Module>()
                 {
@@ -228,13 +229,22 @@ namespace BUS
                 var watchers = await _unitOfWork.RoleInProjects.Get(m => m.IsActive && m.ModuleId == module.Id);
                 foreach (var item in watchers)
                 {
-                    await _unitOfWork.RoleInProjects.Delete(item);
+                    item.IsActive = false;
+                    _unitOfWork.RoleInProjects.Update(item);
                 }
 
                 //insert new member
                 var listMember = members.Select(m => new RoleInProject { IsActive = true, RoleId = m.RoleId, UserName = m.Username, ModuleId = module.Id }).ToList();
                 foreach (var item in listMember)
                 {
+                    if (!watchers.Any(m => m.UserName.Equals(item.UserName)))
+                    {
+                        item.JoinDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        item.JoinDate = watchers.Where(m => m.UserName.Equals(item.UserName)).FirstOrDefault().JoinDate;
+                    }
                     _unitOfWork.RoleInProjects.Insert(item);
                 }
 
@@ -824,9 +834,9 @@ namespace BUS
                 worksheet.Cells[i + 4, 1].Value = item.UserInfo.UserName;
                 worksheet.Cells[i + 4, 2].Value = item.UserInfo.FullName;
 
-                var module_tmp = item.UserInfo.Modules.Where(m => m.ProjectId == item.ProjectId).FirstOrDefault();
-                worksheet.Cells[i + 4, 3].Value = module_tmp.Title ;
-                worksheet.Cells[i + 4, 4].Value = item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Id && m.IsActive).FirstOrDefault().JobRole.Title;
+                var module_tmp = item.UserInfo.RoleInProjects.Where(m => m.Module.ProjectId == item.ProjectId).FirstOrDefault();
+                worksheet.Cells[i + 4, 3].Value = module_tmp.Module.Title ;
+                worksheet.Cells[i + 4, 4].Value = item.UserInfo.RoleInProjects.Where(m => m.ModuleId == module_tmp.Module.Id && m.IsActive).FirstOrDefault().JobRole.Title;
                 worksheet.Cells[i + 4, 5].Value = item.Content;
                 worksheet.Cells[i + 4, 6].Value = item.CreatedDate.ToLongTimeString() + " "+ item.CreatedDate.ToString("dd/MM/yyyy");
             }

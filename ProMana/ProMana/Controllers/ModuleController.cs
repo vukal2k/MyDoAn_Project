@@ -100,6 +100,7 @@ namespace ProMana.Controllers
                     }
                 }
 
+                _moduleBus = new ModuleBUS();
                 var originalModule = await _moduleBus.GetById(module.Id);
                 ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
                 ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();
@@ -109,6 +110,7 @@ namespace ProMana.Controllers
             }
             catch
             {
+                _moduleBus = new ModuleBUS();
                 var originalModule = await _moduleBus.GetById(module.Id);
                 ViewBag.Users = await _projectBus.GetUserNotWatcher(module.ProjectId);
                 ViewBag.GetSoftRole = await _jobRoleBUS.GetSoftRole();

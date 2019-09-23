@@ -1,0 +1,229 @@
+﻿@model DTO.Module
+@using COMMON
+@using Microsoft.AspNet.Identity
+@{
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+    var project = (DTO.Project)ViewBag.Project;
+    ViewBag.Title = project.Name;
+}
+<h2>Create module in project: @project.Name</h2>
+<div class="container">
+    @using (Html.BeginForm("Create", "Module", FormMethod.Post, new { @id = "formModule" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <input type="hidden" name="members" id="members"/>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <input type="hidden" name="ProjectId" value="@project.Id" />
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TeamLead, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select name="TeamLead" id="TeamLead" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                        <option value="0">-- Choose Team Lead --</option>
+                        @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
+                        {
+                            <option value="@item.UserName">@item.FullName (@item.UserName)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">
+                    Member
+                </label>
+                <div class="col-md-10">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Fullname</th>
+                                <th>Role In Project</th>
+                                <th>Company</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="listMember"></tbody>
+                    </table>
+                    <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" id="btnSubmit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<br />
+<br />
+<br />
+<br />
+
+<div id="memberModal" class="modal fade" role="dialog" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#memberModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Add member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <label>User</label><span style="color:red">*</span>
+                        <br />
+                        <div class="form-inline">
+                            <select style="width:100%" type="text" id="user" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                                <option value="0"> -- Choose User --</option>
+                                @foreach (var item in (IEnumerable<DTO.UserInfo>)ViewBag.Users)
+                                {
+                                    if (!item.UserName.Equals(User.Identity.GetUserName()))
+                                    {
+                                        <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <label>Role In Project</label><span style="color:red">*</span>
+                        <br />
+                        <div class="form-inline">
+                            <select style="width:100%" type="text" id="role" class="form-control">
+                                <option value="0"> -- Choose Role --</option>
+                                @{
+                                    var roles = (IEnumerable <DTO.JobRole>)ViewBag.GetSoftRole;
+                                    foreach (var item in roles)
+                                    {
+                                        <option value="@item.Id"> @item.Title</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br />
+                        <label style="width:100% !important" onclick="AddMember()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="@Url.Action("Index","Module",new { id = project.Id})">Back to list</a>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/addMemberToProject.js"></script>
+    <script>
+        $(document).ready(() => {
+            var roleCurrentUser = @project.GetRoleInModule(User.Identity.GetUserName());
+            if (@project.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
+                $("#sidebar3").addClass('active');
+                $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = project.Id })')
+            $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+
+                $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = project.Id })')
+                if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                    $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar22").remove();
+                }
+
+                $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = project.Id })')
+                if (roleCurrentUser !== @HardFixJobRole.PM) {
+                    $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar2-52").remove();
+                }
+
+
+                if (roleCurrentUser === @HardFixJobRole.PM) {
+                    $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+                    $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = project.Id })')
+
+                    $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+                    $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = project.Id })')
+
+                    $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = project.Id })')
+                    $("#sidebar42").attr("href", '@Url.Action("Statistic", "Project", new { id = project.Id })')
+                }
+                else {
+                    $("#sidebar3").remove();
+                    $("#sidebar4").remove();
+                }
+            }
+            else {
+                $("#sidebar0").remove();
+                $("#sidebar1").remove();
+                $("#sidebar2-5").remove();
+                $("#sidebar2").remove();
+                $("#sidebar3").remove();
+                $("#sidebar4").remove();
+            }
+
+            validateTask();
+            if ('@ViewBag.InsertFailed' === "True")
+            {
+                $.notify("Failed!", "error");
+            }
+        })
+        function validateTask() {
+            $('#formModule').validate({
+                errorClass: 'errors',
+                rules: {
+                    Title: {
+                        required: true,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    Title: {
+                        required: "Title is required",
+                        maxlength: "Max length is 100"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#btnSubmit").click(function () {
+                var result = true;
+                if ($("#TeamLead").val() === "0") {
+                    $("#TeamLead").parent().addClass('has-error');
+                    result = false;
+                }
+                alert(JSON.stringify(listMemeberAndRole));
+                $("#members").val(JSON.stringify(listMemeberAndRole));
+                return $("#formModule").valid() && result;
+            })
+        }
+    </script>
+}

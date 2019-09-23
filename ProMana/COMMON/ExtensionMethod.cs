@@ -18,7 +18,7 @@ namespace COMMON
 
         public static IEnumerable<UserInfo> GetMemberByModule(this Project project, int moduleId)
         {
-            var result = project.Modules.Where(m => m.Id==moduleId).SelectMany(r => r.RoleInProjects).GroupBy(m => m.UserInfo).Select(u => u.Key);
+            var result = project.Modules.Where(m => m.Id==moduleId).SelectMany(r => r.RoleInProjects).Where(m => m.IsActive).GroupBy(m => m.UserInfo).Select(u => u.Key);
             return result;
         }
 

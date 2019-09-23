@@ -44,10 +44,11 @@ namespace BUS
                 var resultCommit = await _unitOfWork.CommitAsync() > 0;
                 if (resultCommit)
                 {
+                    var project = await _unitOfWork.Projects.GetById(module.ProjectId);
                     await _projectLog.AddLog(new ProjectLog
                     {
                         Content = $"Create module {module.Title}",
-                        CreatedBy = module.Project.CreatedBy,
+                        CreatedBy = project.CreatedBy,
                         CreatedDate = DateTime.Now,
                         ProjectId = module.ProjectId
                     }, new List<string>());
@@ -103,10 +104,11 @@ namespace BUS
                 var resultCommit = await _unitOfWork.CommitAsync() > 0;
                 if (resultCommit)
                 {
+                    var project = await _unitOfWork.Projects.GetById(module.ProjectId);
                     await _projectLog.AddLog(new ProjectLog
                     {
                         Content = $"Update module {module.Title}",
-                        CreatedBy = module.Project.CreatedBy,
+                        CreatedBy = project.CreatedBy,
                         CreatedDate = DateTime.Now,
                         ProjectId = module.ProjectId
                     }, new List<string>());

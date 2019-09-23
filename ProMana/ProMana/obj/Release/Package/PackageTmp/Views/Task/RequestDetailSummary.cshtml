@@ -1,0 +1,11 @@
+﻿@model DTO.Task
+
+<div class="card" onclick="chooseTask(this,@Model.Id);" id="@String.Format("card{0}",Model.Id)" style="width: 100%;  padding:1%; transition: transform 1s;">
+    <div class="card-body">
+        <h4 class="card-title"><i class="fas fa-file-invoice"></i> @Model.Title</h4>
+        <h6 class="card-subtitle mb-2 text-muted"><label class="label label-default">@Model.TaskType</label></h6>
+        <p class="card-text">Created By: @Model.UserInfo1.UserName</p>
+        <p class="card-text">Deadline: @Model.To</p>
+    </div>
+</div>
+<hr />

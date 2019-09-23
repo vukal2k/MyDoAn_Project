@@ -46,16 +46,21 @@
         {
             <div class="gantt__row">
                 <div class="gantt__row-first">
-                    <a href="@Url.Action("TaskList","Project", new { id = item.Task.Module.ProjectId,chooseTaskId=item.Task.Id})">@item.Task.Title</a>
+                    <a>@item.Task.Title</a>
                 </div>
                 <ul class="gantt__row-bars">
-                    @if (item.Task.To < DateTime.Today.AddDays(1) && item.Task.StatusId<TaskStatusKey.Resolved)
+
+                    @if (item.Task.To < DateTime.Today && item.Task.StatusId < TaskStatusKey.Resolved)
                     {
-                        <li style="grid-column: @string.Format("{0}/{1}",item.FromIndex,item.ToIndex); background-color: #ff6252;" class="stripes">@item.Task.AssignedTo</li>
+                        <li style="grid-column: @string.Format("{0}/{1}",item.FromIndex,item.ToIndex); background-color: #ff6252;" class="stripes">
+                            <a style="color:white!important" href="@Url.Action("TaskList","Project", new { id = item.Task.Module.ProjectId,chooseTaskId=item.Task.Id})">@item.Task.AssignedTo</a>
+                        </li>
                     }
                     else
                     {
-                        <li style="grid-column: @string.Format("{0}/{1}",item.FromIndex,item.ToIndex); background-color: #00a65a;" class="stripes">@item.Task.AssignedTo</li>
+                        <li style="grid-column: @string.Format("{0}/{1}",item.FromIndex,item.ToIndex); background-color: #00a65a;" class="stripes">
+                            <a style="color:white!important" href="@Url.Action("TaskList","Project", new { id = item.Task.Module.ProjectId,chooseTaskId=item.Task.Id})">@item.Task.AssignedTo</a>
+                        </li>
                     }
                 </ul>
             </div>

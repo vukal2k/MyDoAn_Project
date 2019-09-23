@@ -1,0 +1,218 @@
+﻿@model DTO.Project
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Your Project";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    ViewBag.ReturnUrl = Url.Action("Create", "Action");
+}
+
+
+<h2>Create</h2>
+<link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+
+@using (Html.BeginForm("Create", "Project", FormMethod.Post, new { @id = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @{
+            var errors = (List<string>
+                )ViewBag.Errors;
+            if (errors != null && errors.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var item in errors)
+                    {
+                        <li class="list-group-item text-danger">@item</li>
+                    }
+                </ul>
+            }
+        }
+        <input name="CreatedBy" type="hidden" value="abc"/>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input name="Name" id="Name" type="text" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" onchange="ValidateDateTo()" autocomplete="off" value="" class="control-label col-md-3" id="from" style="margin-left:1.3% !important" />
+            <input type="hidden" name="From" id="fromValue" />
+
+            @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" autocomplete="off" value="" class="control-label col-md-3" id="to" />
+            <input type="hidden" name="To" id="toValue" />
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea name="Description" id="Description" class="form-control"></textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Watcher</label>
+            <div class="col-md-10">
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Fullname</th>
+                                <th>Current Job</th>
+                                <th>Company</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="listMember"></tbody>
+                    </table>
+                </div>
+                <label style="width:100% !important" onclick="$('#memberModal').modal('show')" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+            </div>
+        </div>
+        <input type="hidden" name="members" id="members" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="submit" type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<br />
+<br />
+<br />
+<br />
+
+<div id="memberModal" class="modal fade" role="dialog" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="$('#memberModal').modal('hide')">&times;</button>
+                <h4 class="modal-title">Add member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <label>User</label><span style="color:red">*</span>
+                        <br />
+                        <div class="form-inline">
+                            <select style="width:100%" type="text" id="user" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                                @{
+                                    <option value="0"> -- Choose User --</option>
+                                    var user = (IEnumerable
+                                    <DTO.UserInfo>
+                                        )ViewBag.GetUserDoNotInProject;
+                                    foreach (var item in user)
+                                    {
+                                        if (!item.UserName.Equals(User.Identity.GetUserName()))
+                                        {
+                                            <option value="@item.UserName"> @item.FullName (@item.UserName)</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <p>
+                            These users act as a customer or project related people but do not directly participate in the project.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br />
+                        <label style="width:100% !important" onclick="AddWatcher()" class="btn btn-default"><i class="fas fa-plus-circle"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.full.js"></script>
+    <script src="~/Scripts/addMemberToProject.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#from').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+            $('#to').datetimepicker({
+                timepicker: false,
+                format: 'm/d/Y'
+            });
+
+            $('#form').validate({
+                errorClass: 'errors',
+                rules: {
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    Code: {
+                        required: true,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    Name: {
+                        required: "Project name is required",
+                        maxlength: "Max length is 100"
+                    },
+                    Code: {
+                        required: "Project Code is required",
+                        maxlength: "Max length is 100"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).parent().addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).parent().removeClass('has-error');
+                },
+            });
+
+            $("#submit").click(function () {
+                $('#fromValue').val($('#from').val());
+                $('#toValue').val($('#to').val());
+                $("#members").val(JSON.stringify(listMemeberAndRole));
+                return $("#form").valid();
+            });
+        });
+
+        function ValidateDateTo() {
+            $('#to').datetimepicker({
+                format: 'm/d/Y',
+                timepicker: false,
+                minDate: new Date($('#from').val())
+            });
+        }
+    </script>
+}

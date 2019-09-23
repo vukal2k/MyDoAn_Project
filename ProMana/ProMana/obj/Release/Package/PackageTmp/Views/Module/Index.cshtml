@@ -1,0 +1,109 @@
+﻿@model IEnumerable<DTO.Module>
+@using COMMON
+@using Microsoft.AspNet.Identity
+@{
+    var project = (DTO.Project)ViewBag.Project;
+    ViewBag.Title = project.Name;
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+
+<h2>Modules</h2>
+
+<p>
+    <a href="@Url.Action("Create","Module",new { id = project.Id})">Add new</a>
+</p>
+<div class="container">
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TeamLead)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                if (!item.Title.Equals(COMMON.HardFixJobRoleTitle.Watcher))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @item.UserInfo.FullName (@item.UserInfo.UserName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            <a href="@Url.Action("Delete","Module", new { moduleId = item.Id, projectId = item.ProjectId })" onclick="return confirm('Are u sure? Delete: @item.Title now?')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            var roleCurrentUser = @project.GetRoleInModule(User.Identity.GetUserName());
+            if (@project.StatusId==@ProjectStatusKey.Opened || roleCurrentUser == @HardFixJobRole.PM) {
+                $("#sidebar3").addClass('active');
+                $("#sidebar0").children().attr("href", '@Url.Action("GanttChart", "Project", new { id = project.Id })')
+                $("#sidebar1").children().attr("href", '@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+
+                $("#linkSidebar21").attr("href", '@Url.Action("TaskList", "Project", new { id = project.Id })')
+                if (roleCurrentUser !== 0 && roleCurrentUser !== @HardFixJobRole.Watcher) {
+                    $("#linkSidebar22").attr("href", '@Url.Action("TaskList", "Project", new { id = project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar22").remove();
+                }
+
+                $("#linkSidebar2-51").attr("href", '@Url.Action("RequestList", "Project", new { id = project.Id })')
+                if (roleCurrentUser !== @HardFixJobRole.PM) {
+                    $("#linkSidebar2-52").attr("href", '@Url.Action("RequestList", "Project", new { id = project.Id, createTask =true})')
+                }
+                else {
+                    $("#linkSidebar2-52").remove();
+                }
+
+
+                if (roleCurrentUser === @HardFixJobRole.PM) {
+                    $("#linkSidebar31").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+                    $("#linkSidebar31").attr("href", '@Url.Action("Index", "Module", new { id = project.Id })')
+
+                    $("#linkSidebar32").attr("href",'@Url.Action("KanbanBoard", "Project", new { id = project.Id })')
+                    $("#linkSidebar32").attr("href", '@Url.Action("Create", "Module", new { id = project.Id })')
+
+                    $("#sidebar41").attr("href", '@Url.Action("Infomation", "Project", new { id = project.Id })')
+                    $("#sidebar42").attr("href", '@Url.Action("Statistic", "Project", new { id = project.Id })')
+                }
+                else {
+                    $("#sidebar3").remove();
+                    $("#sidebar4").remove();
+                }
+            }
+            else {
+                $("#sidebar0").remove();
+                $("#sidebar1").remove();
+                $("#sidebar2").remove();
+                $("#sidebar3").remove();
+                $("#sidebar4").remove();
+                $("#sidebar2-5").remove();
+            }
+
+            if ('@ViewBag.isSuccess'=== "True") {
+                    $.notify("Success!", "success");
+            }
+        });
+    </script>
+}

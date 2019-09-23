@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DTO.Premise>
+
+@{
+    ViewBag.Title = "ListOrganisation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="">
+    <h2>Premise List</h2>
+    <hr />
+    <a class="aHover">All |</a>
+    <a class="aHover"><b>0 - 9 |</b></a>
+    <a class="aHover"><b>A B C D E |</b></a>
+    <a class="aHover"><b>F G H I J |</b></a>
+    <a class="aHover"><b>K L M N |</b></a>
+    <a class="aHover"><b>O P Q R |</b></a>
+    <a class="aHover"><b>S T U V |</b></a>
+    <a class="aHover"><b>W X Y Z </b></a>
+    <div class="pull-right">
+        <button class="btn btn-default">Create</button>
+        <label style="margin-left:10px"><input type="checkbox" value="">Include In-active</label>
+    </div>
+    <div id="noiTableDungChan">
+        <table class="UseDataTables table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Location Name
+                    </th>
+                    <th>
+                        Address Line 1
+                    </th>
+                    <th>
+                        Postcode
+                    </th>
+                    <th>
+                        Is Active
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        1 <label class="label label-success">!New</label>
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        1
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button onclick="$('#contactLookUpModal').modal('show')">test</button>
+@Html.Action("ListContact","Contact")
+
+@section scripts{
+<script src="~/Scripts/jquery-lookupContact.js"></script>
+}

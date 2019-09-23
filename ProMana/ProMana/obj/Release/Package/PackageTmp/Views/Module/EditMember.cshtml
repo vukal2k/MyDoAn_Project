@@ -1,0 +1,14 @@
+﻿@model DTO.Module
+@foreach (var item in Model.RoleInProjects.Where(r=> r.IsActive))
+{
+    if (item.RoleId!=COMMON.HardFixJobRole.TeamLead)
+    {
+        <tr id="@string.Format("row{0}",item.UserName)">
+            <td>@item.UserName</td>
+            <td>@item.UserInfo.FullName</td>
+            <td>@item.JobRole.Title</td>
+            <td>@item.UserInfo.Company</td>
+            <td><a class="aHover" onclick="RemoveMember('@item.UserName','@item.RoleId')">Remove</a></td>
+        </tr>
+    }
+}

@@ -1,0 +1,827 @@
+﻿@model DTO.Organisation
+
+@{
+    ViewBag.Title = "CreateOrganisation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Organisation Details</h2>
+<style>
+    .scrollCheckbox {
+        height: 100px;
+        background-color: #ede9e9;
+        padding: 2%;
+        overflow-y: scroll;
+    }
+</style>
+
+<div id="updateBodyOrganisation">
+    <form action="@Url.Action("", "")" method="post" id="formOrganisation">@Html.AntiForgeryToken()</form>
+    <form action="@Url.Action("", "")" method="post" id="formSupportingMaterials">@Html.AntiForgeryToken()</form>
+    <form action="@Url.Action("", "")" method="post" id="formBUDirectorate">@Html.AntiForgeryToken()</form>
+    <div class="pull-right">
+        <a href="" class="btn btn-primary">In-Active</a>
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a href="" class="btn btn-default">Cancel</a>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#details1">Details 1</a></li>
+        <li><a data-toggle="tab" href="#details2">Details 2</a></li>
+        <li><a data-toggle="tab" href="#details4">Details 4</a></li>
+        <li><a data-toggle="tab" href="#details5">Details 5</a></li>
+        <li><a data-toggle="tab" href="#buDirectorate">BU/Directorates</a></li>
+    </ul>
+    <div class="tab-content">
+
+        <div class="tab-pane fade in active container" id="details1">
+            <h4>Details1</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="OrganisationName">Organisation Name</label><span style="color:red">*</span>
+                        <input form="formOrganisation" type="text" id="OrganisationName" name="OrganisationName" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.OrganisationName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ShortDescription">Organisation Short Description</label><span style="color:red">*</span>
+                        <textarea form="formOrganisation" class="form-control" id="ShortDescription" name="ShortDescription"></textarea>
+                        @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="ContactId">Lead Contact</label><br />
+                        <input type="text" name="ContactName" readonly id="ContactName" class="form-control" style="width:90% !important" />
+                        <input type="hidden" id="ContactId" form="formOrganisation" name="ContactId" />
+                        <a class="aHover pull-right" id="ContactIdLookup" style="margin-top:5px">Lookup</a>
+                        @Html.ValidationMessageFor(model => model.OrganisationName, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="AddressLine1">Address Line1</label><span style="color:red">*</span>
+                        <input type="text" id="AddressLine1" name="AddressLine1" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AddressLine2">Address Line2</label>
+                        <input type="text" form="formOrganisation" id="AddressLine2" name="AddressLine2" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.AddressLine2, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="AddressLine3">Address Line3</label>
+                        <input type="text" form="formOrganisation" id="AddressLine3" name="AddressLine3" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.AddressLine3, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="PostCode">PostCode</label><span style="color:red">*</span><br />
+                        <input type="text" form="formOrganisation" id="PostCode" name="PostCode" class="form-control" style="width:90% !important" />
+                        <a class="aHover pull-right" id="PostCode" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="Town">City/Town</label>
+                        <input type="text" form="formOrganisation" id="Town" name="Town" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Town, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="County">County</label>
+                        <input type="text" form="formOrganisation" id="County" name="County" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.County, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Country">Country</label>
+                        <select id="Country" form="formOrganisation" name="Country" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.County, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <div class="form-group" style="margin-top:-15px">
+                        <label class="" for="Preferred">Preferred Organisation <input type="checkbox" form="formOrganisation" value="true" name="Preferred" id="Preferred" /></label>
+                        @Html.ValidationMessageFor(model => model.Preferred, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ExpressionOfInteres" class="">Expression Of Interes <input type="checkbox" value="true" form="formOrganisation" id="ExpressionOfInteres" onchange="showDetails3(this)" name="ExpressionOfInteres" value="true" /></label>
+                        @Html.ValidationMessageFor(model => model.ExpressionOfInterest, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-inline">
+                        <label for="TypeOfBussinessId">Type Of Bussiness</label><span style="color:red">*</span><br />
+                        <input type="text" name="TypeOfBussinessName" required readonly id="TypeOfBussinessName" class="form-control" style="width:90% !important" />
+                        <input type="text" id="TypeOfBussinessId" form="formOrganisation" style="display:none" name="County" class="form-control" />
+                        <a class="aHover pull-right" id="TypeOfBussinessId" style="margin-top:5px">Lookup</a>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="SICCode">SIC Code</label><br />
+                        <input type="text" readonly id="SICCode" class="form-control" style="width:90% !important" />
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label for="FullDescription">Organisation Full Description</label>
+                        <textarea id="FullDescription" form="formOrganisation" class="form-control" style="height:110px" name="FullDescription"></textarea>
+                        @Html.ValidationMessageFor(model => model.FullDescription, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PhoneNumber">Phone Number</label>
+                        <input type="text" form="formOrganisation" id="PhoneNumber" name="PhoneNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Fax">Fax</label>
+                        <input type="text" form="formOrganisation" id="Fax" name="Fax" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="text" form="formOrganisation" id="Email" name="Email" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="WebAddress">Web Address</label>
+                        <input type="text" form="formOrganisation" id="WebAddress" name="WebAddress" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.WebAddress, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CharityNumber">Charity Number</label>
+                        <input type="text" form="formOrganisation" id="CharityNumber" name="CharityNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.CharityNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CompanyNumber">Company Number</label>
+                        <input type="text" form="formOrganisation" id="CompanyNumber" name="CompanyNumber" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.CompanyNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="details2" class="tab-pane fade container">
+            <h4>Details2</h4>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="OrganisationSpecialism" class="col-md-6">Organisation Specialism</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="OrganisationSpecialism" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="OrganisationSpecialism" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="OrganisationSpecialism" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="OrganisationSpecialism" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="OrganisationSpecialism" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="DisablitiesCapabillities" class="col-md-6">Disablities Capabillities</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="DisablitiesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="DisablitiesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="DisablitiesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="DisablitiesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="DisablitiesCapabillities" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="BarriersCapabillities" class="col-md-6">Service Barriers Capabillities</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="BenefitsCapabillities" class="col-md-6">ServiceBenefitsCapabillities</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="BarriersCapabillities" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-md-6">
+                    <div class="form-inline">
+                        <label for="PersonalCircumstancesCapabillities" class="col-md-6">Service Personal Circumstances Capabillities</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="PersonalCircumstancesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="PersonalCircumstancesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="PersonalCircumstancesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="PersonalCircumstancesCapabillities" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="PersonalCircumstancesCapabillities" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-inline">
+                        <label for="Accreditation" class="col-md-6">Accreditation</label>
+                        <div class="scrollCheckbox">
+                            <label><input type="checkbox" form="formOrganisation" name="Accreditation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="Accreditation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="Accreditation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="Accreditation" value="1" /> 1</label><br />
+                            <label><input type="checkbox" form="formOrganisation" name="Accreditation" value="1" /> 1</label><br />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+        <div id="details4" class="tab-pane fade container">
+            <h4>Details4</h4>
+            <hr />
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Premises Name
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                        <th>
+                            Primary Location
+                        </th>
+                        <th>
+                            Phone Number
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="OrganisationName">Ward</label>
+                        <input type="text" readonly id="Ward" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="OrganisationName">Borough</label>
+                        <input type="text" readonly id="Borough" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LocalAuthority">Local Authority</label>
+                        <input type="text" readonly id="LocalAuthority" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UnitaryAuthority">Unitary Authority</label>
+                        <input type="text" readonly id="UnitaryAuthority" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="NHSAuthority">NHS Authority</label>
+                        <input type="text" readonly id="NHSAuthority" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GovermentOfficeId">Gov Office Region</label>
+                        <select form="formOrganisation" id="GovermentOfficeId" name="GovermentOfficeId" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TrustRegionId">Trust Region</label>
+                        <select form="formOrganisation" id="TrustRegionId" name="TrustRegionId" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TrustDistrictId">Trust District</label>
+                        <select form="formOrganisation" id="TrustDistrictId" name="TrustRegionId" class="form-control">
+                            <option>
+                                1
+                            </option>
+                            <option>
+                                2
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <div id="details5" class="tab-pane fade container">
+            <h4>Current list of Supporting Materials</h4>
+            <hr />
+            <div class="pull-right">
+                <input type="button" class="btn btn-success" data-toggle="modal" data-target="#details5Modal" value="Create" />
+            </div>
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Url
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Added by
+                        </th>
+                        <th>
+                            Added date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="buDirectorate" class="tab-pane fade container">
+            <h4>BU/Directorate</h4>
+            <hr />
+            <a class="aHover">All |</a>
+            <a class="aHover"><b>0 - 9 |</b></a>
+            <a class="aHover"><b>A B C D E |</b></a>
+            <a class="aHover"><b>F G H I J |</b></a>
+            <a class="aHover"><b>K L M N |</b></a>
+            <a class="aHover"><b>O P Q R |</b></a>
+            <a class="aHover"><b>S T U V |</b></a>
+            <a class="aHover"><b>W X Y Z </b></a>
+            <div class="pull-right">
+                <input type="button" class="btn btn-success" data-toggle="modal" data-target="#buDirectorateModal" value="Create" />
+            </div>
+            <table class="UseDataTables table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            BU/Directorate Name
+                        </th>
+                        <th>
+                            Office Address Line 1
+                        </th>
+                        <th>
+                            Postcode
+                        </th>
+                        <th>
+                            Contact
+                        </th>
+                        <th>
+                            Is Active
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-toggle="modal" data-target="#buDirectorateUpdateModal">
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            1
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal -->
+        <div id="details5Modal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" onclick="$('#details5Modal').modal('hide')">&times;</button>
+                        <h4 class="modal-title">Supporting Materials Details</h4>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" onclick="$('#details5Modal').modal('hide')">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="URL">URL</label><span style="color:red">*</span>
+                                <input form="formSupportingMaterials" type="text" name="URL" id="URL" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Description</label>
+                                <textarea form="formSupportingMaterials" type="text" name="Description" id="Description" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="Type">Type</label>
+                                <select form="formSupportingMaterials" class="form-control" name="Type" id="Type">
+                                    <option>1</option>
+                                    <option>1</option>
+                                    <option>1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="UserIdAdd">Added by</label>
+                                <input form="formSupportingMaterials" type="text" name="UserIdAdd" readonly id="UserIdAdd" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="AddDate">Added date</label>
+                                <input form="formSupportingMaterials" type="text" name="AddDate" readonly id="AddDate" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="buDirectorateModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" onclick="$('#buDirectorateModal').modal('hide')">&times;</button>
+                        <h4 class="modal-title">Business Unit/Directorate Details</h4>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" onclick="$('#buDirectorateModal').modal('hide')">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="DirectorateName">BU/Directorate Name</label><span style="color:red">*</span>
+                                <input form="formBUDirectorate" type="text" name="DirectorateName" id="DirectorateName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="ShortDescription">BU/Directorate Short Description</label>
+                                <textarea form="formBUDirectorate" name="ShortDescription" id="ShortDescription" class="form-control"></textarea>
+                            </div>
+                            <div class="form-inline">
+                                <label for="ContactId">Lead Contact</label><br />
+                                <input form="formBUDirectorate" type="text" name="ContactName" readonly id="ContactName" class="form-control" />
+                                <input form="formBUDirectorate" type="hidden" name="ContactId" id="ContactId" />
+                                <a class="aHover pull-right" id="ContactIdLookup" style="margin-top:5px">Lookup</a>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label><input form="formBUDirectorate" type="checkbox" id="coppyAddressFromOrganisation" onchange="coppyAddressFromOrganisation(this)" /> Copy Address from Organisation</label>
+                            </div>
+                            <div class="form-group">
+                                <label for="AddressLine1">Address Line 1</label><span style="color:red">*</span>
+                                <input form="formBUDirectorate" type="text" name="AddressLine1" id="AddressLine1" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="AddressLine2">Address Line 2</label>
+                                <input form="formBUDirectorate" type="text" name="AddressLine2" id="AddressLine2" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="AddressLine3">Address Line 3</label>
+                                <input form="formBUDirectorate" type="text" name="AddressLine3" id="AddressLine3" class="form-control" />
+                            </div>
+                            <div class="form-inline">
+                                <label for="PostCode">PostCode</label><span style="color:red">*</span><br />
+                                <input form="formBUDirectorate" type="text" name="PostCode" id="PostCode" class="form-control" style="width:90% !important" />
+                                <a class="aHover pull-right" id="PostCode" style="margin-top:5px">Lookup</a>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label for="Town">City/Town</label>
+                                <input form="formBUDirectorate" type="text" name="Town" id="Town" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="County">County</label>
+                                <input form="formBUDirectorate" type="text" name="County" id="County" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Country">Country</label>
+                                <select form="formBUDirectorate" id="Country" name="Country" class="form-control">
+                                    <option>
+                                        1
+                                    </option>
+                                    <option>
+                                        2
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br />
+                            <div class="form-inline">
+                                <label for="TypeOfBussinessId">Type Of Bussiness</label><span style="color:red">*</span><br />
+                                <input form="formBUDirectorate" type="text" name="TypeOfBussinessName" required readonly id="TypeOfBussinessName" class="form-control" style="width:90% !important" />
+                                <input form="formBUDirectorate" type="text" style="display:none" value="" name="TypeOfBussinessId" />
+                                <a class="aHover pull-right" id="TypeOfBussinessId" style="margin-top:5px">Lookup</a>
+                            </div>
+                            <br />
+
+                            <div class="form-inline">
+                                <label for="SICCode">SIC Code</label><br />
+                                <input form="formBUDirectorate" type="text" readonly id="SICCode" class="form-control" style="width:90% !important" />
+                            </div>
+                            <br />
+
+                            <div class="form-group">
+                                <label for="FullDescription">Organisation Full Description</label>
+                                <textarea form="formBUDirectorate" style="height:110px" name="FullDescription" id="ShortDescription" class="form-control"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PhoneNumber">Phone Number</label>
+                                <input form="formBUDirectorate" type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Fax">Fax</label>
+                                <input form="formBUDirectorate" type="text" name="Fax" id="Fax" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Email">Email</label>
+                                <input form="formBUDirectorate" type="email" name="Email" id="Email" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="WebAddress">Web Address</label>
+                                <input form="formBUDirectorate" type="text" name="WebAddress" id="WebAddress" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CharityNumber">Charity Number</label>
+                                <input form="formBUDirectorate" type="text" name="CharityNumber" id="CharityNumber" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CompanyNumber">Company Number</label>
+                                <input form="formBUDirectorate" type="text" name="CompanyNumber" id="CompanyNumber" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*@foreach ()
+        {
+            foreach lai cai table BuDirectorate
+        }*@
+        @{Html.RenderPartial("~/Views/Shared/_UpdateBuDDirectorate.cshtml"); }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        //function test() {
+        //    $("#updateBodyOrganisation").hide();
+        //    $("#roiGidoDungChan").show;
+        //    //$.ajax('/Home/UpdateBuDDirectorate', {
+        //    //    type: 'get',  // http method
+        //    //    data: { },  // data to submit
+        //    //    success: function (data) {
+        //    //        $("#updateBodyOrganisation").hide();
+        //    //        $("#roiGidoDungChan").html(data);
+        //    //    }
+        //    //});
+        //}
+        function showDetails3 (checkbox) {
+            if (checkbox.checked) {
+                $("#menuDetails").show();
+            }
+            else {
+                $("#menuDetails").hide();
+            }
+        };
+        //validate
+        $("#formOrganisation").validate({
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                "OrganisationName": {
+                    required: true
+                },
+                "ShortDescription": {
+                    required: true
+                },
+                "AddressLine1": {
+                    required: true
+                },
+                "PostCode": {
+                    required: true
+                },
+                "TypeOfBussinessName": {
+                    required: true,
+                    minlength: 0
+                },
+                "PhoneNumber": {
+                    required: true,
+                    minlength: 7
+                }
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            },
+        });
+
+        $("#formSupportingMaterials").validate({
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                "URL": {
+                    required: true
+                },
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            },
+        });
+        $("#formBUDirectorate").validate({
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                "DirectorateName": {
+                    required: true
+                },
+                "AddressLine1": {
+                    required: true
+                },
+                "PostCode": {
+                    required: true
+                },
+                "TypeOfBussinessId": {
+                    required: true
+                },
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('has-error');
+            },
+        });
+    </script>
+}

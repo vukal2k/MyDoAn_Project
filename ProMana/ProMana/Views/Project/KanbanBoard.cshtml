@@ -53,7 +53,7 @@ else
                                                     <p>Assign to: @task.UserInfo.FullName</p>
                                                     <p>
                                                         Deadline: @task.To
-                                                        @if (task.To < DateTime.Now.AddDays(1))
+                                                        @if (task.To < DateTime.Now)
                                                         {
                                                             <lable class="label-danger">Overdue</lable>
                                                         }

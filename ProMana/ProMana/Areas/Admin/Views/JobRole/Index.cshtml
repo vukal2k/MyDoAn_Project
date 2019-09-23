@@ -36,7 +36,10 @@
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        <a href="@Url.Action("Delete","JobRole",new { area="Admin",id=item.Id})" onclick="return confirm('Are u sure? Delete @item.Title?')">Delete</a>
+                        @if (item.CanDelete)
+                        {
+                            <a href="@Url.Action("Delete","JobRole",new { area="Admin",id=item.Id})" onclick="return confirm('Are u sure? Delete @item.Title?')">Delete</a>
+                        }
                     </td>
                 </tr>
             }

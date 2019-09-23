@@ -1,0 +1,126 @@
+﻿@model DTO.Project
+@using COMMON
+@using Microsoft.AspNet.Identity
+
+@{
+    Layout = null;
+}
+
+
+
+@using (Ajax.BeginForm("CreateRequest", "Task", new { }, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    UpdateTargetId = "createResult",
+}, new { @id = "createFormTask" }))
+{
+    <input type="hidden" value="abc" name="CreatedBy" />
+    <input type="hidden" value="@Model.Id" name="projectId" />
+    <input type="hidden" name="AssignedTo" value="abc" />
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">
+                Title
+            </label>
+            <div class="col-md-10">
+                <input type="text" id="creatTitle" name="Title" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Reporting to</label>
+            <div class="col-md-10">
+                <select name="ModuleId" id="createModuleId" class="form-control selectpicker"  data-show-subtext="true" data-live-search="true">
+                    <option value="0">-- Choose reporting to --</option>
+                    @foreach (var item in Model.GetModuleIn(User.Identity.GetUserName()))
+                    {
+                        if (item.Title.Equals(HardFixJobRoleTitle.Watcher))
+                        {
+                            <option value="@item.Id">Project Manager</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <input type="hidden" name="TaskType" id="createTaskTypeValue" />
+        <div class="form-group">
+            <label class="control-label col-md-2">Request Type</label>
+            <div class="col-md-10">
+                <select id="createTaskTypeId" onchange="ChangeTaskType(this,'createTaskTypeOther')" class="form-control">
+                    <option value="0">-- Choose Request Type --</option>
+                    @foreach (var item in (IEnumerable<DTO.TaskType>)ViewBag.TaskTypes)
+                    {
+                        <option value="@item.Title">@item.Title</option>
+                    }
+                    <option value="other">Others: </option>
+                </select>
+                <div id="createTaskTypeOther" class="hidden">
+                    is <input type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">From</label>
+            <div class="control-label col-md-3">
+                <input type="text" name="From" onchange="ValidateDateTo('create')" class="form-control" style="margin-left:1.5% !important" id="createFrom" autocomplete="off" />
+            </div>
+
+            <label class="control-label col-md-2">To</label>
+            <div class="control-label col-md-3">
+                <input type="text" class="form-control" name="To" id="createTo" autocomplete="off" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Severity</label>
+            <div class="col-md-10">
+                <select class="form-control" name="Severity" id="createSeverity">
+                    <option value="0">-- Choose severity --</option>
+                    @{
+                        var keySeverity = COMMON.CONSTANCT.Severities.Keys;
+                    }
+                    @foreach (var key in keySeverity)
+                    {
+                        <option value="@key" data-toggle="tooltip" data-placement="right" title="@COMMON.CONSTANCT.Severities[key]">@key</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Priority</label>
+            <div class="col-md-10">
+                <select class="form-control" name="Priority" id="createPriority">
+                    <option value="0">-- Choose priority --</option>
+                    @{
+                        var keyPiority = COMMON.CONSTANCT.Priorities.Keys;
+                    }
+                    @foreach (var key in keyPiority)
+                    {
+                        <option value="@key" data-toggle="tooltip" data-placement="right" title="@COMMON.CONSTANCT.Priorities[key]">@key</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Description</label>
+            <div class="col-md-10">
+                <textarea name="Description" id="createDescription" class="form-control mytextarea"></textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-9">
+                    <input form="createFormTask" type="submit" id="createSubmit" value="Create" class="btn btn-success pull-right" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

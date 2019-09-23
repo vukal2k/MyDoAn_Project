@@ -1,0 +1,21 @@
+﻿$('.UseDataTables').DataTable({
+                "language": {
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Số bản ghi _MENU_",
+                    "sZeroRecords": "Không có bản ghi nào",
+                    "sInfo": "Từ bản ghi _START_ đến bản gi _END_ trong tổng số _TOTAL_ bản ghi",
+                    "sInfoEmpty": "Không có bản ghi nào",
+                    "sInfoFiltered": "(được lọc từ _MAX_ bản ghi)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm kiếm: ",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "<i class='fa fa-angle-double-left fa-lg'></i>",
+                        "sPrevious": "<i class='fa fa-angle-left fa-lg'></i>",
+                        "sNext": "<i class='fa fa-angle-right fa-lg'></i>",
+                        "sLast": "<i class='fa fa-angle-double-right fa-lg'></i>"
+                    }
+                },
+                "pagingType": "full_numbers",
+                "deferRender": true,
+            });

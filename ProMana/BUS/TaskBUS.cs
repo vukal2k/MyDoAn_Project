@@ -274,6 +274,7 @@ namespace BUS
                 var createNewTask = new DTO.Task();
                 createNewTask.From = task.From;
                 createNewTask.To = task.To;
+                createNewTask.Priority = task.Priority;
                 createNewTask.Description = task.Description;
                 createNewTask.AssignedTo = task.AssignedTo;
                 createNewTask.Severity = task.Severity;
@@ -281,7 +282,7 @@ namespace BUS
                 createNewTask.Module = updateRequest.Module;
                 createNewTask.Title = task.Title;
                 createNewTask.IsTask = true;
-                createNewTask.IsActive = false;
+                createNewTask.IsActive = true;
                 createNewTask.StatusId = TaskStatusKey.Opened;
                 if (userNameApprove != null)
                 {

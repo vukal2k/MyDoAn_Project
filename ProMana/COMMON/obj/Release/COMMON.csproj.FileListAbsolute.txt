@@ -1,0 +1,10 @@
+D:\MyDoAn_Project\ProMana\COMMON\bin\Release\COMMON.dll
+D:\MyDoAn_Project\ProMana\COMMON\bin\Release\COMMON.pdb
+D:\MyDoAn_Project\ProMana\COMMON\bin\Release\DTO.dll
+D:\MyDoAn_Project\ProMana\COMMON\bin\Release\DTO.pdb
+D:\MyDoAn_Project\ProMana\COMMON\bin\Release\DTO.dll.config
+D:\MyDoAn_Project\ProMana\COMMON\obj\Release\COMMON.csprojAssemblyReference.cache
+D:\MyDoAn_Project\ProMana\COMMON\obj\Release\COMMON.csproj.CoreCompileInputs.cache
+D:\MyDoAn_Project\ProMana\COMMON\obj\Release\COMMON.csproj.CopyComplete
+D:\MyDoAn_Project\ProMana\COMMON\obj\Release\COMMON.dll
+D:\MyDoAn_Project\ProMana\COMMON\obj\Release\COMMON.pdb

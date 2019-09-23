@@ -1,0 +1,12 @@
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\DTO.dll.config
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\DTO.dll
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\DTO.pdb
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\EntityFramework.dll
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\EntityFramework.SqlServer.dll
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\EntityFramework.xml
+D:\MyDoAn_Project\ProMana\DTO\bin\Release\EntityFramework.SqlServer.xml
+D:\MyDoAn_Project\ProMana\DTO\obj\Release\DTO.csprojAssemblyReference.cache
+D:\MyDoAn_Project\ProMana\DTO\obj\Release\DTO.csproj.CoreCompileInputs.cache
+D:\MyDoAn_Project\ProMana\DTO\obj\Release\DTO.csproj.CopyComplete
+D:\MyDoAn_Project\ProMana\DTO\obj\Release\DTO.dll
+D:\MyDoAn_Project\ProMana\DTO\obj\Release\DTO.pdb

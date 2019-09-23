@@ -1,0 +1,35 @@
+﻿@model IEnumerable<DTO.Task>
+@{
+    ViewBag.Title = "Request assigned to me";
+    Layout = "~/Views/Shared/_LayoutGuest.cshtml";
+}
+
+<h2>Request assigned to me</h2>
+
+<div class="container" style="height:700px !important">
+    <table class="table table-bordered UseDataTables">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Project</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("RequestList","Project", new { id = item.Module.ProjectId,chooseTaskId=item.Id})">@item.Title</a>
+                    </td>
+                    <td>
+                        @item.Module.Project.Name
+                    </td>
+                    <td>
+                        @item.CreatedBy
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
